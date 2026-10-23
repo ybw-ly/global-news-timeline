@@ -1,0 +1,19 @@
+services:
+  meridian:
+    build: .
+    image: meridian-news-timeline:latest
+    container_name: meridian-news-timeline
+    restart: unless-stopped
+    ports:
+      # Bind to the host loopback only. Put a reverse proxy with auth in front
+      # if you need LAN or internet access.
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config:ro
+    environment:
+      - TZ=Asia/Shanghai
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=qwen3-vl:8b
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

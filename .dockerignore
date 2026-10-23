@@ -1,0 +1,13 @@
+__pycache__
+*.pyc
+.venv
+data/news.db
+data/news.db-wal
+data/news.db-shm
+docs
+tmp_*.png
+.chrome-*
+.edge-*
+server.log
+server2.log
+.git

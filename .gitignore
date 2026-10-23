@@ -1,0 +1,23 @@
+__pycache__/
+*.py[cod]
+.venv/
+data/news.db
+data/news.db-wal
+data/news.db-shm
+server.log
+server2.log
+tmp_*.png
+.chrome-*/
+.edge-*/
+.DS_Store
+data/raw/
+data/backup*/
+data/*.pid
+data/*.out
+data/*.json
+data/*.txt
+data/*.csv
+
+# generated database snapshots
+data/*.db
+data/*.db-*

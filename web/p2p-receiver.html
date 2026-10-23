@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>经纬 · P2P 接收端</title>
+<style>
+  :root {
+    --bg: #070c11;
+    --panel: #0b121a;
+    --line: rgba(255, 255, 255, 0.09);
+    --line-strong: rgba(255, 255, 255, 0.17);
+    --text: #e7eef5;
+    --muted: #9aaaba;
+    --faint: #63717f;
+    --accent: #76e0c2;
+    --accent-line: rgba(118, 224, 194, 0.32);
+    --accent-soft: rgba(118, 224, 194, 0.09);
+    --danger: #ff9b9b;
+    --mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+    --serif: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+    --sans: "Noto Sans SC", "Source Han Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 28px 18px 60px;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(118, 224, 194, 0.08), transparent 30%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  main { max-width: 760px; margin: 0 auto; }
+  .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+  .brand { font-family: var(--serif); font-size: 20px; letter-spacing: 0.06em; }
+  .brand span { color: var(--accent); }
+  .top small { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: var(--faint); }
+  .panel { padding: 20px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); }
+  h1, h2, h3, h4, p { margin-top: 0; }
+  h2 { font-family: var(--serif); font-size: 24px; margin-bottom: 6px; }
+  .lede { color: var(--muted); font-size: 12px; margin-bottom: 18px; }
+  label { display: block; margin: 14px 0 6px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--faint); }
+  textarea {
+    width: 100%; min-height: 88px; resize: vertical; padding: 9px 10px;
+    border: 1px solid var(--line); border-radius: 5px; background: #050a0f;
+    color: var(--text); font-family: var(--mono); font-size: 9px; line-height: 1.55;
+    word-break: break-all;
+  }
+  textarea:focus { outline: 1px solid var(--accent-line); }
+  button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 8px 13px; border: 1px solid var(--line); border-radius: 5px;
+    background: transparent; color: var(--muted); font: inherit; font-size: 11px;
+    cursor: pointer;
+  }
+  button:hover { color: var(--text); border-color: var(--line-strong); }
+  button.primary { border-color: var(--accent-line); background: var(--accent-soft); color: var(--accent); }
+  button.primary:hover { background: rgba(118, 224, 194, 0.16); }
+  button:disabled { opacity: 0.45; cursor: wait; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 9px; }
+  .status { margin-top: 13px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono); font-size: 9px; color: var(--muted); }
+  .status.ok { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+  .status.error { color: var(--danger); border-color: rgba(255, 120, 120, 0.35); background: rgba(255, 80, 80, 0.07); }
+  .note { margin: 12px 0 0; font-size: 10px; line-height: 1.7; color: var(--faint); }
+  #receive-view { margin-top: 18px; }
+  .view-head { padding: 20px; border: 1px solid var(--accent-line); border-radius: 9px; background: linear-gradient(135deg, rgba(118, 224, 194, 0.08), transparent 65%), var(--panel); }
+  .view-head h1 { font-family: var(--serif); font-size: 27px; line-height: 1.38; margin-bottom: 6px; }
+  .view-head p { margin-bottom: 4px; color: var(--muted); font-size: 12px; }
+  .view-head .meta { font-family: var(--mono); font-size: 9px; color: var(--faint); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 1px; margin-top: 12px; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--line); }
+  .stat { padding: 9px 10px; background: var(--panel); }
+  .stat b { display: block; font-family: var(--mono); font-size: 16px; font-weight: 500; color: var(--text); }
+  .stat span { display: block; margin-top: 2px; font-size: 9px; color: var(--faint); }
+  .stories { display: grid; gap: 10px; margin-top: 14px; }
+  .story { padding: 15px 16px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); }
+  .story-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .badge { padding: 2px 6px; border: 1px solid var(--line); border-radius: 3px; font-family: var(--mono); font-size: 8px; color: var(--muted); }
+  .badge.accent { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+  .story h3 { margin: 0 0 5px; font-family: var(--serif); font-size: 18px; line-height: 1.45; font-weight: 600; }
+  .story h3 a { color: var(--text); text-decoration: none; }
+  .story h3 a:hover { color: var(--accent); }
+  .story-meta { display: flex; flex-wrap: wrap; gap: 7px; font-family: var(--mono); font-size: 8.5px; color: var(--faint); }
+  .story-summary { margin: 9px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+  .story-verify { margin-top: 9px; padding-top: 8px; border-top: 1px dashed var(--line); font-family: var(--mono); font-size: 9px; color: var(--accent); }
+  .related { margin: 10px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+  .related li { padding: 7px 0; border-bottom: 1px solid var(--line); }
+  .related li:last-child { border-bottom: 0; }
+  .related a { display: block; color: var(--muted); font-size: 11.5px; text-decoration: none; }
+  .related a:hover { color: var(--accent); }
+  .related span { display: block; margin-top: 2px; font-family: var(--mono); font-size: 8px; color: var(--faint); }
+  .receive-foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .receive-foot small { font-family: var(--mono); font-size: 8px; color: var(--faint); }
+  [hidden] { display: none !important; }
+  @media (max-width: 620px) {
+    body { padding: 18px 12px 40px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .view-head h1 { font-size: 22px; }
+    .top small { display: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div class="brand">经纬 <span>·</span> P2P 接收端</div>
+    <small>WEBRTC DATA CHANNEL · NO RELAY</small>
+  </div>
+
+  <section class="panel" id="setup">
+    <h2>接收一个新闻推送</h2>
+    <p class="lede">这个页面不连接任何服务器。把发送者给你的邀请码粘贴到下面，生成应答码并发回去，随后新闻快照会通过加密的 WebRTC 数据通道直接到达。</p>
+
+    <label for="offer-input">01 · 邀请码</label>
+    <textarea id="offer-input" placeholder="粘贴发送者发来的邀请码 JP2P1.…" spellcheck="false"></textarea>
+    <div class="actions"><button class="primary" id="make-answer" type="button">生成应答码</button></div>
+
+    <label for="answer-output">02 · 应答码</label>
+    <textarea id="answer-output" readonly placeholder="生成后出现在这里"></textarea>
+    <div class="actions"><button id="copy-answer" type="button">复制应答码</button></div>
+
+    <div class="status" id="status" role="status" aria-live="polite">等待邀请码。</div>
+    <p class="note">只接收你信任的人发来的内容。传输由 WebRTC 的 DTLS 加密，本页面不存储推送内容。复杂 NAT 或公司网络可能无法直连，家庭网络/同一 Wi-Fi 成功率最高。</p>
+  </section>
+
+  <section id="receive-view" hidden>
+    <div class="view-head">
+      <div class="story-top">
+        <span class="badge accent" id="kind-badge">推送</span>
+        <span class="badge" id="sender-badge">经纬</span>
+      </div>
+      <h1 id="view-title"></h1>
+      <p id="view-subtitle"></p>
+      <p class="meta" id="view-meta"></p>
+    </div>
+    <div class="stats" id="view-stats"></div>
+    <div class="stories" id="stories"></div>
+    <div class="receive-foot">
+      <small>由朋友的经纬客户端直接推送 · 不代表事实核查结论</small>
+      <button id="restart" type="button">接收下一个</button>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  document.body.dataset.jsReady = "1";
+
+  const PREFIX = "JP2P1.";
+  const MAX_MESSAGE = 400000;
+  const $ = (selector) => document.querySelector(selector);
+  let pc = null;
+  let dc = null;
+
+  function setStatus(text, kind = "") {
+    const el = $("#status");
+    el.textContent = text;
+    el.className = `status${kind ? ` ${kind}` : ""}`;
+  }
+
+  function encodeSdp(sdp) {
+    const bytes = new TextEncoder().encode(sdp);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      const chunk = bytes.subarray(i, i + 0x8000);
+      for (const byte of chunk) binary += String.fromCharCode(byte);
+    }
+    const base64 = btoa(binary)
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/g, "");
+    return PREFIX + base64;
+  }
+
+  function decodeCode(code) {
+    const raw = String(code || "").trim().replace(/\s+/g, "");
+    if (!raw.startsWith(PREFIX)) throw new Error("邀请码应以 JP2P1. 开头");
+    let base64 = raw.slice(PREFIX.length).replace(/-/g, "+").replace(/_/g, "/");
+    while (base64.length % 4) base64 += "=";
+    const binary = atob(base64);
+    const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+
+  function createPeer() {
+    return new RTCPeerConnection({
+      iceServers: [{
+        urls: [
+          "stun:stun.l.google.com:19302",
+          "stun:stun1.l.google.com:19302",
+        ],
+      }],
+    });
+  }
+
+  function waitIce(peer, timeout = 9000) {
+    if (peer.iceGatheringState === "complete") return Promise.resolve();
+    return new Promise((resolve) => {
+      const done = () => {
+        if (peer.iceGatheringState === "complete") {
+          peer.removeEventListener("icegatheringstatechange", done);
+          resolve();
+        }
+      };
+      peer.addEventListener("icegatheringstatechange", done);
+      setTimeout(() => {
+        peer.removeEventListener("icegatheringstatechange", done);
+        resolve();
+      }, timeout);
+    });
+  }
+
+  function safeUrl(value) {
+    try {
+      const url = new URL(value);
+      if (url.protocol === "http:" || url.protocol === "https:") return url.href;
+    } catch (_) { /* ignore */ }
+    return "";
+  }
+
+  function formatTime(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value || "";
+    return date.toLocaleString("zh-CN", {
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hour12: false,
+    });
+  }
+
+  function textNode(tag, className, text) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined && text !== null) el.textContent = String(text);
+    return el;
+  }
+
+  async function makeAnswer() {
+    if (!window.RTCPeerConnection) {
+      setStatus("当前浏览器不支持 WebRTC，请换用新版 Chrome、Edge 或 Safari。", "error");
+      return;
+    }
+    const offerCode = $("#offer-input").value.trim();
+    if (!offerCode) {
+      setStatus("请先粘贴邀请码。", "error");
+      return;
+    }
+    const button = $("#make-answer");
+    button.disabled = true;
+    button.textContent = "生成中…";
+    try {
+      const sdp = decodeCode(offerCode);
+      try { dc?.close(); } catch (_) { /* ignore */ }
+      try { pc?.close(); } catch (_) { /* ignore */ }
+      dc = null;
+      pc = createPeer();
+      pc.ondatachannel = (event) => {
+        dc = event.channel;
+        dc.onopen = () => setStatus("已连接，等待推送…", "ok");
+        dc.onmessage = (message) => {
+          if (typeof message.data !== "string" || message.data.length > MAX_MESSAGE) return;
+          try {
+            const data = JSON.parse(message.data);
+            if (!data || data.v !== 1 || !Array.isArray(data.stories)) throw new Error("数据结构无效");
+            renderSnapshot(data);
+            setStatus("推送已接收。", "ok");
+            try { dc.send("ack"); } catch (_) { /* ignore */ }
+          } catch (error) {
+            setStatus(`接收失败：${error.message}`, "error");
+            try { dc.send("error"); } catch (_) { /* ignore */ }
+          }
+        };
+        dc.onclose = () => setStatus("发送者已断开连接。", "");
+      };
+      pc.onconnectionstatechange = () => {
+        if (pc?.connectionState === "failed") {
+          setStatus("P2P 连接失败：网络可能无法直连。", "error");
+        }
+      };
+      await pc.setRemoteDescription({ type: "offer", sdp });
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      await waitIce(pc);
+      $("#answer-output").value = encodeSdp(pc.localDescription.sdp);
+      setStatus("应答码已生成。把它发回给发送者，等待推送…", "ok");
+    } catch (error) {
+      setStatus(`生成应答码失败：${error.message}`, "error");
+      try { pc?.close(); } catch (_) { /* ignore */ }
+      pc = null;
+    } finally {
+      button.disabled = false;
+      button.textContent = "生成应答码";
+    }
+  }
+
+  function renderSnapshot(data) {
+    $("#setup").hidden = true;
+    $("#receive-view").hidden = false;
+    $("#kind-badge").textContent = data.kind === "story" ? "事件详情" : "页面汇总";
+    $("#sender-badge").textContent = data.sender || "经纬";
+    $("#view-title").textContent = data.title || "来自经纬的新闻推送";
+    $("#view-subtitle").textContent = data.subtitle || "";
+    $("#view-meta").textContent = `推送时间 ${formatTime(data.generated_at)}`;
+
+    const stats = $("#view-stats");
+    stats.innerHTML = "";
+    for (const entry of Array.isArray(data.stats) ? data.stats.slice(0, 6) : []) {
+      const box = textNode("div", "stat");
+      box.append(textNode("b", "", entry.value), textNode("span", "", entry.label));
+      stats.appendChild(box);
+    }
+
+    const wrap = $("#stories");
+    wrap.innerHTML = "";
+    for (const story of data.stories.slice(0, 20)) {
+      const article = textNode("article", "story");
+      const top = textNode("div", "story-top");
+      top.append(
+        textNode("span", "badge accent", story.content_type_label || "硬新闻"),
+        textNode("span", "badge", story.level_label || "单一信源"),
+      );
+      const heading = textNode("h3");
+      const link = textNode("a", "", story.title || "（无标题）");
+      const url = safeUrl(story.url);
+      if (url) {
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
+      heading.appendChild(link);
+
+      const meta = textNode("div", "story-meta");
+      for (const value of [
+        story.publisher,
+        formatTime(story.published_at),
+        story.language_label,
+        story.country_label,
+        story.category_label,
+        story.event_label ? `事件 · ${story.event_label}` : "",
+      ]) {
+        if (value) meta.appendChild(textNode("span", "", value));
+      }
+
+      article.append(top, heading, meta);
+      if (story.summary) {
+        const summary = textNode("p", "story-summary", story.summary);
+        summary.setAttribute("dir", "auto");
+        article.appendChild(summary);
+      }
+      if (story.publishers || story.level_label) {
+        article.appendChild(textNode(
+          "div", "story-verify",
+          `${story.publishers || 1} 家独立信源 · ${story.languages || 1} 种语言${story.level_label ? ` · ${story.level_label}` : ""}`,
+        ));
+      }
+      if (Array.isArray(story.related) && story.related.length) {
+        const title = textNode("h4", "", "同事件其他信源");
+        title.style.cssText = "margin:12px 0 0;font-size:11px;color:var(--faint);font-weight:500";
+        const list = textNode("ul", "related");
+        for (const related of story.related.slice(0, 8)) {
+          const item = textNode("li");
+          const relatedLink = textNode("a", "", related.title || "（无标题）");
+          const relatedUrl = safeUrl(related.url);
+          if (relatedUrl) {
+            relatedLink.href = relatedUrl;
+            relatedLink.target = "_blank";
+            relatedLink.rel = "noopener noreferrer";
+          }
+          item.append(
+            relatedLink,
+            textNode("span", "", [related.publisher, formatTime(related.published_at), related.language_label, related.content_type_label].filter(Boolean).join(" · ")),
+          );
+          list.appendChild(item);
+        }
+        article.append(title, list);
+      }
+      wrap.appendChild(article);
+    }
+  }
+
+  async function copyAnswer() {
+    const value = $("#answer-output").value;
+    if (!value) return;
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch (_) {
+      const area = document.createElement("textarea");
+      area.value = value;
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      try { document.execCommand("copy"); } catch (error) { setStatus("复制失败，请手动选择。", "error"); }
+      area.remove();
+    }
+    setStatus("应答码已复制。", "ok");
+  }
+
+  $("#make-answer").addEventListener("click", makeAnswer);
+  $("#copy-answer").addEventListener("click", copyAnswer);
+  $("#restart").addEventListener("click", () => location.reload());
+  window.addEventListener("beforeunload", () => {
+    try { dc?.close(); } catch (_) { /* ignore */ }
+    try { pc?.close(); } catch (_) { /* ignore */ }
+  });
+})();
+</script>
+</body>
+</html>

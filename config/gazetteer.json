@@ -1,0 +1,6653 @@
+{
+ "locales": [
+  "en",
+  "zh",
+  "ar",
+  "ru",
+  "es",
+  "fr",
+  "de",
+  "ja",
+  "ko",
+  "pt",
+  "tr",
+  "fa",
+  "he",
+  "hi",
+  "id",
+  "vi",
+  "th",
+  "it",
+  "uk"
+ ],
+ "countries": {
+  "AE": {
+   "region": "middle_east",
+   "label_zh": "阿拉伯联合酋长国",
+   "aliases": [
+    "các tiểu vương quốc ả rập thống nhất",
+    "vereinigte arabische emirate",
+    "обʼєднані арабські емірати",
+    "birleşik arap emirlikleri",
+    "الإمارات العربية المتحدة",
+    "איחוד האמירויות הערביות",
+    "emirados árabes unidos",
+    "emiratos árabes unidos",
+    "united arab emirates",
+    "สหรัฐอาหรับเอมิเรตส์",
+    "emirati arabi uniti",
+    "émirats arabes unis",
+    "امارات متحدهٔ عربی",
+    "संयुक्त अरब अमीरात",
+    "uni emirat arab",
+    "アラブ首長国連邦",
+    "阿拉伯联合酋长国",
+    "아랍에미리트",
+    "uae",
+    "ОАЭ"
+   ],
+   "weak_aliases": [
+    "emirati"
+   ],
+   "ambiguous_aliases": []
+  },
+  "AF": {
+   "region": "south_asia",
+   "label_zh": "阿富汗",
+   "aliases": [
+    "अफ़गानिस्तान",
+    "afeganistão",
+    "afghanistan",
+    "อัฟกานิสถาน",
+    "afganistan",
+    "afganistán",
+    "Афганистан",
+    "Афганістан",
+    "أفغانستان",
+    "افغانستان",
+    "אפגניסטן",
+    "アフガニスタン",
+    "아프가니스탄",
+    "阿富汗"
+   ],
+   "weak_aliases": [
+    "afghan"
+   ],
+   "ambiguous_aliases": []
+  },
+  "AL": {
+   "region": "europe",
+   "label_zh": "阿尔巴尼亚",
+   "aliases": [
+    "arnavutluk",
+    "अल्बानिया",
+    "แอลเบเนีย",
+    "albanien",
+    "albania",
+    "albanie",
+    "albânia",
+    "Албания",
+    "Албанія",
+    "ألبانيا",
+    "אלבניה",
+    "آلبانی",
+    "アルバニア",
+    "阿尔巴尼亚",
+    "알바니아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "AM": {
+   "region": "middle_east",
+   "label_zh": "亚美尼亚",
+   "aliases": [
+    "ermenistan",
+    "อาร์เมเนีย",
+    "आर्मेनिया",
+    "armenien",
+    "Вірменія",
+    "ارمنستان",
+    "armenia",
+    "arménie",
+    "armênia",
+    "Армения",
+    "أرمينيا",
+    "ארמניה",
+    "アルメニア",
+    "아르메니아",
+    "亚美尼亚"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "AO": {
+   "region": "africa",
+   "label_zh": "安哥拉",
+   "aliases": [
+    "แองโกลา",
+    "angola",
+    "Ангола",
+    "אנגולה",
+    "آنگولا",
+    "أنغولا",
+    "अंगोला",
+    "アンゴラ",
+    "安哥拉",
+    "앙골라"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "AR": {
+   "region": "latin_america",
+   "label_zh": "阿根廷",
+   "aliases": [
+    "argentinien",
+    "อาร์เจนตินา",
+    "अर्जेंटीना",
+    "argentina",
+    "Аргентина",
+    "الأرجنتين",
+    "arjantin",
+    "ארגנטינה",
+    "آرژانتین",
+    "アルゼンチン",
+    "아르헨티나",
+    "阿根廷"
+   ],
+   "weak_aliases": [
+    "argentinian",
+    "argentine"
+   ],
+   "ambiguous_aliases": []
+  },
+  "AT": {
+   "region": "europe",
+   "label_zh": "奥地利",
+   "aliases": [
+    "österreich",
+    "avusturya",
+    "ऑस्ट्रिया",
+    "autriche",
+    "ออสเตรีย",
+    "austria",
+    "áustria",
+    "Австрия",
+    "Австрія",
+    "אוסטריה",
+    "النمسا",
+    "オーストリア",
+    "اتریش",
+    "오스트리아",
+    "奥地利",
+    "áo"
+   ],
+   "weak_aliases": [
+    "austrian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "AU": {
+   "region": "oceania",
+   "label_zh": "澳大利亚",
+   "aliases": [
+    "ऑस्ट्रेलिया",
+    "australien",
+    "avustralya",
+    "ออสเตรเลีย",
+    "australia",
+    "australie",
+    "austrália",
+    "Австралия",
+    "Австралія",
+    "אוסטרליה",
+    "أستراليا",
+    "استرالیا",
+    "オーストラリア",
+    "오스트레일리아",
+    "澳大利亚"
+   ],
+   "weak_aliases": [
+    "australian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "AZ": {
+   "region": "middle_east",
+   "label_zh": "阿塞拜疆",
+   "aliases": [
+    "جمهوری آذربایجان",
+    "aserbaidschan",
+    "อาเซอร์ไบจาน",
+    "azerbaigian",
+    "azerbaïdjan",
+    "Азербайджан",
+    "azerbaijan",
+    "azerbaijão",
+    "azerbaiyán",
+    "azerbaycan",
+    "אזרבייג׳ן",
+    "अज़रबैजान",
+    "أذربيجان",
+    "アゼルバイジャン",
+    "아제르바이잔",
+    "阿塞拜疆"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BA": {
+   "region": "europe",
+   "label_zh": "波斯尼亚和黑塞哥维那",
+   "aliases": [
+    "बोस्निया और हर्ज़ेगोविना",
+    "bosnien und herzegowina",
+    "บอสเนียและเฮอร์เซโกวีนา",
+    "bosnia dan herzegovina",
+    "bosnia và herzegovina",
+    "bosnia & herzegovina",
+    "bosnia ed erzegovina",
+    "bosnia y herzegovina",
+    "bósnia e herzegovina",
+    "босния и герцеговина",
+    "боснія і герцеговина",
+    "bosnie-herzégovine",
+    "בוסניה והרצגובינה",
+    "bosnia and herz.",
+    "البوسنة والهرسك",
+    "بوسنی و هرزگوین",
+    "bosna-hersek",
+    "ボスニア・ヘルツェゴビナ",
+    "보스니아 헤르체고비나",
+    "波斯尼亚和黑塞哥维那"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BD": {
+   "region": "south_asia",
+   "label_zh": "孟加拉国",
+   "aliases": [
+    "bangladesch",
+    "bangladesh",
+    "बांग्लादेश",
+    "bangladeş",
+    "bangladés",
+    "Бангладеш",
+    "บังกลาเทศ",
+    "بنغلاديش",
+    "بنگلادش",
+    "バングラデシュ",
+    "בנגלדש",
+    "방글라데시",
+    "孟加拉国"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BE": {
+   "region": "europe",
+   "label_zh": "比利时",
+   "aliases": [
+    "belgique",
+    "बेल्जियम",
+    "เบลเยียม",
+    "belgien",
+    "belgium",
+    "belçika",
+    "bélgica",
+    "Бельгия",
+    "Бельгія",
+    "belgia",
+    "belgio",
+    "بلجيكا",
+    "בלגיה",
+    "بلژیک",
+    "ベルギー",
+    "比利时",
+    "벨기에",
+    "bỉ"
+   ],
+   "weak_aliases": [
+    "belgian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "BF": {
+   "region": "africa",
+   "label_zh": "布基纳法索",
+   "aliases": [
+    "बुर्किना फ़ासो",
+    "burquina faso",
+    "burkina faso",
+    "буркина-фасо",
+    "буркіна-фасо",
+    "בורקינה פאסו",
+    "بوركينا فاسو",
+    "บูร์กินาฟาโซ",
+    "بورکینافاسو",
+    "ブルキナファソ",
+    "부르키나파소",
+    "布基纳法索"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BG": {
+   "region": "europe",
+   "label_zh": "保加利亚",
+   "aliases": [
+    "bulgaristan",
+    "बुल्गारिया",
+    "bulgarien",
+    "بلغارستان",
+    "บัลแกเรีย",
+    "bulgaria",
+    "bulgarie",
+    "bulgária",
+    "Болгария",
+    "Болгарія",
+    "בולגריה",
+    "بلغاريا",
+    "ブルガリア",
+    "保加利亚",
+    "불가리아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BI": {
+   "region": "africa",
+   "label_zh": "布隆迪",
+   "aliases": [
+    "burundi",
+    "Бурунди",
+    "Бурунді",
+    "בורונדי",
+    "بوروندي",
+    "بوروندی",
+    "बुरुंडी",
+    "บุรุนดี",
+    "ブルンジ",
+    "布隆迪",
+    "부룬디"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BJ": {
+   "region": "africa",
+   "label_zh": "贝宁",
+   "aliases": [
+    "benin",
+    "benín",
+    "bénin",
+    "Бенин",
+    "Бенін",
+    "बेनिन",
+    "เบนิน",
+    "בנין",
+    "بنين",
+    "بنین",
+    "ベナン",
+    "贝宁",
+    "베냉"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BN": {
+   "region": "southeast_asia",
+   "label_zh": "文莱",
+   "aliases": [
+    "brunei darussalam",
+    "ब्रूनेई",
+    "brunei",
+    "brunéi",
+    "Бруней",
+    "ברוניי",
+    "برونئی",
+    "بروناي",
+    "บรูไน",
+    "ブルネイ",
+    "브루나이",
+    "文莱"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BO": {
+   "region": "latin_america",
+   "label_zh": "玻利维亚",
+   "aliases": [
+    "bolivien",
+    "बोलीविया",
+    "โบลิเวีย",
+    "bolivia",
+    "bolivie",
+    "bolivya",
+    "bolívia",
+    "Боливия",
+    "Болівія",
+    "בוליביה",
+    "بوليفيا",
+    "بولیوی",
+    "ボリビア",
+    "玻利维亚",
+    "볼리비아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BR": {
+   "region": "latin_america",
+   "label_zh": "巴西",
+   "aliases": [
+    "brasilien",
+    "brezilya",
+    "Бразилия",
+    "Бразилія",
+    "البرازيل",
+    "ब्राज़ील",
+    "brasile",
+    "brasil",
+    "brazil",
+    "brésil",
+    "บราซิล",
+    "ברזיל",
+    "برزیل",
+    "ブラジル",
+    "브라질",
+    "巴西"
+   ],
+   "weak_aliases": [
+    "brazilian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "BS": {
+   "region": "latin_america",
+   "label_zh": "巴哈马",
+   "aliases": [
+    "багамські острови",
+    "جزر البهاما",
+    "bahamalar",
+    "איי בהאמה",
+    "bahamas",
+    "บาฮามาส",
+    "bahama",
+    "Багамы",
+    "باهاما",
+    "बहामास",
+    "バハマ",
+    "巴哈马",
+    "바하마"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BT": {
+   "region": "south_asia",
+   "label_zh": "不丹",
+   "aliases": [
+    "bhoutan",
+    "bhutan",
+    "butan",
+    "bután",
+    "butão",
+    "Бутан",
+    "בהוטן",
+    "بوتان",
+    "भूटान",
+    "ภูฏาน",
+    "ブータン",
+    "不丹",
+    "부탄"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BW": {
+   "region": "africa",
+   "label_zh": "博茨瓦纳",
+   "aliases": [
+    "बोत्स्वाना",
+    "botsuana",
+    "botsvana",
+    "botswana",
+    "Ботсвана",
+    "בוטסואנה",
+    "بوتسوانا",
+    "บอตสวานา",
+    "ボツワナ",
+    "博茨瓦纳",
+    "보츠와나"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "BY": {
+   "region": "europe",
+   "label_zh": "白俄罗斯",
+   "aliases": [
+    "bielorrússia",
+    "bielorrusia",
+    "bielorussia",
+    "biélorussie",
+    "Беларусь",
+    "Білорусь",
+    "belarus",
+    "بيلاروس",
+    "बेलारूस",
+    "เบลารุส",
+    "בלארוס",
+    "بلاروس",
+    "ベラルーシ",
+    "白俄罗斯",
+    "벨라루스"
+   ],
+   "weak_aliases": [
+    "belarusian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "BZ": {
+   "region": "latin_america",
+   "label_zh": "伯利兹",
+   "aliases": [
+    "belice",
+    "belize",
+    "बेलीज़",
+    "Белиз",
+    "Беліз",
+    "เบลีซ",
+    "בליז",
+    "بليز",
+    "بلیز",
+    "ベリーズ",
+    "伯利兹",
+    "벨리즈"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "CA": {
+   "region": "north_america",
+   "label_zh": "加拿大",
+   "aliases": [
+    "canada",
+    "canadá",
+    "kanada",
+    "Канада",
+    "کانادا",
+    "แคนาดา",
+    "कनाडा",
+    "קנדה",
+    "كندا",
+    "カナダ",
+    "加拿大",
+    "캐나다"
+   ],
+   "weak_aliases": [
+    "canadian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "CD": {
+   "region": "africa",
+   "label_zh": "刚果（金）",
+   "aliases": [
+    "república democrática del congo",
+    "الكونغو - كينشاسا",
+    "congo - kinshasa",
+    "kongo - kinshasa",
+    "dem. rep. congo",
+    "kongo - kinşasa",
+    "конго - киншаса",
+    "конго – кіншаса",
+    "קונגו - קינשאסה",
+    "कांगो - किंशासा",
+    "คองโก - กินชาซา",
+    "コンゴ民主共和国(キンシャサ)",
+    "congo-kinshasa",
+    "kongo-kinshasa",
+    "کنگو - کینشاسا",
+    "콩고-킨샤사",
+    "刚果（金）"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "CF": {
+   "region": "africa",
+   "label_zh": "中非共和国",
+   "aliases": [
+    "центрально-африканская республика",
+    "центральноафриканська республіка",
+    "zentralafrikanische republik",
+    "república centro-africana",
+    "république centrafricaine",
+    "central african republic",
+    "repubblica centrafricana",
+    "república centroafricana",
+    "הרפובליקה המרכז-אפריקאית",
+    "orta afrika cumhuriyeti",
+    "republik afrika tengah",
+    "جمهورية أفريقيا الوسطى",
+    "मध्य अफ़्रीकी गणराज्य",
+    "central african rep.",
+    "جمهوری افریقای مرکزی",
+    "สาธารณรัฐแอฟริกากลาง",
+    "cộng hòa trung phi",
+    "중앙 아프리카 공화국",
+    "中央アフリカ共和国",
+    "中非共和国"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "CG": {
+   "region": "africa",
+   "label_zh": "刚果（布）",
+   "aliases": [
+    "congo - brazzaville",
+    "kongo - brazzaville",
+    "república do congo",
+    "конго - браззавиль",
+    "конго – браззавіль",
+    "الكونغو - برازافيل",
+    "कांगो – ब्राज़ाविल",
+    "congo-brazzaville",
+    "kongo-brazzaville",
+    "คองโก - บราซซาวิล",
+    "kongo - brazavil",
+    "קונגו - ברזאויל",
+    "کنگو - برازویل",
+    "コンゴ共和国(ブラザビル)",
+    "콩고-브라자빌",
+    "刚果（布）"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "CH": {
+   "region": "europe",
+   "label_zh": "瑞士",
+   "aliases": [
+    "สวิตเซอร์แลนด์",
+    "स्विट्ज़रलैंड",
+    "switzerland",
+    "Швейцария",
+    "Швейцарія",
+    "i̇sviçre",
+    "svizzera",
+    "schweiz",
+    "thụy sĩ",
+    "suisse",
+    "שווייץ",
+    "سويسرا",
+    "suiza",
+    "suíça",
+    "سوئیس",
+    "スイス",
+    "스위스",
+    "瑞士"
+   ],
+   "weak_aliases": [
+    "swiss"
+   ],
+   "ambiguous_aliases": []
+  },
+  "CI": {
+   "region": "africa",
+   "label_zh": "科特迪瓦",
+   "aliases": [
+    "costa do marfim",
+    "costa d’avorio",
+    "côte d'ivoire",
+    "côte d’ivoire",
+    "кот-дʼівуар",
+    "кот-д’ивуар",
+    "ساحل العاج",
+    "कोत दिवुआर",
+    "โกตดิวัวร์",
+    "חוף השנהב",
+    "ساحل عاج",
+    "コートジボワール",
+    "코트디부아르",
+    "科特迪瓦"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "CL": {
+   "region": "latin_america",
+   "label_zh": "智利",
+   "aliases": [
+    "chile",
+    "chili",
+    "צ׳ילה",
+    "تشيلي",
+    "cile",
+    "şili",
+    "Чили",
+    "Чилі",
+    "شیلی",
+    "चिली",
+    "ชิลี",
+    "チリ",
+    "智利",
+    "칠레"
+   ],
+   "weak_aliases": [
+    "chilean"
+   ],
+   "ambiguous_aliases": []
+  },
+  "CM": {
+   "region": "africa",
+   "label_zh": "喀麦隆",
+   "aliases": [
+    "الكاميرون",
+    "camarões",
+    "cameroon",
+    "cameroun",
+    "แคเมอรูน",
+    "camerun",
+    "camerún",
+    "kamerun",
+    "Камерун",
+    "کامرون",
+    "कैमरून",
+    "קמרון",
+    "カメルーン",
+    "喀麦隆",
+    "카메룬"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "CN": {
+   "region": "east_asia",
+   "label_zh": "中国",
+   "aliases": [
+    "mainland china",
+    "trung quốc",
+    "tiongkok",
+    "china",
+    "chine",
+    "Китай",
+    "الصين",
+    "cina",
+    "prc",
+    "çin",
+    "סין",
+    "چین",
+    "चीन",
+    "จีน",
+    "中国",
+    "중국"
+   ],
+   "weak_aliases": [
+    "chinese"
+   ],
+   "ambiguous_aliases": []
+  },
+  "CO": {
+   "region": "latin_america",
+   "label_zh": "哥伦比亚",
+   "aliases": [
+    "kolombiya",
+    "kolumbien",
+    "โคลอมเบีย",
+    "colombia",
+    "colombie",
+    "colômbia",
+    "kolombia",
+    "Колумбия",
+    "Колумбія",
+    "קולומביה",
+    "كولومبيا",
+    "कोलंबिया",
+    "کلمبیا",
+    "コロンビア",
+    "哥伦比亚",
+    "콜롬비아"
+   ],
+   "weak_aliases": [
+    "colombian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "CR": {
+   "region": "latin_america",
+   "label_zh": "哥斯达黎加",
+   "aliases": [
+    "costa rica",
+    "kosta rika",
+    "коста-рика",
+    "קוסטה ריקה",
+    "कोस्टारिका",
+    "كوستاريكا",
+    "کاستاریکا",
+    "คอสตาริกา",
+    "コスタリカ",
+    "哥斯达黎加",
+    "코스타리카"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "CU": {
+   "region": "latin_america",
+   "label_zh": "古巴",
+   "aliases": [
+    "क्यूबा",
+    "คิวบา",
+    "cuba",
+    "kuba",
+    "küba",
+    "Куба",
+    "קובה",
+    "كوبا",
+    "کوبا",
+    "キューバ",
+    "古巴",
+    "쿠바"
+   ],
+   "weak_aliases": [
+    "cuban"
+   ],
+   "ambiguous_aliases": []
+  },
+  "CY": {
+   "region": "middle_east",
+   "label_zh": "塞浦路斯",
+   "aliases": [
+    "קפריסין",
+    "साइप्रस",
+    "chipre",
+    "chypre",
+    "cyprus",
+    "kıbrıs",
+    "siprus",
+    "zypern",
+    "ไซปรัส",
+    "cipro",
+    "Кипр",
+    "Кіпр",
+    "قبرس",
+    "قبرص",
+    "キプロス",
+    "塞浦路斯",
+    "키프로스",
+    "síp"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "CZ": {
+   "region": "europe",
+   "label_zh": "捷克",
+   "aliases": [
+    "tschechien",
+    "tchéquia",
+    "tchéquie",
+    "chequia",
+    "czechia",
+    "cechia",
+    "التشيك",
+    "चेकिया",
+    "çekya",
+    "Чехия",
+    "Чехія",
+    "צ׳כיה",
+    "ceko",
+    "เช็ก",
+    "séc",
+    "チェコ",
+    "چک",
+    "捷克",
+    "체코"
+   ],
+   "weak_aliases": [
+    "czech"
+   ],
+   "ambiguous_aliases": []
+  },
+  "DE": {
+   "region": "europe",
+   "label_zh": "德国",
+   "aliases": [
+    "deutschland",
+    "allemagne",
+    "Німеччина",
+    "alemanha",
+    "alemania",
+    "germania",
+    "Германия",
+    "almanya",
+    "germany",
+    "ألمانيا",
+    "เยอรมนี",
+    "jerman",
+    "גרמניה",
+    "जर्मनी",
+    "آلمان",
+    "đức",
+    "ドイツ",
+    "德国",
+    "독일"
+   ],
+   "weak_aliases": [
+    "german"
+   ],
+   "ambiguous_aliases": []
+  },
+  "DJ": {
+   "region": "africa",
+   "label_zh": "吉布提",
+   "aliases": [
+    "dschibuti",
+    "djibouti",
+    "djibuti",
+    "Джибути",
+    "Джибуті",
+    "ג׳יבוטי",
+    "cibuti",
+    "gibuti",
+    "jibuti",
+    "yibuti",
+    "جيبوتي",
+    "جیبوتی",
+    "जिबूती",
+    "จิบูตี",
+    "ジブチ",
+    "吉布提",
+    "지부티"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "DK": {
+   "region": "europe",
+   "label_zh": "丹麦",
+   "aliases": [
+    "danimarca",
+    "danimarka",
+    "dinamarca",
+    "danemark",
+    "dänemark",
+    "đan mạch",
+    "الدانمرك",
+    "डेनमार्क",
+    "เดนมาร์ก",
+    "denmark",
+    "دانمارک",
+    "Дания",
+    "Данія",
+    "דנמרק",
+    "デンマーク",
+    "덴마크",
+    "丹麦"
+   ],
+   "weak_aliases": [
+    "danish"
+   ],
+   "ambiguous_aliases": []
+  },
+  "DO": {
+   "region": "latin_america",
+   "label_zh": "多米尼加共和国",
+   "aliases": [
+    "доминиканская республика",
+    "домініканська республіка",
+    "dominikanische republik",
+    "république dominicaine",
+    "repubblica dominicana",
+    "הרפובליקה הדומיניקנית",
+    "república dominicana",
+    "dominik cumhuriyeti",
+    "جمهورية الدومينيكان",
+    "dominican republic",
+    "สาธารณรัฐโดมินิกัน",
+    "cộng hòa dominica",
+    "republik dominika",
+    "डोमिनिकन गणराज्य",
+    "جمهوری دومینیکن",
+    "dominican rep.",
+    "도미니카 공화국",
+    "ドミニカ共和国",
+    "多米尼加共和国"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "DZ": {
+   "region": "africa",
+   "label_zh": "阿尔及利亚",
+   "aliases": [
+    "अल्जीरिया",
+    "แอลจีเรีย",
+    "algerien",
+    "aljazair",
+    "אלג׳יריה",
+    "algeria",
+    "algérie",
+    "argelia",
+    "argélia",
+    "cezayir",
+    "الجزائر",
+    "الجزایر",
+    "アルジェリア",
+    "Алжир",
+    "阿尔及利亚",
+    "알제리"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "EC": {
+   "region": "latin_america",
+   "label_zh": "厄瓜多尔",
+   "aliases": [
+    "الإكوادور",
+    "เอกวาดอร์",
+    "équateur",
+    "इक्वाडोर",
+    "ecuador",
+    "ekuador",
+    "ekvador",
+    "equador",
+    "Еквадор",
+    "Эквадор",
+    "אקוודור",
+    "اکوادور",
+    "エクアドル",
+    "厄瓜多尔",
+    "에콰도르"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "EE": {
+   "region": "europe",
+   "label_zh": "爱沙尼亚",
+   "aliases": [
+    "एस्टोनिया",
+    "เอสโตเนีย",
+    "estland",
+    "estonia",
+    "estonie",
+    "estonya",
+    "estônia",
+    "Естонія",
+    "Эстония",
+    "אסטוניה",
+    "إستونيا",
+    "استونی",
+    "エストニア",
+    "에스토니아",
+    "爱沙尼亚"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "EG": {
+   "region": "middle_east",
+   "label_zh": "埃及",
+   "aliases": [
+    "ägypten",
+    "อียิปต์",
+    "ai cập",
+    "egipto",
+    "egitto",
+    "égypte",
+    "Єгипет",
+    "Египет",
+    "egito",
+    "egypt",
+    "mesir",
+    "mısır",
+    "מצרים",
+    "मिस्र",
+    "エジプト",
+    "مصر",
+    "이집트",
+    "埃及"
+   ],
+   "weak_aliases": [
+    "egyptian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "EH": {
+   "region": "africa",
+   "label_zh": "西撒哈拉",
+   "aliases": [
+    "sahara occidentale",
+    "sahara occidental",
+    "sáhara occidental",
+    "saara ocidental",
+    "западная сахара",
+    "الصحراء الغربية",
+    "western sahara",
+    "західна сахара",
+    "पश्चिमी सहारा",
+    "ซาฮาราตะวันตก",
+    "sahara barat",
+    "סהרה המערבית",
+    "batı sahra",
+    "tây sahara",
+    "westsahara",
+    "صحرای غربی",
+    "w. sahara",
+    "西サハラ",
+    "西撒哈拉",
+    "서사하라"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "ER": {
+   "region": "africa",
+   "label_zh": "厄立特里亚",
+   "aliases": [
+    "इरिट्रिया",
+    "เอริเทรีย",
+    "eritreia",
+    "érythrée",
+    "אריתריאה",
+    "eritrea",
+    "Еритрея",
+    "Эритрея",
+    "إريتريا",
+    "eritre",
+    "اریتره",
+    "エリトリア",
+    "厄立特里亚",
+    "에리트리아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "ES": {
+   "region": "europe",
+   "label_zh": "西班牙",
+   "aliases": [
+    "tây ban nha",
+    "i̇spanya",
+    "espagne",
+    "espanha",
+    "spanien",
+    "spanyol",
+    "Іспанія",
+    "Испания",
+    "إسبانيا",
+    "اسپانیا",
+    "españa",
+    "spagna",
+    "spain",
+    "स्पेन",
+    "ספרד",
+    "สเปน",
+    "スペイン",
+    "西班牙",
+    "스페인"
+   ],
+   "weak_aliases": [
+    "spanish"
+   ],
+   "ambiguous_aliases": []
+  },
+  "ET": {
+   "region": "africa",
+   "label_zh": "埃塞俄比亚",
+   "aliases": [
+    "เอธิโอเปีย",
+    "äthiopien",
+    "इथियोपिया",
+    "ethiopia",
+    "etiyopya",
+    "éthiopie",
+    "etiopia",
+    "etiopía",
+    "etiópia",
+    "Ефіопія",
+    "Эфиопия",
+    "אתיופיה",
+    "إثيوبيا",
+    "اتیوپی",
+    "エチオピア",
+    "埃塞俄比亚",
+    "에티오피아"
+   ],
+   "weak_aliases": [
+    "ethiopian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "FI": {
+   "region": "europe",
+   "label_zh": "芬兰",
+   "aliases": [
+    "finlandiya",
+    "finlandia",
+    "finlândia",
+    "Финляндия",
+    "Фінляндія",
+    "finlande",
+    "finnland",
+    "phần lan",
+    "फ़िनलैंड",
+    "ฟินแลนด์",
+    "finland",
+    "פינלנד",
+    "فنلاند",
+    "فنلندا",
+    "フィンランド",
+    "핀란드",
+    "芬兰"
+   ],
+   "weak_aliases": [
+    "finnish"
+   ],
+   "ambiguous_aliases": []
+  },
+  "FJ": {
+   "region": "oceania",
+   "label_zh": "斐济",
+   "aliases": [
+    "fidschi",
+    "fidji",
+    "Фиджи",
+    "Фіджі",
+    "פיג׳י",
+    "फ़िजी",
+    "figi",
+    "fiji",
+    "fiyi",
+    "فيجي",
+    "فیجی",
+    "ฟิจิ",
+    "フィジー",
+    "斐济",
+    "피지"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "FK": {
+   "region": "latin_america",
+   "label_zh": "福克兰群岛",
+   "aliases": [
+    "фолклендські острови",
+    "kepulauan falkland",
+    "फ़ॉकलैंड द्वीपसमूह",
+    "หมู่เกาะฟอล์กแลนด์",
+    "quần đảo falkland",
+    "фолклендские о-ва",
+    "falkland adaları",
+    "falkland islands",
+    "falklandinseln",
+    "ilhas malvinas",
+    "islas malvinas",
+    "isole falkland",
+    "îles malouines",
+    "جزایر فالکلند",
+    "falkland is.",
+    "جزر فوكلاند",
+    "איי פוקלנד",
+    "フォークランド諸島",
+    "포클랜드 제도",
+    "福克兰群岛"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "FR": {
+   "region": "europe",
+   "label_zh": "法国",
+   "aliases": [
+    "frankreich",
+    "ฝรั่งเศส",
+    "francia",
+    "prancis",
+    "Франция",
+    "Франція",
+    "फ़्रांस",
+    "france",
+    "fransa",
+    "frança",
+    "فرانسه",
+    "فرنسا",
+    "pháp",
+    "צרפת",
+    "フランス",
+    "프랑스",
+    "法国"
+   ],
+   "weak_aliases": [
+    "french"
+   ],
+   "ambiguous_aliases": []
+  },
+  "GA": {
+   "region": "africa",
+   "label_zh": "加蓬",
+   "aliases": [
+    "الغابون",
+    "gabon",
+    "gabun",
+    "gabão",
+    "gabón",
+    "Габон",
+    "गैबॉन",
+    "กาบอง",
+    "גבון",
+    "گابن",
+    "ガボン",
+    "加蓬",
+    "가봉"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GB": {
+   "region": "europe",
+   "label_zh": "英国",
+   "aliases": [
+    "vereinigtes königreich",
+    "birleşik krallık",
+    "велика британія",
+    "المملكة المتحدة",
+    "यूनाइटेड किंगडम",
+    "united kingdom",
+    "vương quốc anh",
+    "Великобритания",
+    "สหราชอาณาจักร",
+    "inggris raya",
+    "regno unito",
+    "reino unido",
+    "royaume-uni",
+    "scotland",
+    "بریتانیا",
+    "britain",
+    "england",
+    "בריטניה",
+    "wales",
+    "u.k.",
+    "イギリス",
+    "英国",
+    "영국"
+   ],
+   "weak_aliases": [
+    "british"
+   ],
+   "ambiguous_aliases": [
+    "uk"
+   ]
+  },
+  "GE": {
+   "region": "middle_east",
+   "label_zh": "格鲁吉亚",
+   "aliases": [
+    "gürcistan",
+    "georgien",
+    "जॉर्जिया",
+    "จอร์เจีย",
+    "geórgia",
+    "géorgie",
+    "גאורגיה",
+    "گرجستان",
+    "Грузия",
+    "Грузія",
+    "جورجيا",
+    "ジョージア",
+    "格鲁吉亚",
+    "조지아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GH": {
+   "region": "africa",
+   "label_zh": "加纳",
+   "aliases": [
+    "ghana",
+    "gana",
+    "Гана",
+    "גאנה",
+    "غانا",
+    "घाना",
+    "กานา",
+    "غنا",
+    "ガーナ",
+    "加纳",
+    "가나"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GL": {
+   "region": "north_america",
+   "label_zh": "格陵兰",
+   "aliases": [
+    "groenlandia",
+    "groenlândia",
+    "Гренландия",
+    "Гренландія",
+    "greenland",
+    "groenland",
+    "ग्रीनलैंड",
+    "กรีนแลนด์",
+    "grönland",
+    "غرينلاند",
+    "גרינלנד",
+    "گرینلند",
+    "グリーンランド",
+    "그린란드",
+    "格陵兰"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GM": {
+   "region": "africa",
+   "label_zh": "冈比亚",
+   "aliases": [
+    "गाम्बिया",
+    "gambiya",
+    "แกมเบีย",
+    "gambia",
+    "gambie",
+    "gâmbia",
+    "Гамбия",
+    "Гамбія",
+    "غامبيا",
+    "گامبیا",
+    "גמביה",
+    "ガンビア",
+    "冈比亚",
+    "감비아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GN": {
+   "region": "africa",
+   "label_zh": "几内亚",
+   "aliases": [
+    "guinée",
+    "Гвинея",
+    "Гвінея",
+    "guiné",
+    "גינאה",
+    "غينيا",
+    "gine",
+    "گینه",
+    "गिनी",
+    "กินี",
+    "ギニア",
+    "几内亚",
+    "기니"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GQ": {
+   "region": "africa",
+   "label_zh": "赤道几内亚",
+   "aliases": [
+    "экваториальная гвинея",
+    "екваторіальна гвінея",
+    "guinea equatoriale",
+    "guinée équatoriale",
+    "equatorial guinea",
+    "guinea ecuatorial",
+    "guinea ekuatorial",
+    "guiné equatorial",
+    "äquatorialguinea",
+    "غينيا الاستوائية",
+    "इक्वेटोरियल गिनी",
+    "อิเควทอเรียลกินี",
+    "guinea xích đạo",
+    "ekvator ginesi",
+    "גינאה המשוונית",
+    "گینهٔ استوایی",
+    "eq. guinea",
+    "赤道ギニア",
+    "赤道几内亚",
+    "적도 기니"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GR": {
+   "region": "europe",
+   "label_zh": "希腊",
+   "aliases": [
+    "griechenland",
+    "yunanistan",
+    "اليونان",
+    "grecia",
+    "greece",
+    "grécia",
+    "hy lạp",
+    "yunani",
+    "Греция",
+    "Греція",
+    "grèce",
+    "یونان",
+    "यूनान",
+    "יוון",
+    "กรีซ",
+    "ギリシャ",
+    "그리스",
+    "希腊"
+   ],
+   "weak_aliases": [
+    "greek"
+   ],
+   "ambiguous_aliases": []
+  },
+  "GT": {
+   "region": "latin_america",
+   "label_zh": "危地马拉",
+   "aliases": [
+    "ग्वाटेमाला",
+    "guatemala",
+    "Гватемала",
+    "غواتيمالا",
+    "กัวเตมาลา",
+    "گواتمالا",
+    "גואטמלה",
+    "グアテマラ",
+    "危地马拉",
+    "과테말라"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GW": {
+   "region": "africa",
+   "label_zh": "几内亚比绍",
+   "aliases": [
+    "guinea-bissau",
+    "guinée-bissau",
+    "guinea-bisáu",
+    "guiné-bissau",
+    "гвинея-бисау",
+    "гвінея-бісау",
+    "گینهٔ بیسائو",
+    "gine-bissau",
+    "גינאה-ביסאו",
+    "غينيا بيساو",
+    "กินี-บิสเซา",
+    "गिनी-बिसाउ",
+    "ギニアビサウ",
+    "几内亚比绍",
+    "기니비사우"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "GY": {
+   "region": "latin_america",
+   "label_zh": "圭亚那",
+   "aliases": [
+    "กายอานา",
+    "guiana",
+    "guyana",
+    "Гайана",
+    "गुयाना",
+    "Гаяна",
+    "גיאנה",
+    "غيانا",
+    "گویان",
+    "ガイアナ",
+    "가이아나",
+    "圭亚那"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "HK": {
+   "region": "east_asia",
+   "label_zh": "中国香港",
+   "aliases": [
+    "เขตปกครองพิเศษฮ่องกงแห่งสาธารณรัฐประชาชนจีน",
+    "đặc khu hành chính hồng kông, trung quốc",
+    "हाँग काँग (चीन विशेष प्रशासनिक क्षेत्र)",
+    "هونغ كونغ الصينية (منطقة إدارية خاصة)",
+    "הונג קונג (אזור מנהלי מיוחד של סין)",
+    "sonderverwaltungsregion hongkong",
+    "هنگ‌کنگ، منطقهٔ ویژهٔ اداری چین",
+    "r.a.s. chinoise de hong kong",
+    "rae de hong kong (china)",
+    "hong kong, rae da china",
+    "hong kong dak tiongkok",
+    "hong kong sar china",
+    "çin hong kong öi̇b",
+    "гонконг, оар китаю",
+    "ras di hong kong",
+    "中華人民共和国香港特別行政区",
+    "гонконг (сар)",
+    "홍콩(중국 특별행정구)",
+    "hong kong",
+    "中国香港特别行政区",
+    "hongkong",
+    "中国香港"
+   ],
+   "weak_aliases": [
+    "hong konger"
+   ],
+   "ambiguous_aliases": []
+  },
+  "HN": {
+   "region": "latin_america",
+   "label_zh": "洪都拉斯",
+   "aliases": [
+    "honduras",
+    "Гондурас",
+    "होंडूरास",
+    "ฮอนดูรัส",
+    "הונדורס",
+    "هندوراس",
+    "ホンジュラス",
+    "洪都拉斯",
+    "온두라스"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "HR": {
+   "region": "europe",
+   "label_zh": "克罗地亚",
+   "aliases": [
+    "hırvatistan",
+    "क्रोएशिया",
+    "โครเอเชีย",
+    "kroatien",
+    "Хорватия",
+    "Хорватія",
+    "croacia",
+    "croatia",
+    "croatie",
+    "croazia",
+    "croácia",
+    "kroasia",
+    "קרואטיה",
+    "كرواتيا",
+    "کرواسی",
+    "クロアチア",
+    "크로아티아",
+    "克罗地亚"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "HT": {
+   "region": "latin_america",
+   "label_zh": "海地",
+   "aliases": [
+    "هائیتی",
+    "haiti",
+    "haití",
+    "haïti",
+    "Гаити",
+    "Гаїті",
+    "האיטי",
+    "هايتي",
+    "हैती",
+    "เฮติ",
+    "ハイチ",
+    "아이티",
+    "海地"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "HU": {
+   "region": "europe",
+   "label_zh": "匈牙利",
+   "aliases": [
+    "macaristan",
+    "hungaria",
+    "ungheria",
+    "Угорщина",
+    "مجارستان",
+    "hongrie",
+    "hungary",
+    "hungria",
+    "hungría",
+    "Венгрия",
+    "הונגריה",
+    "هنغاريا",
+    "ฮังการี",
+    "ungarn",
+    "हंगरी",
+    "ハンガリー",
+    "匈牙利",
+    "헝가리"
+   ],
+   "weak_aliases": [
+    "hungarian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "ID": {
+   "region": "southeast_asia",
+   "label_zh": "印度尼西亚",
+   "aliases": [
+    "อินโดนีเซีย",
+    "indonesien",
+    "इंडोनेशिया",
+    "endonezya",
+    "indonesia",
+    "indonésia",
+    "indonésie",
+    "Індонезія",
+    "Индонезия",
+    "אינדונזיה",
+    "إندونيسيا",
+    "اندونزی",
+    "インドネシア",
+    "印度尼西亚",
+    "인도네시아"
+   ],
+   "weak_aliases": [
+    "indonesian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "IE": {
+   "region": "europe",
+   "label_zh": "爱尔兰",
+   "aliases": [
+    "ไอร์แลนด์",
+    "irlandia",
+    "i̇rlanda",
+    "Ірландія",
+    "Ирландия",
+    "ireland",
+    "irlanda",
+    "irlande",
+    "أيرلندا",
+    "आयरलैंड",
+    "irland",
+    "אירלנד",
+    "ایرلند",
+    "アイルランド",
+    "아일랜드",
+    "爱尔兰"
+   ],
+   "weak_aliases": [
+    "irish"
+   ],
+   "ambiguous_aliases": []
+  },
+  "IL": {
+   "region": "middle_east",
+   "label_zh": "以色列",
+   "aliases": [
+    "อิสราเอล",
+    "israele",
+    "i̇srail",
+    "Ізраїль",
+    "Израиль",
+    "إسرائيل",
+    "اسرائیل",
+    "इज़राइल",
+    "israel",
+    "israël",
+    "ישראל",
+    "イスラエル",
+    "이스라엘",
+    "以色列"
+   ],
+   "weak_aliases": [
+    "israeli"
+   ],
+   "ambiguous_aliases": []
+  },
+  "IN": {
+   "region": "south_asia",
+   "label_zh": "印度",
+   "aliases": [
+    "hindistan",
+    "อินเดีย",
+    "indien",
+    "india",
+    "índia",
+    "Індія",
+    "Индия",
+    "الهند",
+    "ấn độ",
+    "inde",
+    "הודו",
+    "भारत",
+    "هند",
+    "インド",
+    "印度",
+    "인도"
+   ],
+   "weak_aliases": [
+    "indian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "IQ": {
+   "region": "middle_east",
+   "label_zh": "伊拉克",
+   "aliases": [
+    "iraque",
+    "العراق",
+    "עיראק",
+    "อิรัก",
+    "irak",
+    "iraq",
+    "Ірак",
+    "Ирак",
+    "عراق",
+    "इराक",
+    "イラク",
+    "伊拉克",
+    "이라크"
+   ],
+   "weak_aliases": [
+    "iraqi"
+   ],
+   "ambiguous_aliases": []
+  },
+  "IR": {
+   "region": "middle_east",
+   "label_zh": "伊朗",
+   "aliases": [
+    "อิหร่าน",
+    "i̇ran",
+    "איראן",
+    "إيران",
+    "ایران",
+    "iran",
+    "irán",
+    "Іран",
+    "Иран",
+    "ईरान",
+    "irã",
+    "イラン",
+    "伊朗",
+    "이란"
+   ],
+   "weak_aliases": [
+    "iranian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "IS": {
+   "region": "europe",
+   "label_zh": "冰岛",
+   "aliases": [
+    "ไอซ์แลนด์",
+    "islandia",
+    "islândia",
+    "i̇zlanda",
+    "Ісландія",
+    "Исландия",
+    "iceland",
+    "islanda",
+    "islande",
+    "آيسلندا",
+    "आइसलैंड",
+    "island",
+    "איסלנד",
+    "ایسلند",
+    "アイスランド",
+    "아이슬란드",
+    "冰岛"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "IT": {
+   "region": "europe",
+   "label_zh": "意大利",
+   "aliases": [
+    "italien",
+    "i̇talya",
+    "إيطاليا",
+    "ایتالیا",
+    "italia",
+    "italie",
+    "itália",
+    "Італія",
+    "Италия",
+    "איטליה",
+    "อิตาลี",
+    "italy",
+    "इटली",
+    "イタリア",
+    "이탈리아",
+    "意大利"
+   ],
+   "weak_aliases": [
+    "italian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "JM": {
+   "region": "latin_america",
+   "label_zh": "牙买加",
+   "aliases": [
+    "giamaica",
+    "jamaïque",
+    "جامائیکا",
+    "jamaica",
+    "jamaika",
+    "ג׳מייקה",
+    "جامايكا",
+    "Ямайка",
+    "จาเมกา",
+    "जमैका",
+    "ジャマイカ",
+    "자메이카",
+    "牙买加"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "JO": {
+   "region": "middle_east",
+   "label_zh": "约旦",
+   "aliases": [
+    "giordania",
+    "jordanien",
+    "jordania",
+    "jordanie",
+    "jordânia",
+    "yordania",
+    "Иордания",
+    "Йорданія",
+    "จอร์แดน",
+    "الأردن",
+    "जॉर्डन",
+    "ürdün",
+    "ירדן",
+    "اردن",
+    "ヨルダン",
+    "요르단",
+    "约旦"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "JP": {
+   "region": "east_asia",
+   "label_zh": "日本",
+   "aliases": [
+    "giappone",
+    "nhật bản",
+    "japonya",
+    "اليابان",
+    "ญี่ปุ่น",
+    "jepang",
+    "Япония",
+    "Японія",
+    "japan",
+    "japon",
+    "japão",
+    "japón",
+    "जापान",
+    "ژاپن",
+    "יפן",
+    "日本",
+    "일본"
+   ],
+   "weak_aliases": [
+    "japanese"
+   ],
+   "ambiguous_aliases": []
+  },
+  "KE": {
+   "region": "africa",
+   "label_zh": "肯尼亚",
+   "aliases": [
+    "quênia",
+    "केन्या",
+    "kenia",
+    "kenya",
+    "Кения",
+    "Кенія",
+    "كينيا",
+    "เคนยา",
+    "קניה",
+    "کنیا",
+    "ケニア",
+    "肯尼亚",
+    "케냐"
+   ],
+   "weak_aliases": [
+    "kenyan"
+   ],
+   "ambiguous_aliases": []
+  },
+  "KG": {
+   "region": "central_asia",
+   "label_zh": "吉尔吉斯斯坦",
+   "aliases": [
+    "किर्गिज़स्तान",
+    "kirghizistan",
+    "kirghizstan",
+    "kirgisistan",
+    "kırgızistan",
+    "quirguistão",
+    "คีร์กีซสถาน",
+    "kirgizstan",
+    "kirguistán",
+    "kyrgyzstan",
+    "Киргизстан",
+    "قيرغيزستان",
+    "קירגיזסטן",
+    "قرقیزستان",
+    "Киргизия",
+    "吉尔吉斯斯坦",
+    "키르기스스탄",
+    "キルギス"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "KH": {
+   "region": "southeast_asia",
+   "label_zh": "柬埔寨",
+   "aliases": [
+    "kambodscha",
+    "campuchia",
+    "cambodge",
+    "cambodia",
+    "cambogia",
+    "kamboçya",
+    "Камбоджа",
+    "कंबोडिया",
+    "camboja",
+    "camboya",
+    "kamboja",
+    "קמבודיה",
+    "كمبوديا",
+    "กัมพูชา",
+    "کامبوج",
+    "カンボジア",
+    "캄보디아",
+    "柬埔寨"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "KP": {
+   "region": "east_asia",
+   "label_zh": "朝鲜",
+   "aliases": [
+    "corea del norte",
+    "coreia do norte",
+    "corea del nord",
+    "північна корея",
+    "קוריאה הצפונית",
+    "كوريا الشمالية",
+    "corée du nord",
+    "उत्तर कोरिया",
+    "korea utara",
+    "north korea",
+    "เกาหลีเหนือ",
+    "kuzey kore",
+    "triều tiên",
+    "کرهٔ شمالی",
+    "nordkorea",
+    "dprk",
+    "КНДР",
+    "北朝鮮",
+    "朝鲜",
+    "북한"
+   ],
+   "weak_aliases": [
+    "north korean"
+   ],
+   "ambiguous_aliases": []
+  },
+  "KR": {
+   "region": "east_asia",
+   "label_zh": "韩国",
+   "aliases": [
+    "republic of korea",
+    "республика корея",
+    "південна корея",
+    "קוריאה הדרומית",
+    "كوريا الجنوبية",
+    "corea del sud",
+    "corea del sur",
+    "coreia do sul",
+    "korea selatan",
+    "दक्षिण कोरिया",
+    "corée du sud",
+    "south korea",
+    "güney kore",
+    "کرهٔ جنوبی",
+    "เกาหลีใต้",
+    "hàn quốc",
+    "südkorea",
+    "대한민국",
+    "韓国",
+    "韩国"
+   ],
+   "weak_aliases": [
+    "south korean"
+   ],
+   "ambiguous_aliases": []
+  },
+  "KW": {
+   "region": "middle_east",
+   "label_zh": "科威特",
+   "aliases": [
+    "koweït",
+    "kuveyt",
+    "kuwait",
+    "Кувейт",
+    "الكويت",
+    "כווית",
+    "कुवैत",
+    "คูเวต",
+    "クウェート",
+    "کویت",
+    "쿠웨이트",
+    "科威特"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "KZ": {
+   "region": "central_asia",
+   "label_zh": "哈萨克斯坦",
+   "aliases": [
+    "cazaquistão",
+    "kasachstan",
+    "kazajistán",
+    "kazakhstan",
+    "kazakistan",
+    "कज़ाखस्तान",
+    "Казахстан",
+    "كازاخستان",
+    "คาซัคสถาน",
+    "قزاقستان",
+    "קזחסטן",
+    "カザフスタン",
+    "哈萨克斯坦",
+    "카자흐스탄"
+   ],
+   "weak_aliases": [
+    "kazakh"
+   ],
+   "ambiguous_aliases": []
+  },
+  "LA": {
+   "region": "southeast_asia",
+   "label_zh": "老挝",
+   "aliases": [
+    "لائوس",
+    "laos",
+    "Лаос",
+    "לאוס",
+    "لاوس",
+    "लाओस",
+    "lào",
+    "ลาว",
+    "ラオス",
+    "라오스",
+    "老挝"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "LB": {
+   "region": "middle_east",
+   "label_zh": "黎巴嫩",
+   "aliases": [
+    "lebanon",
+    "li-băng",
+    "libanon",
+    "เลบานอน",
+    "libano",
+    "líbano",
+    "lübnan",
+    "लेबनान",
+    "liban",
+    "Ливан",
+    "Ліван",
+    "לבנון",
+    "لبنان",
+    "レバノン",
+    "黎巴嫩",
+    "레바논"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "LK": {
+   "region": "south_asia",
+   "label_zh": "斯里兰卡",
+   "aliases": [
+    "sri lanka",
+    "шри-ланка",
+    "шрі-ланка",
+    "سری‌لانکا",
+    "סרי לנקה",
+    "سريلانكا",
+    "श्रीलंका",
+    "ศรีลังกา",
+    "スリランカ",
+    "斯里兰卡",
+    "스리랑카"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "LR": {
+   "region": "africa",
+   "label_zh": "利比里亚",
+   "aliases": [
+    "लाइबेरिया",
+    "ไลบีเรีย",
+    "liberia",
+    "liberya",
+    "libéria",
+    "Либерия",
+    "Ліберія",
+    "ليبيريا",
+    "ליבריה",
+    "لیبریا",
+    "라이베리아",
+    "リベリア",
+    "利比里亚"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "LS": {
+   "region": "africa",
+   "label_zh": "莱索托",
+   "aliases": [
+    "lesotho",
+    "lesoto",
+    "Лесото",
+    "ليسوتو",
+    "लेसोथो",
+    "เลโซโท",
+    "לסוטו",
+    "لسوتو",
+    "レソト",
+    "莱索托",
+    "레소토"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "LT": {
+   "region": "europe",
+   "label_zh": "立陶宛",
+   "aliases": [
+    "lithuania",
+    "लिथुआनिया",
+    "ลิทัวเนีย",
+    "lituania",
+    "lituanie",
+    "lituânia",
+    "litvanya",
+    "ليتوانيا",
+    "litauen",
+    "لیتوانی",
+    "litva",
+    "Литва",
+    "リトアニア",
+    "리투아니아",
+    "ליטא",
+    "立陶宛"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "LU": {
+   "region": "europe",
+   "label_zh": "卢森堡",
+   "aliases": [
+    "ลักเซมเบิร์ก",
+    "lussemburgo",
+    "luksemburg",
+    "luxembourg",
+    "luxemburgo",
+    "lüksemburg",
+    "Люксембург",
+    "لوکزامبورگ",
+    "लग्ज़मबर्ग",
+    "luxemburg",
+    "לוקסמבורג",
+    "لوكسمبورغ",
+    "ルクセンブルク",
+    "룩셈부르크",
+    "卢森堡"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "LV": {
+   "region": "europe",
+   "label_zh": "拉脱维亚",
+   "aliases": [
+    "lettland",
+    "lettonia",
+    "lettonie",
+    "letonia",
+    "letonya",
+    "letônia",
+    "लातविया",
+    "ลัตเวีย",
+    "latvia",
+    "Латвия",
+    "Латвія",
+    "لاتفيا",
+    "לטביה",
+    "لتونی",
+    "ラトビア",
+    "拉脱维亚",
+    "라트비아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "LY": {
+   "region": "africa",
+   "label_zh": "利比亚",
+   "aliases": [
+    "libyen",
+    "लीबिया",
+    "ลิเบีย",
+    "libia",
+    "libya",
+    "libye",
+    "líbia",
+    "Ливия",
+    "Лівія",
+    "ليبيا",
+    "لیبی",
+    "לוב",
+    "リビア",
+    "利比亚",
+    "리비아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MA": {
+   "region": "africa",
+   "label_zh": "摩洛哥",
+   "aliases": [
+    "marruecos",
+    "marrocos",
+    "โมร็อกโก",
+    "marocco",
+    "marokko",
+    "morocco",
+    "Марокко",
+    "मोरक्को",
+    "ma-rốc",
+    "maroko",
+    "المغرب",
+    "maroc",
+    "מרוקו",
+    "مراکش",
+    "モロッコ",
+    "fas",
+    "摩洛哥",
+    "모로코"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MD": {
+   "region": "europe",
+   "label_zh": "摩尔多瓦",
+   "aliases": [
+    "republik moldau",
+    "moldavia",
+    "moldavie",
+    "moldávia",
+    "मॉल्डोवा",
+    "moldova",
+    "Молдова",
+    "מולדובה",
+    "مولداوی",
+    "مولدوفا",
+    "มอลโดวา",
+    "モルドバ",
+    "摩尔多瓦",
+    "몰도바"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "ME": {
+   "region": "europe",
+   "label_zh": "黑山",
+   "aliases": [
+    "الجبل الأسود",
+    "मोंटेनेग्रो",
+    "montenegro",
+    "monténégro",
+    "Черногория",
+    "Чорногорія",
+    "مونته‌نگرو",
+    "มอนเตเนโกร",
+    "מונטנגרו",
+    "karadağ",
+    "モンテネグロ",
+    "몬테네그로",
+    "黑山"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MG": {
+   "region": "africa",
+   "label_zh": "马达加斯加",
+   "aliases": [
+    "มาดากัสการ์",
+    "madagascar",
+    "madagaskar",
+    "Мадагаскар",
+    "ماداگاسکار",
+    "मेडागास्कर",
+    "מדגסקר",
+    "مدغشقر",
+    "マダガスカル",
+    "마다가스카르",
+    "马达加斯加"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MK": {
+   "region": "europe",
+   "label_zh": "北马其顿",
+   "aliases": [
+    "macedonia del norte",
+    "macedonia del nord",
+    "macedônia do norte",
+    "північна македонія",
+    "северная македония",
+    "macédoine du nord",
+    "مقدونيا الشمالية",
+    "kuzey makedonya",
+    "makedonia utara",
+    "north macedonia",
+    "מקדוניה הצפונית",
+    "उत्तरी मकदूनिया",
+    "มาซิโดเนียเหนือ",
+    "nordmazedonien",
+    "مقدونیهٔ شمالی",
+    "bắc macedonia",
+    "北マケドニア",
+    "북마케도니아",
+    "北马其顿"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "ML": {
+   "region": "africa",
+   "label_zh": "马里",
+   "aliases": [
+    "mali",
+    "Мали",
+    "Малі",
+    "מאלי",
+    "مالي",
+    "مالی",
+    "माली",
+    "มาลี",
+    "マリ",
+    "马里",
+    "말리"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MM": {
+   "region": "southeast_asia",
+   "label_zh": "缅甸",
+   "aliases": [
+    "myanmar (miến điện)",
+    "mianmar (birmânia)",
+    "myanmar (birmania)",
+    "myanmar (birmanie)",
+    "म्यांमार (बर्मा)",
+    "myanmar (burma)",
+    "ميانمار (بورما)",
+    "мʼянма (бірма)",
+    "мьянма (бирма)",
+    "מיאנמר (בורמה)",
+    "میانمار (برمه)",
+    "เมียนมา (พม่า)",
+    "ミャンマー (ビルマ)",
+    "myanmar",
+    "미얀마",
+    "缅甸"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MN": {
+   "region": "east_asia",
+   "label_zh": "蒙古",
+   "aliases": [
+    "moğolistan",
+    "มองโกเลีย",
+    "mongolei",
+    "mongolia",
+    "mongolie",
+    "mongólia",
+    "Монголия",
+    "Монголія",
+    "מונגוליה",
+    "مغولستان",
+    "मंगोलिया",
+    "mông cổ",
+    "منغوليا",
+    "モンゴル",
+    "蒙古",
+    "몽골"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MO": {
+   "region": "east_asia",
+   "label_zh": "中国澳门",
+   "aliases": [
+    "เขตปกครองพิเศษมาเก๊าแห่งสาธารณรัฐประชาชนจีน",
+    "đặc khu hành chính macao, trung quốc",
+    "मकाऊ (विशेष प्रशासनिक क्षेत्र चीन)",
+    "מקאו (אזור מנהלי מיוחד של סין)",
+    "ماکائو، منطقهٔ ویژهٔ اداری چین",
+    "sonderverwaltungsregion macau",
+    "منطقة ماكاو الإدارية الخاصة",
+    "r.a.s. chinoise de macao",
+    "rae de macao (china)",
+    "macau, rae da china",
+    "makau dak tiongkok",
+    "макао, оар китаю",
+    "macao sar china",
+    "中華人民共和国マカオ特別行政区",
+    "çin makao öi̇b",
+    "마카오(중국 특별행정구)",
+    "ras di macao",
+    "макао (сар)",
+    "中国澳门特别行政区",
+    "macao",
+    "中国澳门"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MR": {
+   "region": "africa",
+   "label_zh": "毛里塔尼亚",
+   "aliases": [
+    "mauretanien",
+    "mauritania",
+    "mauritanie",
+    "mauritânia",
+    "Мавритания",
+    "Мавританія",
+    "मॉरिटानिया",
+    "มอริเตเนีย",
+    "moritanya",
+    "מאוריטניה",
+    "موريتانيا",
+    "موریتانی",
+    "モーリタニア",
+    "毛里塔尼亚",
+    "모리타니"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MW": {
+   "region": "africa",
+   "label_zh": "马拉维",
+   "aliases": [
+    "malaui",
+    "malavi",
+    "malawi",
+    "Малави",
+    "Малаві",
+    "מלאווי",
+    "مالاوی",
+    "มาลาวี",
+    "ملاوي",
+    "मलावी",
+    "マラウイ",
+    "马拉维",
+    "말라위"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MX": {
+   "region": "latin_america",
+   "label_zh": "墨西哥",
+   "aliases": [
+    "मैक्सिको",
+    "เม็กซิโก",
+    "meksika",
+    "meksiko",
+    "messico",
+    "mexique",
+    "Мексика",
+    "المكسيك",
+    "mexico",
+    "mexiko",
+    "méxico",
+    "מקסיקו",
+    "مکزیک",
+    "メキシコ",
+    "墨西哥",
+    "멕시코"
+   ],
+   "weak_aliases": [
+    "mexican"
+   ],
+   "ambiguous_aliases": []
+  },
+  "MY": {
+   "region": "southeast_asia",
+   "label_zh": "马来西亚",
+   "aliases": [
+    "malaisie",
+    "malaysia",
+    "Малайзия",
+    "Малайзія",
+    "มาเลเซีย",
+    "malasia",
+    "malezya",
+    "malásia",
+    "ماليزيا",
+    "मलेशिया",
+    "מלזיה",
+    "مالزی",
+    "マレーシア",
+    "말레이시아",
+    "马来西亚"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "MZ": {
+   "region": "africa",
+   "label_zh": "莫桑比克",
+   "aliases": [
+    "mozambique",
+    "moçambique",
+    "mozambico",
+    "मोज़ांबिक",
+    "mosambik",
+    "mozambik",
+    "Мозамбик",
+    "Мозамбік",
+    "موزامبیک",
+    "โมซัมบิก",
+    "מוזמביק",
+    "موزمبيق",
+    "モザンビーク",
+    "莫桑比克",
+    "모잠비크"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "NA": {
+   "region": "africa",
+   "label_zh": "纳米比亚",
+   "aliases": [
+    "नामीबिया",
+    "นามิเบีย",
+    "namibia",
+    "namibie",
+    "namibya",
+    "namíbia",
+    "Намибия",
+    "Намібія",
+    "ناميبيا",
+    "نامیبیا",
+    "נמיביה",
+    "ナミビア",
+    "纳米比亚",
+    "나미비아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "NC": {
+   "region": "oceania",
+   "label_zh": "新喀里多尼亚",
+   "aliases": [
+    "nouvelle-calédonie",
+    "كاليدونيا الجديدة",
+    "nueva caledonia",
+    "nuova caledonia",
+    "новая каледония",
+    "न्यू कैलेडोनिया",
+    "kaledonia baru",
+    "nova caledônia",
+    "yeni kaledonya",
+    "нова каледонія",
+    "کالدونیای جدید",
+    "neukaledonien",
+    "new caledonia",
+    "קלדוניה החדשה",
+    "นิวแคลิโดเนีย",
+    "ニューカレドニア",
+    "新喀里多尼亚",
+    "뉴칼레도니아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "NE": {
+   "region": "africa",
+   "label_zh": "尼日尔",
+   "aliases": [
+    "ไนเจอร์",
+    "النيجر",
+    "niger",
+    "nijer",
+    "níger",
+    "Нигер",
+    "Нігер",
+    "ניז׳ר",
+    "नाइजर",
+    "ニジェール",
+    "نیجر",
+    "尼日尔",
+    "니제르"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "NG": {
+   "region": "africa",
+   "label_zh": "尼日利亚",
+   "aliases": [
+    "नाइजीरिया",
+    "ไนจีเรีย",
+    "nigeria",
+    "nigéria",
+    "nijerya",
+    "Нигерия",
+    "Нігерія",
+    "نيجيريا",
+    "ניגריה",
+    "نیجریه",
+    "ナイジェリア",
+    "나이지리아",
+    "尼日利亚"
+   ],
+   "weak_aliases": [
+    "nigerian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "NI": {
+   "region": "latin_america",
+   "label_zh": "尼加拉瓜",
+   "aliases": [
+    "نیکاراگوئه",
+    "nicaragua",
+    "nicarágua",
+    "nikaragua",
+    "Никарагуа",
+    "Нікарагуа",
+    "نيكاراغوا",
+    "निकारागुआ",
+    "นิการากัว",
+    "ניקרגואה",
+    "ニカラグア",
+    "尼加拉瓜",
+    "니카라과"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "NL": {
+   "region": "europe",
+   "label_zh": "荷兰",
+   "aliases": [
+    "países baixos",
+    "países bajos",
+    "เนเธอร์แลนด์",
+    "netherlands",
+    "niederlande",
+    "paesi bassi",
+    "Нидерланды",
+    "Нідерланди",
+    "hollanda",
+    "pays-bas",
+    "नीदरलैंड",
+    "belanda",
+    "hà lan",
+    "هولندا",
+    "הולנד",
+    "هلند",
+    "オランダ",
+    "네덜란드",
+    "荷兰"
+   ],
+   "weak_aliases": [
+    "dutch"
+   ],
+   "ambiguous_aliases": []
+  },
+  "NO": {
+   "region": "europe",
+   "label_zh": "挪威",
+   "aliases": [
+    "norvegia",
+    "norwegen",
+    "norwegia",
+    "Норвегия",
+    "Норвегія",
+    "נורווגיה",
+    "นอร์เวย์",
+    "noruega",
+    "norvège",
+    "النرويج",
+    "norveç",
+    "norway",
+    "नॉर्वे",
+    "na uy",
+    "ノルウェー",
+    "نروژ",
+    "노르웨이",
+    "挪威"
+   ],
+   "weak_aliases": [
+    "norwegian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "NP": {
+   "region": "south_asia",
+   "label_zh": "尼泊尔",
+   "aliases": [
+    "nepal",
+    "népal",
+    "Непал",
+    "نيبال",
+    "नेपाल",
+    "เนปาล",
+    "נפאל",
+    "نپال",
+    "ネパール",
+    "尼泊尔",
+    "네팔"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "NZ": {
+   "region": "oceania",
+   "label_zh": "新西兰",
+   "aliases": [
+    "nouvelle-zélande",
+    "новая зеландия",
+    "nova zelândia",
+    "nueva zelanda",
+    "nuova zelanda",
+    "selandia baru",
+    "нова зеландія",
+    "yeni zelanda",
+    "new zealand",
+    "न्यूज़ीलैंड",
+    "neuseeland",
+    "นิวซีแลนด์",
+    "ניו זילנד",
+    "نيوزيلندا",
+    "نیوزیلند",
+    "ニュージーランド",
+    "뉴질랜드",
+    "新西兰"
+   ],
+   "weak_aliases": [
+    "new zealander"
+   ],
+   "ambiguous_aliases": []
+  },
+  "OM": {
+   "region": "middle_east",
+   "label_zh": "阿曼",
+   "aliases": [
+    "umman",
+    "עומאן",
+    "عُمان",
+    "โอมาน",
+    "oman",
+    "omán",
+    "Оман",
+    "عمان",
+    "ओमान",
+    "オマーン",
+    "omã",
+    "阿曼",
+    "오만"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "PA": {
+   "region": "latin_america",
+   "label_zh": "巴拿马",
+   "aliases": [
+    "panama",
+    "panamá",
+    "Панама",
+    "پاناما",
+    "ปานามา",
+    "पनामा",
+    "פנמה",
+    "بنما",
+    "パナマ",
+    "巴拿马",
+    "파나마"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "PE": {
+   "region": "latin_america",
+   "label_zh": "秘鲁",
+   "aliases": [
+    "pérou",
+    "peru",
+    "perù",
+    "perú",
+    "Перу",
+    "بيرو",
+    "पेरू",
+    "เปรู",
+    "פרו",
+    "پرو",
+    "ペルー",
+    "秘鲁",
+    "페루"
+   ],
+   "weak_aliases": [
+    "peruvian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "PG": {
+   "region": "oceania",
+   "label_zh": "巴布亚新几内亚",
+   "aliases": [
+    "papouasie-nouvelle-guinée",
+    "папуа — новая гвинея",
+    "بابوا غينيا الجديدة",
+    "papua nuova guinea",
+    "papúa nueva guinea",
+    "папуа-нова гвінея",
+    "פפואה גינאה החדשה",
+    "papua new guinea",
+    "papua-nova guiné",
+    "papua yeni gine",
+    "papua-neuguinea",
+    "पापुआ न्यू गिनी",
+    "پاپوا گینهٔ نو",
+    "papua nugini",
+    "ปาปัวนิวกินี",
+    "パプアニューギニア",
+    "巴布亚新几内亚",
+    "파푸아뉴기니"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "PH": {
+   "region": "southeast_asia",
+   "label_zh": "菲律宾",
+   "aliases": [
+    "philippinen",
+    "philippines",
+    "filipinler",
+    "הפיליפינים",
+    "ฟิลิปปินส์",
+    "filipinas",
+    "filippine",
+    "Филиппины",
+    "Філіппіни",
+    "फ़िलिपींस",
+    "filipina",
+    "الفلبين",
+    "فیلیپین",
+    "フィリピン",
+    "菲律宾",
+    "필리핀"
+   ],
+   "weak_aliases": [
+    "philippine",
+    "filipino"
+   ],
+   "ambiguous_aliases": []
+  },
+  "PK": {
+   "region": "south_asia",
+   "label_zh": "巴基斯坦",
+   "aliases": [
+    "paquistão",
+    "पाकिस्तान",
+    "pakistan",
+    "pakistán",
+    "Пакистан",
+    "ปากีสถาน",
+    "باكستان",
+    "پاکستان",
+    "פקיסטן",
+    "パキスタン",
+    "巴基斯坦",
+    "파키스탄"
+   ],
+   "weak_aliases": [
+    "pakistani"
+   ],
+   "ambiguous_aliases": []
+  },
+  "PL": {
+   "region": "europe",
+   "label_zh": "波兰",
+   "aliases": [
+    "polandia",
+    "pologne",
+    "polonia",
+    "polonya",
+    "polônia",
+    "โปแลนด์",
+    "ba lan",
+    "poland",
+    "Польша",
+    "Польща",
+    "بولندا",
+    "لهستان",
+    "पोलैंड",
+    "polen",
+    "פולין",
+    "ポーランド",
+    "폴란드",
+    "波兰"
+   ],
+   "weak_aliases": [
+    "polish"
+   ],
+   "ambiguous_aliases": []
+  },
+  "PR": {
+   "region": "latin_america",
+   "label_zh": "波多黎各",
+   "aliases": [
+    "puerto rico",
+    "puerto riko",
+    "пуерто-рико",
+    "пуэрто-рико",
+    "פוארטו ריקו",
+    "पोर्टो रिको",
+    "เปอร์โตริโก",
+    "porto rico",
+    "porto riko",
+    "portorico",
+    "بورتوريكو",
+    "پورتوریکو",
+    "プエルトリコ",
+    "푸에르토리코",
+    "波多黎各"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "PS": {
+   "region": "middle_east",
+   "label_zh": "巴勒斯坦",
+   "aliases": [
+    "palästinensische autonomiegebiete",
+    "territoires palestiniens",
+    "palestinian territories",
+    "палестинские территории",
+    "territorios palestinos",
+    "territórios palestinos",
+    "палестинські території",
+    "territori palestinesi",
+    "फ़िलिस्तीनी क्षेत्र",
+    "filistin bölgeleri",
+    "lãnh thổ palestine",
+    "الأراضي الفلسطينية",
+    "سرزمین‌های فلسطینی",
+    "wilayah palestina",
+    "השטחים הפלסטיניים",
+    "ดินแดนปาเลสไตน์",
+    "gaza strip",
+    "palestine",
+    "west bank",
+    "パレスチナ自治区",
+    "팔레스타인 지구",
+    "巴勒斯坦领土",
+    "巴勒斯坦"
+   ],
+   "weak_aliases": [
+    "palestinian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "PT": {
+   "region": "europe",
+   "label_zh": "葡萄牙",
+   "aliases": [
+    "bồ đào nha",
+    "portogallo",
+    "Португалия",
+    "Португалія",
+    "portekiz",
+    "portugal",
+    "البرتغال",
+    "पुर्तगाल",
+    "โปรตุเกส",
+    "פורטוגל",
+    "پرتغال",
+    "ポルトガル",
+    "포르투갈",
+    "葡萄牙"
+   ],
+   "weak_aliases": [
+    "portuguese"
+   ],
+   "ambiguous_aliases": []
+  },
+  "PY": {
+   "region": "latin_america",
+   "label_zh": "巴拉圭",
+   "aliases": [
+    "paraguai",
+    "paraguay",
+    "Парагвай",
+    "باراغواي",
+    "پاراگوئه",
+    "ปารากวัย",
+    "פרגוואי",
+    "पराग्वे",
+    "パラグアイ",
+    "파라과이",
+    "巴拉圭"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "QA": {
+   "region": "middle_east",
+   "label_zh": "卡塔尔",
+   "aliases": [
+    "กาตาร์",
+    "catar",
+    "katar",
+    "qatar",
+    "Катар",
+    "קטאר",
+    "क़तर",
+    "カタール",
+    "قطر",
+    "卡塔尔",
+    "카타르"
+   ],
+   "weak_aliases": [
+    "qatari"
+   ],
+   "ambiguous_aliases": []
+  },
+  "RO": {
+   "region": "europe",
+   "label_zh": "罗马尼亚",
+   "aliases": [
+    "roumanie",
+    "rumänien",
+    "रोमानिया",
+    "โรมาเนีย",
+    "romania",
+    "romanya",
+    "romênia",
+    "rumania",
+    "rumanía",
+    "Румунія",
+    "Румыния",
+    "رومانيا",
+    "רומניה",
+    "رومانی",
+    "ルーマニア",
+    "罗马尼亚",
+    "루마니아"
+   ],
+   "weak_aliases": [
+    "romanian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "RS": {
+   "region": "europe",
+   "label_zh": "塞尔维亚",
+   "aliases": [
+    "sırbistan",
+    "เซอร์เบีย",
+    "serbien",
+    "صربستان",
+    "सर्बिया",
+    "serbia",
+    "serbie",
+    "sérvia",
+    "Сербия",
+    "Сербія",
+    "סרביה",
+    "صربيا",
+    "セルビア",
+    "塞尔维亚",
+    "세르비아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "RU": {
+   "region": "europe",
+   "label_zh": "俄罗斯",
+   "aliases": [
+    "russland",
+    "รัสเซีย",
+    "russia",
+    "russie",
+    "rússia",
+    "Россия",
+    "rusia",
+    "rusya",
+    "Росія",
+    "רוסיה",
+    "روسيا",
+    "روسیه",
+    "nga",
+    "रूस",
+    "ロシア",
+    "俄罗斯",
+    "러시아"
+   ],
+   "weak_aliases": [
+    "russian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "RW": {
+   "region": "africa",
+   "label_zh": "卢旺达",
+   "aliases": [
+    "ruanda",
+    "rwanda",
+    "Руанда",
+    "רואנדה",
+    "رواندا",
+    "रवांडा",
+    "รวันดา",
+    "ルワンダ",
+    "卢旺达",
+    "르완다"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SA": {
+   "region": "middle_east",
+   "label_zh": "沙特阿拉伯",
+   "aliases": [
+    "المملكة العربية السعودية",
+    "саудовская аравия",
+    "саудівська аравія",
+    "arabie saoudite",
+    "suudi arabistan",
+    "arabia saudita",
+    "arábia saudita",
+    "ซาอุดีอาระเบีย",
+    "saudi-arabien",
+    "عربستان سعودی",
+    "arabia saudí",
+    "saudi arabia",
+    "ערב הסעודית",
+    "ả rập xê-út",
+    "arab saudi",
+    "सऊदी अरब",
+    "サウジアラビア",
+    "사우디아라비아",
+    "沙特阿拉伯"
+   ],
+   "weak_aliases": [
+    "saudi arabian",
+    "saudi"
+   ],
+   "ambiguous_aliases": []
+  },
+  "SB": {
+   "region": "oceania",
+   "label_zh": "所罗门群岛",
+   "aliases": [
+    "соломонові острови",
+    "kepulauan solomon",
+    "quần đảo solomon",
+    "सोलोमन द्वीपसमूह",
+    "solomon adaları",
+    "solomon islands",
+    "соломоновы о-ва",
+    "หมู่เกาะโซโลมอน",
+    "isole salomone",
+    "ilhas salomão",
+    "islas salomón",
+    "îles salomon",
+    "جزایر سلیمان",
+    "solomon is.",
+    "جزر سليمان",
+    "salomonen",
+    "איי שלמה",
+    "ソロモン諸島",
+    "솔로몬 제도",
+    "所罗门群岛"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SD": {
+   "region": "africa",
+   "label_zh": "苏丹",
+   "aliases": [
+    "السودان",
+    "soudan",
+    "sudan",
+    "sudán",
+    "sudão",
+    "Судан",
+    "سودان",
+    "सूडान",
+    "ซูดาน",
+    "סודן",
+    "スーダン",
+    "苏丹",
+    "수단"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SE": {
+   "region": "europe",
+   "label_zh": "瑞典",
+   "aliases": [
+    "thụy điển",
+    "schweden",
+    "i̇sveç",
+    "suecia",
+    "suécia",
+    "svezia",
+    "sweden",
+    "swedia",
+    "Швеция",
+    "Швеція",
+    "שוודיה",
+    "السويد",
+    "स्वीडन",
+    "สวีเดน",
+    "スウェーデン",
+    "suède",
+    "سوئد",
+    "스웨덴",
+    "瑞典"
+   ],
+   "weak_aliases": [
+    "swedish"
+   ],
+   "ambiguous_aliases": []
+  },
+  "SG": {
+   "region": "southeast_asia",
+   "label_zh": "新加坡",
+   "aliases": [
+    "singapore",
+    "singapour",
+    "singapura",
+    "singapur",
+    "Сингапур",
+    "Сінгапур",
+    "سنغافورة",
+    "सिंगापुर",
+    "สิงคโปร์",
+    "סינגפור",
+    "سنگاپور",
+    "シンガポール",
+    "싱가포르",
+    "新加坡"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SI": {
+   "region": "europe",
+   "label_zh": "斯洛文尼亚",
+   "aliases": [
+    "स्लोवेनिया",
+    "eslovenia",
+    "eslovênia",
+    "slowenien",
+    "สโลวีเนีย",
+    "slovenia",
+    "slovenya",
+    "slovénie",
+    "Словения",
+    "Словенія",
+    "سلوفينيا",
+    "סלובניה",
+    "اسلوونی",
+    "スロベニア",
+    "斯洛文尼亚",
+    "슬로베니아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SK": {
+   "region": "europe",
+   "label_zh": "斯洛伐克",
+   "aliases": [
+    "eslovaquia",
+    "eslováquia",
+    "slovacchia",
+    "Словаччина",
+    "स्लोवाकिया",
+    "slovaquie",
+    "สโลวะเกีย",
+    "slovakia",
+    "slovakya",
+    "slowakei",
+    "Словакия",
+    "سلوفاكيا",
+    "סלובקיה",
+    "اسلواکی",
+    "スロバキア",
+    "슬로바키아",
+    "斯洛伐克"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SL": {
+   "region": "africa",
+   "label_zh": "塞拉利昂",
+   "aliases": [
+    "เซียร์ราลีโอน",
+    "sierra leona",
+    "sierra leone",
+    "сьерра-леоне",
+    "сьєрра-леоне",
+    "सिएरा लियोन",
+    "serra leoa",
+    "סיירה לאון",
+    "سيراليون",
+    "سیرالئون",
+    "シエラレオネ",
+    "시에라리온",
+    "塞拉利昂"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SN": {
+   "region": "africa",
+   "label_zh": "塞内加尔",
+   "aliases": [
+    "senegal",
+    "sénégal",
+    "Сенегал",
+    "السنغال",
+    "เซเนกัล",
+    "सेनेगल",
+    "سنگال",
+    "סנגל",
+    "セネガル",
+    "塞内加尔",
+    "세네갈"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SO": {
+   "region": "africa",
+   "label_zh": "索马里",
+   "aliases": [
+    "सोमालिया",
+    "โซมาเลีย",
+    "somalia",
+    "somalie",
+    "somália",
+    "الصومال",
+    "somali",
+    "Сомали",
+    "Сомалі",
+    "סומליה",
+    "سومالی",
+    "ソマリア",
+    "소말리아",
+    "索马里"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SR": {
+   "region": "latin_america",
+   "label_zh": "苏里南",
+   "aliases": [
+    "suriname",
+    "ซูรินาเม",
+    "surinam",
+    "Суринам",
+    "סורינאם",
+    "سورينام",
+    "سورینام",
+    "सूरीनाम",
+    "スリナム",
+    "苏里南",
+    "수리남"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SS": {
+   "region": "africa",
+   "label_zh": "南苏丹",
+   "aliases": [
+    "південний судан",
+    "soudan du sud",
+    "sudan selatan",
+    "sudán del sur",
+    "sudão do sul",
+    "جنوب السودان",
+    "दक्षिण सूडान",
+    "güney sudan",
+    "south sudan",
+    "южный судан",
+    "سودان جنوبی",
+    "nam sudan",
+    "sud sudan",
+    "דרום סודן",
+    "s. sudan",
+    "südsudan",
+    "ซูดานใต้",
+    "南スーダン",
+    "南苏丹",
+    "남수단"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SV": {
+   "region": "latin_america",
+   "label_zh": "萨尔瓦多",
+   "aliases": [
+    "เอลซัลวาดอร์",
+    "el salvador",
+    "अल सल्वाडोर",
+    "السالوادور",
+    "Сальвадор",
+    "אל סלבדור",
+    "السلفادور",
+    "salvador",
+    "エルサルバドル",
+    "엘살바도르",
+    "萨尔瓦多"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "SY": {
+   "region": "middle_east",
+   "label_zh": "叙利亚",
+   "aliases": [
+    "suriah",
+    "suriye",
+    "syrien",
+    "सीरिया",
+    "ซีเรีย",
+    "siria",
+    "syria",
+    "syrie",
+    "síria",
+    "Сирия",
+    "Сирія",
+    "סוריה",
+    "سوريا",
+    "سوریه",
+    "シリア",
+    "叙利亚",
+    "시리아"
+   ],
+   "weak_aliases": [
+    "syrian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "SZ": {
+   "region": "africa",
+   "label_zh": "斯威士兰",
+   "aliases": [
+    "essuatíni",
+    "אסוואטיני",
+    "एस्वाटिनी",
+    "เอสวาตีนี",
+    "esuatini",
+    "esvatini",
+    "eswatini",
+    "Есватіні",
+    "Эсватини",
+    "إسواتيني",
+    "اسواتینی",
+    "エスワティニ",
+    "에스와티니",
+    "斯威士兰"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "TD": {
+   "region": "africa",
+   "label_zh": "乍得",
+   "aliases": [
+    "tschad",
+    "chade",
+    "tchad",
+    "ciad",
+    "צ׳אד",
+    "تشاد",
+    "çad",
+    "Чад",
+    "چاد",
+    "चाड",
+    "ชาด",
+    "チャド",
+    "乍得",
+    "차드"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "TG": {
+   "region": "africa",
+   "label_zh": "多哥",
+   "aliases": [
+    "togo",
+    "Того",
+    "טוגו",
+    "توغو",
+    "توگو",
+    "टोगो",
+    "โตโก",
+    "トーゴ",
+    "多哥",
+    "토고"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "TH": {
+   "region": "southeast_asia",
+   "label_zh": "泰国",
+   "aliases": [
+    "thailandia",
+    "tailandia",
+    "tailândia",
+    "thaïlande",
+    "thailand",
+    "thái lan",
+    "tayland",
+    "Таиланд",
+    "Таїланд",
+    "تايلاند",
+    "थाईलैंड",
+    "תאילנד",
+    "تایلند",
+    "ไทย",
+    "タイ",
+    "泰国",
+    "태국"
+   ],
+   "weak_aliases": [
+    "thai"
+   ],
+   "ambiguous_aliases": []
+  },
+  "TJ": {
+   "region": "central_asia",
+   "label_zh": "塔吉克斯坦",
+   "aliases": [
+    "tadschikistan",
+    "tadjiquistão",
+    "tadjikistan",
+    "Таджикистан",
+    "ताजिकिस्तान",
+    "tacikistan",
+    "tagikistan",
+    "tajikistan",
+    "tayikistán",
+    "ทาจิกิสถาน",
+    "טג׳יקיסטן",
+    "تاجیکستان",
+    "طاجيكستان",
+    "タジキスタン",
+    "塔吉克斯坦",
+    "타지키스탄"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "TL": {
+   "region": "southeast_asia",
+   "label_zh": "东帝汶",
+   "aliases": [
+    "восточный тимор",
+    "timor oriental",
+    "تيمور - ليشتي",
+    "ติมอร์-เลสเต",
+    "timor leste",
+    "timor-leste",
+    "тимор-лешті",
+    "तिमोर-लेस्त",
+    "טימור-לסטה",
+    "تیمور-لسته",
+    "timor est",
+    "東ティモール",
+    "동티모르",
+    "东帝汶"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "TM": {
+   "region": "central_asia",
+   "label_zh": "土库曼斯坦",
+   "aliases": [
+    "तुर्कमेनिस्तान",
+    "เติร์กเมนิสถาน",
+    "turcomenistão",
+    "turkmenistan",
+    "turkmenistán",
+    "turkménistan",
+    "türkmenistan",
+    "Туркменистан",
+    "Туркменістан",
+    "טורקמניסטן",
+    "تركمانستان",
+    "ترکمنستان",
+    "トルクメニスタン",
+    "투르크메니스탄",
+    "土库曼斯坦"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "TN": {
+   "region": "africa",
+   "label_zh": "突尼斯",
+   "aliases": [
+    "ट्यूनीशिया",
+    "tunesien",
+    "ตูนิเซีย",
+    "tunisia",
+    "tunisie",
+    "tunísia",
+    "תוניסיה",
+    "tunus",
+    "túnez",
+    "Тунис",
+    "Туніс",
+    "チュニジア",
+    "تونس",
+    "突尼斯",
+    "튀니지"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "TR": {
+   "region": "middle_east",
+   "label_zh": "土耳其",
+   "aliases": [
+    "thổ nhĩ kỳ",
+    "Туреччина",
+    "तुर्किये",
+    "turchia",
+    "turquia",
+    "turquie",
+    "turquía",
+    "türkiye",
+    "türkei",
+    "Турция",
+    "טורקיה",
+    "turki",
+    "تركيا",
+    "ترکیه",
+    "ตุรกี",
+    "튀르키예",
+    "トルコ",
+    "土耳其"
+   ],
+   "weak_aliases": [
+    "turkish"
+   ],
+   "ambiguous_aliases": [
+    "turkey"
+   ]
+  },
+  "TT": {
+   "region": "latin_america",
+   "label_zh": "特立尼达和多巴哥",
+   "aliases": [
+    "trinidad and tobago",
+    "trinidad dan tobago",
+    "trinidad und tobago",
+    "त्रिनिदाद और टोबैगो",
+    "trinidad ve tobago",
+    "trinidad và tobago",
+    "trinidad & tobago",
+    "trinidad e tobago",
+    "trinidad y tobago",
+    "trinité-et-tobago",
+    "тринидад и тобаго",
+    "тринідад і тобаго",
+    "ترینیداد و توباگو",
+    "ตรินิแดดและโตเบโก",
+    "ترينيداد وتوباغو",
+    "טרינידד וטובגו",
+    "トリニダード・トバゴ",
+    "트리니다드 토바고",
+    "特立尼达和多巴哥"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "TW": {
+   "region": "east_asia",
+   "label_zh": "中国台湾",
+   "aliases": [
+    "chinese taipei",
+    "đài loan",
+    "Тайвань",
+    "טייוואן",
+    "ไต้หวัน",
+    "taiwan",
+    "taiwán",
+    "tayvan",
+    "taïwan",
+    "تايوان",
+    "تایوان",
+    "ताइवान",
+    "中国台湾",
+    "台湾",
+    "대만"
+   ],
+   "weak_aliases": [
+    "taiwanese"
+   ],
+   "ambiguous_aliases": []
+  },
+  "TZ": {
+   "region": "africa",
+   "label_zh": "坦桑尼亚",
+   "aliases": [
+    "तंज़ानिया",
+    "แทนซาเนีย",
+    "tansania",
+    "tanzania",
+    "tanzanie",
+    "tanzanya",
+    "tanzânia",
+    "Танзания",
+    "Танзанія",
+    "تانزانیا",
+    "تنزانيا",
+    "טנזניה",
+    "タンザニア",
+    "坦桑尼亚",
+    "탄자니아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "UA": {
+   "region": "europe",
+   "label_zh": "乌克兰",
+   "aliases": [
+    "אוקראינה",
+    "أوكرانيا",
+    "ucraina",
+    "ucrania",
+    "ucrânia",
+    "ukraina",
+    "ukraine",
+    "ukrayna",
+    "Украина",
+    "Україна",
+    "اوکراین",
+    "यूक्रेन",
+    "ยูเครน",
+    "ウクライナ",
+    "우크라이나",
+    "乌克兰"
+   ],
+   "weak_aliases": [
+    "ukrainian"
+   ],
+   "ambiguous_aliases": []
+  },
+  "UG": {
+   "region": "africa",
+   "label_zh": "乌干达",
+   "aliases": [
+    "ouganda",
+    "اوگاندا",
+    "युगांडा",
+    "ยูกันดา",
+    "uganda",
+    "Уганда",
+    "אוגנדה",
+    "أوغندا",
+    "ウガンダ",
+    "乌干达",
+    "우간다"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "US": {
+   "region": "north_america",
+   "label_zh": "美国",
+   "aliases": [
+    "amerika birleşik devletleri",
+    "united states of america",
+    "vereinigte staaten",
+    "соединенные штаты",
+    "الولايات المتحدة",
+    "amerika serikat",
+    "сполучені штати",
+    "estados unidos",
+    "united states",
+    "संयुक्त राज्य",
+    "ایالات متحده",
+    "สหรัฐอเมริกา",
+    "stati uniti",
+    "ארצות הברית",
+    "états-unis",
+    "アメリカ合衆国",
+    "hoa kỳ",
+    "u.s.",
+    "usa",
+    "美国",
+    "미국"
+   ],
+   "weak_aliases": [
+    "american"
+   ],
+   "ambiguous_aliases": [
+    "america",
+    "us"
+   ]
+  },
+  "UY": {
+   "region": "latin_america",
+   "label_zh": "乌拉圭",
+   "aliases": [
+    "אורוגוואי",
+    "อุรุกวัย",
+    "uruguai",
+    "uruguay",
+    "Уругвай",
+    "أورغواي",
+    "اروگوئه",
+    "उरूग्वे",
+    "ウルグアイ",
+    "우루과이",
+    "乌拉圭"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "UZ": {
+   "region": "central_asia",
+   "label_zh": "乌兹别克斯坦",
+   "aliases": [
+    "उज़्बेकिस्तान",
+    "ouzbékistan",
+    "uzbequistão",
+    "อุซเบกิสถาน",
+    "usbekistan",
+    "uzbekistan",
+    "uzbekistán",
+    "özbekistan",
+    "Узбекистан",
+    "אוזבקיסטן",
+    "أوزبكستان",
+    "ازبکستان",
+    "ウズベキスタン",
+    "乌兹别克斯坦",
+    "우즈베키스탄"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "VE": {
+   "region": "latin_america",
+   "label_zh": "委内瑞拉",
+   "aliases": [
+    "वेनेज़ुएला",
+    "เวเนซุเอลา",
+    "venezuela",
+    "Венесуела",
+    "Венесуэла",
+    "ונצואלה",
+    "فنزويلا",
+    "ونزوئلا",
+    "ベネズエラ",
+    "베네수엘라",
+    "委内瑞拉"
+   ],
+   "weak_aliases": [
+    "venezuelan"
+   ],
+   "ambiguous_aliases": []
+  },
+  "VN": {
+   "region": "southeast_asia",
+   "label_zh": "越南",
+   "aliases": [
+    "viêt nam",
+    "việt nam",
+    "เวียดนาม",
+    "vietnam",
+    "Вʼєтнам",
+    "Вьетнам",
+    "וייטנאם",
+    "वियतनाम",
+    "vietnã",
+    "فيتنام",
+    "ویتنام",
+    "ベトナム",
+    "베트남",
+    "越南"
+   ],
+   "weak_aliases": [
+    "vietnamese"
+   ],
+   "ambiguous_aliases": []
+  },
+  "VU": {
+   "region": "oceania",
+   "label_zh": "瓦努阿图",
+   "aliases": [
+    "วานูอาตู",
+    "vanuatu",
+    "Вануату",
+    "فانواتو",
+    "وانواتو",
+    "ונואטו",
+    "वनुआतू",
+    "バヌアツ",
+    "瓦努阿图",
+    "바누아투"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "XK": {
+   "region": "europe",
+   "label_zh": "科索沃",
+   "aliases": [
+    "kosova",
+    "kosovo",
+    "Косово",
+    "קוסובו",
+    "كوسوفو",
+    "कोसोवो",
+    "โคโซโว",
+    "کوزوو",
+    "コソボ",
+    "科索沃",
+    "코소보"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "YE": {
+   "region": "middle_east",
+   "label_zh": "也门",
+   "aliases": [
+    "iêmen",
+    "jemen",
+    "yaman",
+    "yemen",
+    "yémen",
+    "Йемен",
+    "اليمن",
+    "เยเมน",
+    "Ємен",
+    "תימן",
+    "イエメン",
+    "یمن",
+    "यमन",
+    "也门",
+    "예멘"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "ZA": {
+   "region": "africa",
+   "label_zh": "南非",
+   "aliases": [
+    "південно-африканська республіка",
+    "южно-африканская республика",
+    "दक्षिण अफ़्रीका",
+    "afrika selatan",
+    "afrique du sud",
+    "áfrica do sul",
+    "افریقای جنوبی",
+    "güney afrika",
+    "south africa",
+    "جنوب أفريقيا",
+    "דרום אפריקה",
+    "แอฟริกาใต้",
+    "sudafrica",
+    "sudáfrica",
+    "südafrika",
+    "nam phi",
+    "南アフリカ",
+    "남아프리카",
+    "南非"
+   ],
+   "weak_aliases": [
+    "south african"
+   ],
+   "ambiguous_aliases": []
+  },
+  "ZM": {
+   "region": "africa",
+   "label_zh": "赞比亚",
+   "aliases": [
+    "ज़ाम्बिया",
+    "zambiya",
+    "แซมเบีย",
+    "sambia",
+    "zambia",
+    "zambie",
+    "zâmbia",
+    "Замбия",
+    "Замбія",
+    "زامبيا",
+    "زامبیا",
+    "זמביה",
+    "ザンビア",
+    "赞比亚",
+    "잠비아"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  },
+  "ZW": {
+   "region": "africa",
+   "label_zh": "津巴布韦",
+   "aliases": [
+    "ज़िम्बाब्वे",
+    "simbabwe",
+    "zimbabue",
+    "zimbabve",
+    "zimbabwe",
+    "zimbábue",
+    "Зимбабве",
+    "Зімбабве",
+    "זימבבואה",
+    "زيمبابوي",
+    "زیمبابوه",
+    "ซิมบับเว",
+    "ジンバブエ",
+    "津巴布韦",
+    "짐바브웨"
+   ],
+   "weak_aliases": [],
+   "ambiguous_aliases": []
+  }
+ },
+ "places": [
+  {
+   "id": "KYIV",
+   "country": "UA",
+   "region": "europe",
+   "label_zh": "基辅",
+   "aliases": [
+    "kiev",
+    "kyiv",
+    "киев",
+    "київ",
+    "كييف",
+    "キーウ",
+    "키이우",
+    "基辅"
+   ]
+  },
+  {
+   "id": "MOSCOW",
+   "country": "RU",
+   "region": "europe",
+   "label_zh": "莫斯科",
+   "aliases": [
+    "moscou",
+    "moscow",
+    "moskau",
+    "москва",
+    "moscú",
+    "موسكو",
+    "モスクワ",
+    "모스크바",
+    "莫斯科"
+   ]
+  },
+  {
+   "id": "GAZA",
+   "country": "PS",
+   "region": "middle_east",
+   "label_zh": "加沙",
+   "aliases": [
+    "gaza strip",
+    "gaza city",
+    "قطاع غزة",
+    "gaza",
+    "加沙地带",
+    "עזה",
+    "غزة",
+    "ガザ",
+    "加沙",
+    "가자"
+   ]
+  },
+  {
+   "id": "TEL_AVIV",
+   "country": "IL",
+   "region": "middle_east",
+   "label_zh": "特拉维夫",
+   "aliases": [
+    "tel aviv",
+    "תל אביב",
+    "تل أبيب",
+    "テルアビブ",
+    "特拉维夫",
+    "텔아비브"
+   ]
+  },
+  {
+   "id": "JERUSALEM",
+   "country": null,
+   "region": "middle_east",
+   "label_zh": "耶路撒冷",
+   "aliases": [
+    "jerusalem",
+    "ירושלים",
+    "القدس",
+    "エルサレム",
+    "耶路撒冷",
+    "예루살렘"
+   ]
+  },
+  {
+   "id": "BEIJING",
+   "country": "CN",
+   "region": "east_asia",
+   "label_zh": "北京",
+   "aliases": [
+    "beijing",
+    "pekín",
+    "pékin",
+    "пекин",
+    "بكين",
+    "베이징",
+    "北京"
+   ]
+  },
+  {
+   "id": "SHANGHAI",
+   "country": "CN",
+   "region": "east_asia",
+   "label_zh": "上海",
+   "aliases": [
+    "changhaï",
+    "shanghai",
+    "шанхай",
+    "شنغهاي",
+    "상하이",
+    "上海"
+   ]
+  },
+  {
+   "id": "TAIPEI",
+   "country": "TW",
+   "region": "east_asia",
+   "label_zh": "台北",
+   "aliases": [
+    "taipei",
+    "тайбэй",
+    "تايبيه",
+    "타이베이",
+    "台北"
+   ]
+  },
+  {
+   "id": "HONG_KONG",
+   "country": "HK",
+   "region": "east_asia",
+   "label_zh": "香港",
+   "aliases": [
+    "hong kong",
+    "هونغ كونغ",
+    "hongkong",
+    "гонконг",
+    "香港",
+    "홍콩"
+   ]
+  },
+  {
+   "id": "TOKYO",
+   "country": "JP",
+   "region": "east_asia",
+   "label_zh": "东京",
+   "aliases": [
+    "tokio",
+    "tokyo",
+    "токио",
+    "طوكيو",
+    "东京",
+    "東京",
+    "도쿄"
+   ]
+  },
+  {
+   "id": "SEOUL",
+   "country": "KR",
+   "region": "east_asia",
+   "label_zh": "首尔",
+   "aliases": [
+    "seoul",
+    "сеул",
+    "سيول",
+    "ソウル",
+    "首尔",
+    "서울"
+   ]
+  },
+  {
+   "id": "PYONGYANG",
+   "country": "KP",
+   "region": "east_asia",
+   "label_zh": "平壤",
+   "aliases": [
+    "بيونغ يانغ",
+    "pyongyang",
+    "пхеньян",
+    "平壌",
+    "平壤",
+    "평양"
+   ]
+  },
+  {
+   "id": "WASHINGTON",
+   "country": "US",
+   "region": "north_america",
+   "label_zh": "华盛顿",
+   "aliases": [
+    "washington dc",
+    "washington",
+    "вашингтон",
+    "واشنطن",
+    "ワシントン",
+    "华盛顿",
+    "워싱턴"
+   ]
+  },
+  {
+   "id": "NEW_YORK",
+   "country": "US",
+   "region": "north_america",
+   "label_zh": "纽约",
+   "aliases": [
+    "nueva york",
+    "new york",
+    "нью-йорк",
+    "نيويورك",
+    "ニューヨーク",
+    "纽约",
+    "뉴욕"
+   ]
+  },
+  {
+   "id": "LONDON",
+   "country": "GB",
+   "region": "europe",
+   "label_zh": "伦敦",
+   "aliases": [
+    "londres",
+    "london",
+    "лондон",
+    "لندن",
+    "ロンドン",
+    "伦敦",
+    "런던"
+   ]
+  },
+  {
+   "id": "PARIS",
+   "country": "FR",
+   "region": "europe",
+   "label_zh": "巴黎",
+   "aliases": [
+    "paris",
+    "parís",
+    "париж",
+    "باريس",
+    "パリ",
+    "巴黎",
+    "파리"
+   ]
+  },
+  {
+   "id": "BERLIN",
+   "country": "DE",
+   "region": "europe",
+   "label_zh": "柏林",
+   "aliases": [
+    "berlim",
+    "berlin",
+    "berlín",
+    "берлин",
+    "برلين",
+    "ベルリン",
+    "베를린",
+    "柏林"
+   ]
+  },
+  {
+   "id": "BRUSSELS",
+   "country": "BE",
+   "region": "europe",
+   "label_zh": "布鲁塞尔",
+   "aliases": [
+    "bruxelles",
+    "bruselas",
+    "brussels",
+    "брюссель",
+    "brussel",
+    "بروكسل",
+    "ブリュッセル",
+    "布鲁塞尔",
+    "브뤼셀"
+   ]
+  },
+  {
+   "id": "TEHRAN",
+   "country": "IR",
+   "region": "middle_east",
+   "label_zh": "德黑兰",
+   "aliases": [
+    "teherán",
+    "téhéran",
+    "тегеран",
+    "tehran",
+    "طهران",
+    "テヘラン",
+    "德黑兰",
+    "테헤란"
+   ]
+  },
+  {
+   "id": "RIYADH",
+   "country": "SA",
+   "region": "middle_east",
+   "label_zh": "利雅得",
+   "aliases": [
+    "эр-рияд",
+    "riyadh",
+    "riad",
+    "رياض",
+    "リヤド",
+    "利雅得",
+    "리야드"
+   ]
+  },
+  {
+   "id": "DUBAI",
+   "country": "AE",
+   "region": "middle_east",
+   "label_zh": "迪拜",
+   "aliases": [
+    "dubai",
+    "dubái",
+    "дубай",
+    "دبي",
+    "ドバイ",
+    "두바이",
+    "迪拜"
+   ]
+  },
+  {
+   "id": "DOHA",
+   "country": "QA",
+   "region": "middle_east",
+   "label_zh": "多哈",
+   "aliases": [
+    "الدوحة",
+    "doha",
+    "доха",
+    "ドーハ",
+    "多哈",
+    "도하"
+   ]
+  },
+  {
+   "id": "CAIRO",
+   "country": "EG",
+   "region": "middle_east",
+   "label_zh": "开罗",
+   "aliases": [
+    "el cairo",
+    "القاهرة",
+    "cairo",
+    "каир",
+    "カイロ",
+    "카이로",
+    "开罗"
+   ]
+  },
+  {
+   "id": "ISTANBUL",
+   "country": "TR",
+   "region": "middle_east",
+   "label_zh": "伊斯坦布尔",
+   "aliases": [
+    "estambul",
+    "istanbul",
+    "стамбул",
+    "إسطنبول",
+    "イスタンブール",
+    "伊斯坦布尔",
+    "이스탄불"
+   ]
+  },
+  {
+   "id": "ANKARA",
+   "country": "TR",
+   "region": "middle_east",
+   "label_zh": "安卡拉",
+   "aliases": [
+    "ankara",
+    "анкара",
+    "أنقرة",
+    "アンカラ",
+    "安卡拉",
+    "앙카라"
+   ]
+  },
+  {
+   "id": "NEW_DELHI",
+   "country": "IN",
+   "region": "south_asia",
+   "label_zh": "新德里",
+   "aliases": [
+    "nueva delhi",
+    "new delhi",
+    "nova déli",
+    "нью-дели",
+    "نيودلهي",
+    "ニューデリー",
+    "新德里",
+    "뉴델리"
+   ]
+  },
+  {
+   "id": "MUMBAI",
+   "country": "IN",
+   "region": "south_asia",
+   "label_zh": "孟买",
+   "aliases": [
+    "bombay",
+    "mumbai",
+    "мумбаи",
+    "مومباي",
+    "ムンバイ",
+    "뭄바이",
+    "孟买"
+   ]
+  },
+  {
+   "id": "ISLAMABAD",
+   "country": "PK",
+   "region": "south_asia",
+   "label_zh": "伊斯兰堡",
+   "aliases": [
+    "إسلام آباد",
+    "islamabad",
+    "исламабад",
+    "イスラマバード",
+    "이슬라마바드",
+    "伊斯兰堡"
+   ]
+  },
+  {
+   "id": "KARACHI",
+   "country": "PK",
+   "region": "south_asia",
+   "label_zh": "卡拉奇",
+   "aliases": [
+    "karachi",
+    "карачи",
+    "كراتشي",
+    "カラチ",
+    "卡拉奇",
+    "카라치"
+   ]
+  },
+  {
+   "id": "KABUL",
+   "country": "AF",
+   "region": "south_asia",
+   "label_zh": "喀布尔",
+   "aliases": [
+    "kabul",
+    "кабул",
+    "كابول",
+    "カブール",
+    "喀布尔",
+    "카불"
+   ]
+  },
+  {
+   "id": "BAGHDAD",
+   "country": "IQ",
+   "region": "middle_east",
+   "label_zh": "巴格达",
+   "aliases": [
+    "baghdad",
+    "bagdad",
+    "багдад",
+    "بغداد",
+    "バグダッド",
+    "바그다드",
+    "巴格达"
+   ]
+  },
+  {
+   "id": "DAMASCUS",
+   "country": "SY",
+   "region": "middle_east",
+   "label_zh": "大马士革",
+   "aliases": [
+    "damascus",
+    "damasco",
+    "дамаск",
+    "damas",
+    "ダマスカス",
+    "다마스쿠스",
+    "دمشق",
+    "大马士革"
+   ]
+  },
+  {
+   "id": "BEIRUT",
+   "country": "LB",
+   "region": "middle_east",
+   "label_zh": "贝鲁特",
+   "aliases": [
+    "beirut",
+    "бейрут",
+    "بيروت",
+    "ベイルート",
+    "베이루트",
+    "贝鲁特"
+   ]
+  },
+  {
+   "id": "SANAA",
+   "country": "YE",
+   "region": "middle_east",
+   "label_zh": "萨那",
+   "aliases": [
+    "sanaa",
+    "sanaá",
+    "صنعاء",
+    "сана",
+    "サヌア",
+    "萨那",
+    "사나"
+   ]
+  },
+  {
+   "id": "AMMAN",
+   "country": "JO",
+   "region": "middle_east",
+   "label_zh": "安曼",
+   "aliases": [
+    "amman",
+    "амман",
+    "عمّان",
+    "アンマン",
+    "安曼",
+    "암만"
+   ]
+  },
+  {
+   "id": "TBILISI",
+   "country": "GE",
+   "region": "middle_east",
+   "label_zh": "第比利斯",
+   "aliases": [
+    "tbilisi",
+    "тбилиси",
+    "تبليسي",
+    "トビリシ",
+    "第比利斯",
+    "트빌리시"
+   ]
+  },
+  {
+   "id": "LAGOS",
+   "country": "NG",
+   "region": "africa",
+   "label_zh": "拉各斯",
+   "aliases": [
+    "lagos",
+    "лагос",
+    "لاغوس",
+    "ラゴス",
+    "拉各斯",
+    "라고스"
+   ]
+  },
+  {
+   "id": "ABUJA",
+   "country": "NG",
+   "region": "africa",
+   "label_zh": "阿布贾",
+   "aliases": [
+    "абуджа",
+    "abuja",
+    "abuyá",
+    "أبوجا",
+    "アブジャ",
+    "阿布贾",
+    "아부자"
+   ]
+  },
+  {
+   "id": "NAIROBI",
+   "country": "KE",
+   "region": "africa",
+   "label_zh": "内罗毕",
+   "aliases": [
+    "nairobi",
+    "найроби",
+    "نيروبي",
+    "ナイロビ",
+    "나이로비",
+    "内罗毕"
+   ]
+  },
+  {
+   "id": "ADDIS_ABABA",
+   "country": "ET",
+   "region": "africa",
+   "label_zh": "亚的斯亚贝巴",
+   "aliases": [
+    "addis ababa",
+    "аддис-абеба",
+    "adís abeba",
+    "أديس أبابا",
+    "アディスアベバ",
+    "亚的斯亚贝巴",
+    "아디스아바바"
+   ]
+  },
+  {
+   "id": "JOHANNESBURG",
+   "country": "ZA",
+   "region": "africa",
+   "label_zh": "约翰内斯堡",
+   "aliases": [
+    "johannesburgo",
+    "johannesburg",
+    "йоханнесбург",
+    "جوهانسبرغ",
+    "ヨハネスブルグ",
+    "요하네스버그",
+    "约翰内斯堡"
+   ]
+  },
+  {
+   "id": "MEXICO_CITY",
+   "country": "MX",
+   "region": "latin_america",
+   "label_zh": "墨西哥城",
+   "aliases": [
+    "ciudad de méxico",
+    "مدينة مكسيكو",
+    "mexico city",
+    "メキシコシティ",
+    "мехико",
+    "멕시코시티",
+    "墨西哥城"
+   ]
+  },
+  {
+   "id": "BRASILIA",
+   "country": "BR",
+   "region": "latin_america",
+   "label_zh": "巴西利亚",
+   "aliases": [
+    "brasilia",
+    "бразилиа",
+    "برازيليا",
+    "ブラジリア",
+    "브라질리아",
+    "巴西利亚"
+   ]
+  },
+  {
+   "id": "SAO_PAULO",
+   "country": "BR",
+   "region": "latin_america",
+   "label_zh": "圣保罗",
+   "aliases": [
+    "sao paulo",
+    "são paulo",
+    "сан-паулу",
+    "ساو باولو",
+    "サンパウロ",
+    "상파울루",
+    "圣保罗"
+   ]
+  },
+  {
+   "id": "BUENOS_AIRES",
+   "country": "AR",
+   "region": "latin_america",
+   "label_zh": "布宜诺斯艾利斯",
+   "aliases": [
+    "buenos aires",
+    "буэнос-айрес",
+    "بوينس آيرس",
+    "ブエノスアイレス",
+    "부에노스아이레스",
+    "布宜诺斯艾利斯"
+   ]
+  },
+  {
+   "id": "CARACAS",
+   "country": "VE",
+   "region": "latin_america",
+   "label_zh": "加拉加斯",
+   "aliases": [
+    "caracas",
+    "каракас",
+    "كاراكاس",
+    "カラカス",
+    "加拉加斯",
+    "카라카스"
+   ]
+  },
+  {
+   "id": "BOGOTA",
+   "country": "CO",
+   "region": "latin_america",
+   "label_zh": "波哥大",
+   "aliases": [
+    "bogota",
+    "bogotá",
+    "богота",
+    "بوغوتا",
+    "ボゴタ",
+    "波哥大",
+    "보고타"
+   ]
+  },
+  {
+   "id": "JAKARTA",
+   "country": "ID",
+   "region": "southeast_asia",
+   "label_zh": "雅加达",
+   "aliases": [
+    "джакарта",
+    "jakarta",
+    "yakarta",
+    "جاكرتا",
+    "ジャカルタ",
+    "자카르타",
+    "雅加达"
+   ]
+  },
+  {
+   "id": "BANGKOK",
+   "country": "TH",
+   "region": "southeast_asia",
+   "label_zh": "曼谷",
+   "aliases": [
+    "bangkok",
+    "бангкок",
+    "بانكوك",
+    "バンコク",
+    "曼谷",
+    "방콕"
+   ]
+  },
+  {
+   "id": "HANOI",
+   "country": "VN",
+   "region": "southeast_asia",
+   "label_zh": "河内",
+   "aliases": [
+    "hanoi",
+    "hanói",
+    "ханой",
+    "هانوي",
+    "ハノイ",
+    "하노이",
+    "河内"
+   ]
+  },
+  {
+   "id": "MANILA",
+   "country": "PH",
+   "region": "southeast_asia",
+   "label_zh": "马尼拉",
+   "aliases": [
+    "manila",
+    "манила",
+    "مانيلا",
+    "マニラ",
+    "马尼拉",
+    "마닐라"
+   ]
+  },
+  {
+   "id": "SINGAPORE",
+   "country": "SG",
+   "region": "southeast_asia",
+   "label_zh": "新加坡",
+   "aliases": [
+    "singapore",
+    "singapura",
+    "singapur",
+    "сингапур",
+    "سنغافورة",
+    "シンガポール",
+    "싱가포르",
+    "新加坡"
+   ]
+  },
+  {
+   "id": "SYDNEY",
+   "country": "AU",
+   "region": "oceania",
+   "label_zh": "悉尼",
+   "aliases": [
+    "sidney",
+    "sydney",
+    "сидней",
+    "سيدني",
+    "シドニー",
+    "시드니",
+    "悉尼"
+   ]
+  },
+  {
+   "id": "CANBERRA",
+   "country": "AU",
+   "region": "oceania",
+   "label_zh": "堪培拉",
+   "aliases": [
+    "canberra",
+    "канберра",
+    "كانبرا",
+    "キャンベラ",
+    "堪培拉",
+    "캔버라"
+   ]
+  },
+  {
+   "id": "TORONTO",
+   "country": "CA",
+   "region": "north_america",
+   "label_zh": "多伦多",
+   "aliases": [
+    "toronto",
+    "торонто",
+    "تورونتو",
+    "トロント",
+    "多伦多",
+    "토론토"
+   ]
+  },
+  {
+   "id": "OTTAWA",
+   "country": "CA",
+   "region": "north_america",
+   "label_zh": "渥太华",
+   "aliases": [
+    "ottawa",
+    "оттава",
+    "أوتاوا",
+    "オタワ",
+    "渥太华",
+    "오타와"
+   ]
+  },
+  {
+   "id": "MADRID",
+   "country": "ES",
+   "region": "europe",
+   "label_zh": "马德里",
+   "aliases": [
+    "madrid",
+    "мадрид",
+    "مدريد",
+    "マドリード",
+    "마드리드",
+    "马德里"
+   ]
+  },
+  {
+   "id": "BARCELONA",
+   "country": "ES",
+   "region": "europe",
+   "label_zh": "巴塞罗那",
+   "aliases": [
+    "barcelona",
+    "барселона",
+    "برشلونة",
+    "バルセロナ",
+    "바르셀로나",
+    "巴塞罗那"
+   ]
+  },
+  {
+   "id": "ROME",
+   "country": "IT",
+   "region": "europe",
+   "label_zh": "罗马",
+   "aliases": [
+    "roma",
+    "rome",
+    "روما",
+    "рим",
+    "ローマ",
+    "罗马",
+    "로마"
+   ]
+  },
+  {
+   "id": "MILAN",
+   "country": "IT",
+   "region": "europe",
+   "label_zh": "米兰",
+   "aliases": [
+    "milano",
+    "ميلانو",
+    "milan",
+    "милан",
+    "ミラノ",
+    "밀라노",
+    "米兰"
+   ]
+  },
+  {
+   "id": "WARSAW",
+   "country": "PL",
+   "region": "europe",
+   "label_zh": "华沙",
+   "aliases": [
+    "varsovia",
+    "varsovie",
+    "warszawa",
+    "варшава",
+    "warsaw",
+    "وارسو",
+    "ワルシャワ",
+    "바르샤바",
+    "华沙"
+   ]
+  },
+  {
+   "id": "AMSTERDAM",
+   "country": "NL",
+   "region": "europe",
+   "label_zh": "阿姆斯特丹",
+   "aliases": [
+    "amsterdam",
+    "ámsterdam",
+    "амстердам",
+    "amsterdã",
+    "أمستردام",
+    "アムステルダム",
+    "阿姆斯特丹",
+    "암스테르담"
+   ]
+  },
+  {
+   "id": "VIENNA",
+   "country": "AT",
+   "region": "europe",
+   "label_zh": "维也纳",
+   "aliases": [
+    "vienna",
+    "viena",
+    "فيينا",
+    "wien",
+    "вена",
+    "ウィーン",
+    "维也纳",
+    "빈"
+   ]
+  },
+  {
+   "id": "STOCKHOLM",
+   "country": "SE",
+   "region": "europe",
+   "label_zh": "斯德哥尔摩",
+   "aliases": [
+    "estocolmo",
+    "stockholm",
+    "стокгольм",
+    "ستوكهولم",
+    "ストックホルム",
+    "斯德哥尔摩",
+    "스톡홀름"
+   ]
+  },
+  {
+   "id": "OSLO",
+   "country": "NO",
+   "region": "europe",
+   "label_zh": "奥斯陆",
+   "aliases": [
+    "أوسلو",
+    "oslo",
+    "осло",
+    "オスロ",
+    "奥斯陆",
+    "오슬로"
+   ]
+  },
+  {
+   "id": "HELSINKI",
+   "country": "FI",
+   "region": "europe",
+   "label_zh": "赫尔辛基",
+   "aliases": [
+    "хельсинки",
+    "helsinki",
+    "هلسنكي",
+    "ヘルシンキ",
+    "赫尔辛基",
+    "헬싱키"
+   ]
+  },
+  {
+   "id": "COPENHAGEN",
+   "country": "DK",
+   "region": "europe",
+   "label_zh": "哥本哈根",
+   "aliases": [
+    "copenhagen",
+    "copenhague",
+    "копенгаген",
+    "københavn",
+    "كوبنهاغن",
+    "コペンハーゲン",
+    "哥本哈根",
+    "코펜하겐"
+   ]
+  },
+  {
+   "id": "ATHENS",
+   "country": "GR",
+   "region": "europe",
+   "label_zh": "雅典",
+   "aliases": [
+    "athènes",
+    "atenas",
+    "athens",
+    "афины",
+    "أثينا",
+    "アテネ",
+    "아테네",
+    "雅典"
+   ]
+  },
+  {
+   "id": "LISBON",
+   "country": "PT",
+   "region": "europe",
+   "label_zh": "里斯本",
+   "aliases": [
+    "лиссабон",
+    "lisboa",
+    "lisbon",
+    "لشبونة",
+    "リスボン",
+    "里斯本",
+    "리스본"
+   ]
+  },
+  {
+   "id": "DUBLIN",
+   "country": "IE",
+   "region": "europe",
+   "label_zh": "都柏林",
+   "aliases": [
+    "dublin",
+    "dublín",
+    "дублин",
+    "دبلن",
+    "ダブリン",
+    "都柏林",
+    "더블린"
+   ]
+  },
+  {
+   "id": "WELLINGTON",
+   "country": "NZ",
+   "region": "oceania",
+   "label_zh": "惠灵顿",
+   "aliases": [
+    "wellington",
+    "веллингтон",
+    "ويلينغتون",
+    "ウェリントン",
+    "惠灵顿",
+    "웰링턴"
+   ]
+  },
+  {
+   "id": "DHAKA",
+   "country": "BD",
+   "region": "south_asia",
+   "label_zh": "达卡",
+   "aliases": [
+    "dhaka",
+    "дакка",
+    "daca",
+    "دكا",
+    "ダッカ",
+    "达卡",
+    "다카"
+   ]
+  },
+  {
+   "id": "TIBET",
+   "country": "CN",
+   "region": "east_asia",
+   "label_zh": "西藏",
+   "aliases": [
+    "tibet",
+    "тибет",
+    "التبت",
+    "チベット",
+    "티베트",
+    "西藏"
+   ]
+  },
+  {
+   "id": "DONBAS",
+   "country": "UA",
+   "region": "europe",
+   "label_zh": "顿巴斯",
+   "aliases": [
+    "donbass",
+    "Донбасс",
+    "donbas",
+    "دونباس",
+    "ドンバス",
+    "顿巴斯",
+    "돈바스"
+   ]
+  },
+  {
+   "id": "WEST_BANK",
+   "country": "PS",
+   "region": "middle_east",
+   "label_zh": "约旦河西岸",
+   "aliases": [
+    "الضفة الغربية",
+    "הגדה המערבית",
+    "west bank",
+    "ヨルダン川西岸",
+    "約旦河西岸",
+    "约旦河西岸",
+    "서안 지구"
+   ]
+  },
+  {
+   "id": "CRIMEA",
+   "country": null,
+   "region": "europe",
+   "label_zh": "克里米亚",
+   "aliases": [
+    "crimea",
+    "القرم",
+    "Крым",
+    "クリミア",
+    "克里米亚",
+    "克里米亞",
+    "크림반도"
+   ]
+  },
+  {
+   "id": "RED_SEA",
+   "country": null,
+   "region": "middle_east",
+   "label_zh": "红海",
+   "aliases": [
+    "красное море",
+    "البحر الأحمر",
+    "rotes meer",
+    "mer rouge",
+    "mar rojo",
+    "red sea",
+    "紅海",
+    "红海",
+    "홍해"
+   ]
+  },
+  {
+   "id": "SOUTH_CHINA_SEA",
+   "country": null,
+   "region": "southeast_asia",
+   "label_zh": "南海",
+   "aliases": [
+    "mer de chine méridionale",
+    "южно-китайское море",
+    "بحر الصين الجنوبي",
+    "south china sea",
+    "南シナ海",
+    "남중국해",
+    "南海"
+   ]
+  },
+  {
+   "id": "TAIWAN_STRAIT",
+   "country": null,
+   "region": "east_asia",
+   "label_zh": "台湾海峡",
+   "aliases": [
+    "тайваньский пролив",
+    "détroit de taïwan",
+    "taiwan strait",
+    "taiwanstraße",
+    "タイワン海峡",
+    "대만 해협",
+    "台湾海峡",
+    "台灣海峽"
+   ]
+  },
+  {
+   "id": "KOREAN_PENINSULA",
+   "country": null,
+   "region": "east_asia",
+   "label_zh": "朝鲜半岛",
+   "aliases": [
+    "корейский полуостров",
+    "شبه الجزيرة الكورية",
+    "korean peninsula",
+    "朝鮮半島",
+    "朝鲜半岛",
+    "韓半島",
+    "한반도"
+   ]
+  },
+  {
+   "id": "SAHEL",
+   "country": null,
+   "region": "africa",
+   "label_zh": "萨赫勒",
+   "aliases": [
+    "Сахель",
+    "الساحل",
+    "sahel",
+    "サヘル",
+    "萨赫勒",
+    "薩赫勒",
+    "사헬"
+   ]
+  },
+  {
+   "id": "BALKANS",
+   "country": null,
+   "region": "europe",
+   "label_zh": "巴尔干",
+   "aliases": [
+    "balkans",
+    "Балканы",
+    "البلقان",
+    "バルカン",
+    "巴尔干",
+    "巴爾幹",
+    "발칸"
+   ]
+  },
+  {
+   "id": "HORN_OF_AFRICA",
+   "country": null,
+   "region": "africa",
+   "label_zh": "非洲之角",
+   "aliases": [
+    "африканский рог",
+    "horn of africa",
+    "القرن الأفريقي",
+    "아프리카의 뿔",
+    "アフリカの角",
+    "非洲之角"
+   ]
+  }
+ ],
+ "actors": [
+  {
+   "id": "PUTIN",
+   "kind": "person",
+   "country": "RU",
+   "aliases": [
+    "vladimir putin",
+    "владимир путин",
+    "poutine",
+    "putin",
+    "путин",
+    "بوتين",
+    "पुतिन",
+    "プーチン",
+    "普京",
+    "푸틴"
+   ]
+  },
+  {
+   "id": "ZELENSKY",
+   "kind": "person",
+   "country": "UA",
+   "aliases": [
+    "ज़ेलेंस्की",
+    "zelenskyy",
+    "зеленский",
+    "zelensky",
+    "زيلينسكي",
+    "ゼレンスキー",
+    "泽连斯基",
+    "젤렌스키"
+   ]
+  },
+  {
+   "id": "TRUMP",
+   "kind": "person",
+   "country": "US",
+   "aliases": [
+    "donald trump",
+    "trump",
+    "трамп",
+    "ترامب",
+    "ट्रंप",
+    "トランプ",
+    "特朗普",
+    "트럼프"
+   ]
+  },
+  {
+   "id": "XI",
+   "kind": "person",
+   "country": "CN",
+   "aliases": [
+    "си цзиньпин",
+    "شي جين بينغ",
+    "xi jinping",
+    "शी जिनपिंग",
+    "习近平",
+    "習近平",
+    "시진핑"
+   ]
+  },
+  {
+   "id": "NETANYAHU",
+   "kind": "person",
+   "country": "IL",
+   "aliases": [
+    "netanyahu",
+    "नेतन्याहू",
+    "نتنياهو",
+    "נתניהו",
+    "ネタニヤフ",
+    "内塔尼亚胡",
+    "네타냐후"
+   ]
+  },
+  {
+   "id": "KHAMENEI",
+   "kind": "person",
+   "country": "IR",
+   "aliases": [
+    "khamenei",
+    "خامنه‌ای",
+    "хаменеи",
+    "ハメネイ",
+    "哈梅内伊",
+    "하메네이"
+   ]
+  },
+  {
+   "id": "ERDOGAN",
+   "kind": "person",
+   "country": "TR",
+   "aliases": [
+    "erdogan",
+    "erdoğan",
+    "эрдоган",
+    "أردوغان",
+    "エルドアン",
+    "埃尔多安",
+    "에르도안"
+   ]
+  },
+  {
+   "id": "MODI",
+   "kind": "person",
+   "country": "IN",
+   "aliases": [
+    "narendra modi",
+    "modi",
+    "моди",
+    "مودي",
+    "मोदी",
+    "モディ",
+    "莫迪",
+    "모디"
+   ]
+  },
+  {
+   "id": "MACRON",
+   "kind": "person",
+   "country": "FR",
+   "aliases": [
+    "эммануэль макрон",
+    "macron",
+    "ماكرون",
+    "マクロン",
+    "马克龙",
+    "마크롱"
+   ]
+  },
+  {
+   "id": "KIM_JONG_UN",
+   "kind": "person",
+   "country": "KP",
+   "aliases": [
+    "كيم جونغ أون",
+    "kim jong un",
+    "ким чен ын",
+    "キム・ジョンウン",
+    "金正恩",
+    "김정은"
+   ]
+  },
+  {
+   "id": "LUKASHENKO",
+   "kind": "person",
+   "country": "BY",
+   "aliases": [
+    "lukashenko",
+    "лукашенко",
+    "لوكاشينكو",
+    "ルカシェンコ",
+    "卢卡申科",
+    "루카셴코"
+   ]
+  },
+  {
+   "id": "ORBAN",
+   "kind": "person",
+   "country": "HU",
+   "aliases": [
+    "أوربان",
+    "orban",
+    "orbán",
+    "орбан",
+    "オルバーン",
+    "欧尔班",
+    "오르반"
+   ]
+  },
+  {
+   "id": "MILEI",
+   "kind": "person",
+   "country": "AR",
+   "aliases": [
+    "milei",
+    "милей",
+    "ميلي",
+    "ミレイ",
+    "밀레이",
+    "米莱"
+   ]
+  },
+  {
+   "id": "LULA",
+   "kind": "person",
+   "country": "BR",
+   "aliases": [
+    "lula da silva",
+    "lula",
+    "лула",
+    "لولا",
+    "ルラ",
+    "卢拉",
+    "룰라"
+   ]
+  },
+  {
+   "id": "LAGARDE",
+   "kind": "person",
+   "country": null,
+   "aliases": [
+    "lagarde",
+    "лагард",
+    "لاغارد",
+    "ラガルド",
+    "라가르드",
+    "拉加德"
+   ]
+  },
+  {
+   "id": "GUTERRES",
+   "kind": "person",
+   "country": null,
+   "aliases": [
+    "guterres",
+    "гуттериш",
+    "غوتيريش",
+    "グテーレス",
+    "古特雷斯",
+    "구테흐스"
+   ]
+  },
+  {
+   "id": "STARMER",
+   "kind": "person",
+   "country": "GB",
+   "aliases": [
+    "starmer",
+    "стармер",
+    "ستارمر",
+    "スターマー",
+    "斯塔默",
+    "스타머"
+   ]
+  },
+  {
+   "id": "NATO",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "الناتو",
+    "nato",
+    "otan",
+    "нато",
+    "ナトー",
+    "北約",
+    "北约",
+    "나토"
+   ]
+  },
+  {
+   "id": "UN",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "united nations",
+    "nazioni unite",
+    "الأمم المتحدة",
+    "u.n.",
+    "onu",
+    "оон",
+    "联合国",
+    "聯合國",
+    "国連",
+    "유엔"
+   ]
+  },
+  {
+   "id": "EU",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "الاتحاد الأوروبي",
+    "european union",
+    "união europeia",
+    "unión europea",
+    "евросоюз",
+    "欧州連合",
+    "유럽연합",
+    "欧盟",
+    "歐盟"
+   ]
+  },
+  {
+   "id": "HAMAS",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "hamas",
+    "хамас",
+    "حماس",
+    "ハマス",
+    "哈馬斯",
+    "哈马斯",
+    "하마스"
+   ]
+  },
+  {
+   "id": "HEZBOLLAH",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "hezbollah",
+    "хезболла",
+    "حزب الله",
+    "ヒズボラ",
+    "헤즈볼라",
+    "真主党"
+   ]
+  },
+  {
+   "id": "HOUTHIS",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "الحوثيون",
+    "houthis",
+    "хуситы",
+    "フーシ派",
+    "胡塞武装",
+    "후티"
+   ]
+  },
+  {
+   "id": "TALIBAN",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "taliban",
+    "талибы",
+    "طالبان",
+    "タリバン",
+    "塔利班",
+    "탈레반"
+   ]
+  },
+  {
+   "id": "OPEC",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "opec",
+    "опек",
+    "أوبك",
+    "オペック",
+    "欧佩克",
+    "오펙"
+   ]
+  },
+  {
+   "id": "FED",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "الاحتياطي الفيدرالي",
+    "federal reserve",
+    "frb",
+    "фрс",
+    "美联储",
+    "연준"
+   ]
+  },
+  {
+   "id": "ECB",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "البنك المركزي الأوروبي",
+    "european central bank",
+    "欧洲央行",
+    "ecb",
+    "ецб"
+   ]
+  },
+  {
+   "id": "IMF",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "صندوق النقد الدولي",
+    "国际货币基金组织",
+    "国際通貨基金",
+    "imf",
+    "мвф"
+   ]
+  },
+  {
+   "id": "WHO",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "world health organization",
+    "منظمة الصحة العالمية",
+    "世卫组织",
+    "who",
+    "воз"
+   ]
+  },
+  {
+   "id": "IAEA",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "الوكالة الدولية للطاقة الذرية",
+    "国际原子能机构",
+    "магатэ",
+    "iaea"
+   ]
+  },
+  {
+   "id": "PENTAGON",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "البنتاغون",
+    "pentagon",
+    "пентагон",
+    "ペンタゴン",
+    "五角大楼",
+    "펜타곤"
+   ]
+  },
+  {
+   "id": "WHITE_HOUSE",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "البيت الأبيض",
+    "white house",
+    "белый дом",
+    "ホワイトハウス",
+    "백악관",
+    "白宫"
+   ]
+  },
+  {
+   "id": "KREMLIN",
+   "kind": "org",
+   "country": null,
+   "aliases": [
+    "الكرملين",
+    "kremlin",
+    "кремль",
+    "クレムリン",
+    "克里姆林宫",
+    "크렘린"
+   ]
+  }
+ ],
+ "topics": [
+  {
+   "id": "CEASEFIRE",
+   "label_zh": "停火",
+   "specific": true,
+   "aliases": [
+    "cessate il fuoco",
+    "gencatan senjata",
+    "waffenstillstand",
+    "barış anlaşması",
+    "وقف إطلاق النار",
+    "alto el fuego",
+    "cessez-le-feu",
+    "cessar-fogo",
+    "cease-fire",
+    "युद्धविराम",
+    "ceasefire",
+    "ngừng bắn",
+    "перемир'я",
+    "перемирие",
+    "הפסקת אש",
+    "ateşkes",
+    "หยุดยิง",
+    "آتش‌بس",
+    "truce",
+    "休战",
+    "停戦",
+    "停火",
+    "휴전"
+   ]
+  },
+  {
+   "id": "ELECTION",
+   "label_zh": "选举",
+   "specific": true,
+   "aliases": [
+    "การเลือกตั้ง",
+    "elecciones",
+    "elections",
+    "election",
+    "elezioni",
+    "seçimler",
+    "élection",
+    "انتخابات",
+    "eleição",
+    "bầu cử",
+    "pemilu",
+    "voting",
+    "вибори",
+    "выборы",
+    "בחירות",
+    "seçim",
+    "चुनाव",
+    "vote",
+    "wahl",
+    "投票",
+    "选举",
+    "選挙",
+    "선거"
+   ]
+  },
+  {
+   "id": "PROTEST",
+   "label_zh": "抗议",
+   "specific": true,
+   "aliases": [
+    "demonstration",
+    "manifestation",
+    "การประท้วง",
+    "biểu tình",
+    "protesta",
+    "protesto",
+    "protests",
+    "protest",
+    "протест",
+    "protes",
+    "احتجاج",
+    "مظاهرة",
+    "विरोध",
+    "מחאה",
+    "デモ",
+    "抗議",
+    "抗议",
+    "示威",
+    "시위"
+   ]
+  },
+  {
+   "id": "SANCTIONS",
+   "label_zh": "制裁",
+   "specific": true,
+   "aliases": [
+    "yaptırımlar",
+    "การคว่ำบาตร",
+    "sanktionen",
+    "trừng phạt",
+    "sanciones",
+    "sanctions",
+    "sanction",
+    "sanzioni",
+    "yaptırım",
+    "प्रतिबंध",
+    "sanções",
+    "санкции",
+    "санкції",
+    "סנקציות",
+    "sanksi",
+    "عقوبات",
+    "制裁",
+    "제재"
+   ]
+  },
+  {
+   "id": "TARIFF_TRADE",
+   "label_zh": "关税/贸易",
+   "specific": true,
+   "aliases": [
+    "droits de douane",
+    "ticaret savaşı",
+    "رسوم جمركية",
+    "ภาษีศุลกากร",
+    "aranceles",
+    "thuế quan",
+    "trade war",
+    "tarifas",
+    "tariffs",
+    "пошлина",
+    "tarife",
+    "tariff",
+    "tarif",
+    "टैरिफ",
+    "dazi",
+    "zoll",
+    "мито",
+    "מכס",
+    "贸易战",
+    "关税",
+    "関税",
+    "관세"
+   ]
+  },
+  {
+   "id": "RATES_INFLATION",
+   "label_zh": "利率/通胀",
+   "specific": true,
+   "aliases": [
+    "tasa de interés",
+    "interest rate",
+    "central bank",
+    "inflazione",
+    "suku bunga",
+    "enflasyon",
+    "inflación",
+    "inflation",
+    "inflação",
+    "lãi suất",
+    "lạm phát",
+    "инфляция",
+    "інфляція",
+    "אינפלציה",
+    "نرخ بهره",
+    "ब्याज दर",
+    "ดอกเบี้ย",
+    "เงินเฟ้อ",
+    "inflasi",
+    "ставка",
+    "महंगाई",
+    "juros",
+    "tassi",
+    "فائدة",
+    "인플레이션",
+    "faiz",
+    "zins",
+    "تضخم",
+    "تورم",
+    "インフレ",
+    "通货膨胀",
+    "利率",
+    "央行",
+    "通胀",
+    "金利",
+    "금리"
+   ]
+  },
+  {
+   "id": "OIL_ENERGY",
+   "label_zh": "石油/能源",
+   "specific": true,
+   "aliases": [
+    "oil price",
+    "petrolio",
+    "petróleo",
+    "pétrole",
+    "énergie",
+    "energy",
+    "enerji",
+    "minyak",
+    "petrol",
+    "น้ำมัน",
+    "crude",
+    "crudo",
+    "erdöl",
+    "нафта",
+    "нефть",
+    "النفط",
+    "opec",
+    "dầu",
+    "נפט",
+    "نفت",
+    "तेल",
+    "欧佩克",
+    "öl",
+    "原油",
+    "石油",
+    "能源"
+   ]
+  },
+  {
+   "id": "NUCLEAR",
+   "label_zh": "核问题",
+   "specific": true,
+   "aliases": [
+    "นิวเคลียร์",
+    "atomwaffe",
+    "nucléaire",
+    "hạt nhân",
+    "nucleare",
+    "nuclear",
+    "nükleer",
+    "ядерний",
+    "ядерный",
+    "هسته‌ای",
+    "atomic",
+    "nuklir",
+    "גרעיני",
+    "परमाणु",
+    "نووي",
+    "核兵器",
+    "核武器",
+    "核",
+    "핵"
+   ]
+  },
+  {
+   "id": "AIRSTRIKE_MISSILE",
+   "label_zh": "空袭/导弹",
+   "specific": true,
+   "aliases": [
+    "frappe aérienne",
+    "hava saldırısı",
+    "serangan udara",
+    "attacco aereo",
+    "תקיפה אווירית",
+    "โจมตีทางอากาศ",
+    "ataque aéreo",
+    "luftangriff",
+    "air strike",
+    "không kích",
+    "airstrike",
+    "غارة جوية",
+    "हवाई हमला",
+    "авиаудар",
+    "авіаудар",
+    "ขีปนาวุธ",
+    "missile",
+    "tên lửa",
+    "míssil",
+    "rakete",
+    "ракета",
+    "मिसाइल",
+    "drone",
+    "misil",
+    "rudal",
+    "صاروخ",
+    "پهپاد",
+    "füze",
+    "ミサイル",
+    "טיל",
+    "无人机",
+    "미사일",
+    "导弹",
+    "空爆",
+    "空袭",
+    "공습"
+   ]
+  },
+  {
+   "id": "WAR_CONFLICT",
+   "label_zh": "战争/冲突",
+   "specific": false,
+   "aliases": [
+    "chiến tranh",
+    "conflicto",
+    "conflitto",
+    "conflict",
+    "konflikt",
+    "xung đột",
+    "конфликт",
+    "conflit",
+    "konflik",
+    "warfare",
+    "guerra",
+    "guerre",
+    "perang",
+    "संघर्ष",
+    "สงคราม",
+    "krieg",
+    "savaş",
+    "война",
+    "війна",
+    "מלחמה",
+    "युद्ध",
+    "صراع",
+    "war",
+    "حرب",
+    "冲突",
+    "战争",
+    "戦争",
+    "紛争",
+    "분쟁",
+    "전쟁"
+   ]
+  },
+  {
+   "id": "HOSTAGE",
+   "label_zh": "人质",
+   "specific": true,
+   "aliases": [
+    "ตัวประกัน",
+    "hostages",
+    "ostaggio",
+    "заложник",
+    "заручник",
+    "con tin",
+    "hostage",
+    "sandera",
+    "geisel",
+    "rehine",
+    "otage",
+    "refém",
+    "rehén",
+    "رهينة",
+    "חטוף",
+    "बंधक",
+    "人質",
+    "人质",
+    "인질"
+   ]
+  },
+  {
+   "id": "EARTHQUAKE",
+   "label_zh": "地震",
+   "specific": true,
+   "aliases": [
+    "землетрясение",
+    "earthquake",
+    "רעידת אדמה",
+    "แผ่นดินไหว",
+    "terremoto",
+    "землетрус",
+    "erdbeben",
+    "động đất",
+    "deprem",
+    "séisme",
+    "gempa",
+    "quake",
+    "زلزال",
+    "زلزله",
+    "भूकंप",
+    "地震",
+    "지진"
+   ]
+  },
+  {
+   "id": "FLOOD_TYPHOON",
+   "label_zh": "洪水/台风",
+   "specific": true,
+   "aliases": [
+    "überschwemmung",
+    "inondation",
+    "inundación",
+    "наводнение",
+    "alluvione",
+    "hurricane",
+    "enchente",
+    "typhoon",
+    "น้ำท่วม",
+    "ไต้ฝุ่น",
+    "banjir",
+    "floods",
+    "lũ lụt",
+    "taifun",
+    "tayfun",
+    "tifone",
+    "typhon",
+    "повінь",
+    "тайфун",
+    "שיטפון",
+    "flood",
+    "tifón",
+    "topan",
+    "tufão",
+    "إعصار",
+    "فيضان",
+    "तूफान",
+    "बाढ़",
+    "bão",
+    "sel",
+    "سیل",
+    "台風",
+    "台风",
+    "洪水",
+    "태풍",
+    "홍수"
+   ]
+  },
+  {
+   "id": "SUMMIT_DIPLOMACY",
+   "label_zh": "峰会/外交",
+   "specific": true,
+   "aliases": [
+    "hội nghị thượng đỉnh",
+    "การประชุมสุดยอด",
+    "negociaciones",
+    "verhandlungen",
+    "négociations",
+    "शिखर सम्मेलन",
+    "negociações",
+    "переговоры",
+    "diplomacy",
+    "negoziati",
+    "نشست سران",
+    "vertice",
+    "مفاوضات",
+    "cumbre",
+    "cúpula",
+    "gipfel",
+    "sommet",
+    "summit",
+    "саммит",
+    "talks",
+    "zirve",
+    "саміт",
+    "פסגה",
+    "首脳会談",
+    "정상회담",
+    "ktt",
+    "قمة",
+    "外交",
+    "峰会"
+   ]
+  },
+  {
+   "id": "AI_CHIPS",
+   "label_zh": "AI/芯片",
+   "specific": true,
+   "aliases": [
+    "intelligence artificielle",
+    "intelligenza artificiale",
+    "artificial intelligence",
+    "inteligencia artificial",
+    "inteligência artificial",
+    "искусственный интеллект",
+    "künstliche intelligenz",
+    "कृत्रिम बुद्धिमत्ता",
+    "kecerdasan buatan",
+    "trí tuệ nhân tạo",
+    "штучний інтелект",
+    "semiconducteur",
+    "semiconductor",
+    "полупроводник",
+    "בינה מלאכותית",
+    "semicondutor",
+    "ذكاء اصطناعي",
+    "halbleiter",
+    "yapay zeka",
+    "هوش مصنوعی",
+    "chips",
+    "تراشه",
+    "شريحة",
+    "chip",
+    "puce",
+    "人工智能",
+    "인공지능",
+    "çip",
+    "чип",
+    "чіп",
+    "चिप",
+    "ชิป",
+    "半导体",
+    "半導体",
+    "반도체",
+    "ai",
+    "芯片"
+   ]
+  }
+ ],
+ "regions": [
+  {
+   "id": "east_asia",
+   "label_zh": "东亚",
+   "aliases": [
+    "asia orientale",
+    "восточная азия",
+    "เอเชียตะวันออก",
+    "asia oriental",
+    "asie de l'est",
+    "पूर्वी एशिया",
+    "східна азія",
+    "asia timur",
+    "east asia",
+    "מזרח אסיה",
+    "ostasien",
+    "شرق آسيا",
+    "شرق آسیا",
+    "đông á",
+    "東アジア",
+    "동아시아",
+    "东亚",
+    "東亞"
+   ]
+  },
+  {
+   "id": "southeast_asia",
+   "label_zh": "东南亚",
+   "aliases": [
+    "เอเชียตะวันออกเฉียงใต้",
+    "південно-східна азія",
+    "юго-восточная азия",
+    "दक्षिण-पूर्व एशिया",
+    "sud-est asiatico",
+    "sudeste asiático",
+    "asie du sud-est",
+    "south-east asia",
+    "southeast asia",
+    "דרום-מזרח אסיה",
+    "asia tenggara",
+    "جنوب شرق آسيا",
+    "جنوب شرق آسیا",
+    "südostasien",
+    "đông nam á",
+    "東南アジア",
+    "동남아시아",
+    "东南亚",
+    "東南亞"
+   ]
+  },
+  {
+   "id": "south_asia",
+   "label_zh": "南亚",
+   "aliases": [
+    "asia meridionale",
+    "asia meridional",
+    "південна азія",
+    "asia selatan",
+    "दक्षिण एशिया",
+    "asie du sud",
+    "south asia",
+    "южная азия",
+    "דרום אסיה",
+    "جنوب آسيا",
+    "جنوب آسیا",
+    "เอเชียใต้",
+    "südasien",
+    "nam á",
+    "南アジア",
+    "남아시아",
+    "南亚",
+    "南亞"
+   ]
+  },
+  {
+   "id": "central_asia",
+   "label_zh": "中亚",
+   "aliases": [
+    "центральная азия",
+    "центральна азія",
+    "asia centrale",
+    "asie centrale",
+    "asia central",
+    "central asia",
+    "zentralasien",
+    "asia tengah",
+    "آسيا الوسطى",
+    "آسیای مرکزی",
+    "मध्य एशिया",
+    "เอเชียกลาง",
+    "מרכז אסיה",
+    "trung á",
+    "中央アジア",
+    "중앙아시아",
+    "中亚",
+    "中亞"
+   ]
+  },
+  {
+   "id": "middle_east",
+   "label_zh": "中东",
+   "aliases": [
+    "ближний восток",
+    "medio oriente",
+    "oriente medio",
+    "близький схід",
+    "moyen-orient",
+    "timur tengah",
+    "המזרח התיכון",
+    "الشرق الأوسط",
+    "ตะวันออกกลาง",
+    "middle east",
+    "naher osten",
+    "trung đông",
+    "मध्य पूर्व",
+    "خاورمیانه",
+    "中东",
+    "中東",
+    "중동"
+   ]
+  },
+  {
+   "id": "europe",
+   "label_zh": "欧洲",
+   "aliases": [
+    "châu âu",
+    "europa",
+    "europe",
+    "Европа",
+    "європа",
+    "אירופה",
+    "أوروبا",
+    "eropa",
+    "اروپا",
+    "यूरोप",
+    "ยุโรป",
+    "ヨーロッパ",
+    "欧洲",
+    "歐洲",
+    "유럽"
+   ]
+  },
+  {
+   "id": "north_america",
+   "label_zh": "北美",
+   "aliases": [
+    "américa del norte",
+    "amérique du nord",
+    "північна америка",
+    "северная америка",
+    "أمريكا الشمالية",
+    "אמריקה הצפונית",
+    "उत्तरी अमेरिका",
+    "amerika utara",
+    "north america",
+    "آمریکای شمالی",
+    "nord america",
+    "อเมริกาเหนือ",
+    "nordamerika",
+    "bắc mỹ",
+    "北美洲",
+    "北米",
+    "北美",
+    "북미"
+   ]
+  },
+  {
+   "id": "latin_america",
+   "label_zh": "拉美",
+   "aliases": [
+    "латинская америка",
+    "латинська америка",
+    "أمريكا اللاتينية",
+    "amérique latine",
+    "america latina",
+    "américa latina",
+    "אמריקה הלטינית",
+    "amerika latin",
+    "lateinamerika",
+    "latin america",
+    "آمریکای لاتین",
+    "लैटिन अमेरिका",
+    "ลาตินอเมริกา",
+    "mỹ latinh",
+    "ラテンアメリカ",
+    "拉丁美洲",
+    "중남미",
+    "拉美"
+   ]
+  },
+  {
+   "id": "africa",
+   "label_zh": "非洲",
+   "aliases": [
+    "châu phi",
+    "afrique",
+    "أفريقيا",
+    "अफ्रीका",
+    "แอฟริกา",
+    "africa",
+    "afrika",
+    "áfrica",
+    "Африка",
+    "африка",
+    "אפריקה",
+    "آفریقا",
+    "アフリカ",
+    "아프리카",
+    "非洲"
+   ]
+  },
+  {
+   "id": "oceania",
+   "label_zh": "大洋洲",
+   "aliases": [
+    "châu đại dương",
+    "أوقيانوسيا",
+    "โอเชียเนีย",
+    "اقیانوسیه",
+    "ozeanien",
+    "אוקיאניה",
+    "oceania",
+    "oceanía",
+    "océanie",
+    "oseania",
+    "Океания",
+    "океанія",
+    "ओशिनिया",
+    "オセアニア",
+    "오세아니아",
+    "大洋洲"
+   ]
+  }
+ ]
+}

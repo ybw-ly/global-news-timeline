@@ -1,0 +1,1234 @@
+{
+ "AE": {
+  "lat": 23.466,
+  "lon": 54.547,
+  "name_en": "United Arab Emirates",
+  "name_zh": "阿拉伯联合酋长国",
+  "region": "middle_east"
+ },
+ "AF": {
+  "lat": 34.164,
+  "lon": 66.497,
+  "name_en": "Afghanistan",
+  "name_zh": "阿富汗",
+  "region": "south_asia"
+ },
+ "AL": {
+  "lat": 40.655,
+  "lon": 20.114,
+  "name_en": "Albania",
+  "name_zh": "阿尔巴尼亚",
+  "region": "europe"
+ },
+ "AM": {
+  "lat": 40.459,
+  "lon": 44.801,
+  "name_en": "Armenia",
+  "name_zh": "亚美尼亚",
+  "region": "middle_east"
+ },
+ "AO": {
+  "lat": -12.183,
+  "lon": 17.984,
+  "name_en": "Angola",
+  "name_zh": "安哥拉",
+  "region": "africa"
+ },
+ "AR": {
+  "lat": -33.501,
+  "lon": -64.173,
+  "name_en": "Argentina",
+  "name_zh": "阿根廷",
+  "region": "latin_america"
+ },
+ "AT": {
+  "lat": 47.519,
+  "lon": 14.131,
+  "name_en": "Austria",
+  "name_zh": "奥地利",
+  "region": "europe"
+ },
+ "AU": {
+  "lat": -24.13,
+  "lon": 134.05,
+  "name_en": "Australia",
+  "name_zh": "澳大利亚",
+  "region": "oceania"
+ },
+ "AZ": {
+  "lat": 40.402,
+  "lon": 47.211,
+  "name_en": "Azerbaijan",
+  "name_zh": "阿塞拜疆",
+  "region": "middle_east"
+ },
+ "BA": {
+  "lat": 44.091,
+  "lon": 18.068,
+  "name_en": "Bosnia and Herz.",
+  "name_zh": "波斯尼亚和黑塞哥维那",
+  "region": "europe"
+ },
+ "BD": {
+  "lat": 24.215,
+  "lon": 89.685,
+  "name_en": "Bangladesh",
+  "name_zh": "孟加拉国",
+  "region": "south_asia"
+ },
+ "BE": {
+  "lat": 50.785,
+  "lon": 4.8,
+  "name_en": "Belgium",
+  "name_zh": "比利时",
+  "region": "europe"
+ },
+ "BF": {
+  "lat": 12.673,
+  "lon": -1.364,
+  "name_en": "Burkina Faso",
+  "name_zh": "布基纳法索",
+  "region": "africa"
+ },
+ "BG": {
+  "lat": 42.509,
+  "lon": 25.157,
+  "name_en": "Bulgaria",
+  "name_zh": "保加利亚",
+  "region": "europe"
+ },
+ "BI": {
+  "lat": -3.333,
+  "lon": 29.917,
+  "name_en": "Burundi",
+  "name_zh": "布隆迪",
+  "region": "africa"
+ },
+ "BJ": {
+  "lat": 10.325,
+  "lon": 2.352,
+  "name_en": "Benin",
+  "name_zh": "贝宁",
+  "region": "africa"
+ },
+ "BN": {
+  "lat": 4.448,
+  "lon": 114.552,
+  "name_en": "Brunei",
+  "name_zh": "文莱",
+  "region": "southeast_asia"
+ },
+ "BO": {
+  "lat": -16.666,
+  "lon": -64.593,
+  "name_en": "Bolivia",
+  "name_zh": "玻利维亚",
+  "region": "latin_america"
+ },
+ "BR": {
+  "lat": -12.099,
+  "lon": -49.559,
+  "name_en": "Brazil",
+  "name_zh": "巴西",
+  "region": "latin_america"
+ },
+ "BS": {
+  "lat": 26.402,
+  "lon": -77.147,
+  "name_en": "Bahamas",
+  "name_zh": "巴哈马",
+  "region": "latin_america"
+ },
+ "BT": {
+  "lat": 27.537,
+  "lon": 90.04,
+  "name_en": "Bhutan",
+  "name_zh": "不丹",
+  "region": "south_asia"
+ },
+ "BW": {
+  "lat": -22.103,
+  "lon": 24.179,
+  "name_en": "Botswana",
+  "name_zh": "博茨瓦纳",
+  "region": "africa"
+ },
+ "BY": {
+  "lat": 53.822,
+  "lon": 28.418,
+  "name_en": "Belarus",
+  "name_zh": "白俄罗斯",
+  "region": "europe"
+ },
+ "BZ": {
+  "lat": 17.202,
+  "lon": -88.713,
+  "name_en": "Belize",
+  "name_zh": "伯利兹",
+  "region": "latin_america"
+ },
+ "CA": {
+  "lat": 60.324,
+  "lon": -101.911,
+  "name_en": "Canada",
+  "name_zh": "加拿大",
+  "region": "north_america"
+ },
+ "CD": {
+  "lat": -1.858,
+  "lon": 23.459,
+  "name_en": "Dem. Rep. Congo",
+  "name_zh": "刚果（金）",
+  "region": "africa"
+ },
+ "CF": {
+  "lat": 6.99,
+  "lon": 20.907,
+  "name_en": "Central African Rep.",
+  "name_zh": "中非共和国",
+  "region": "africa"
+ },
+ "CG": {
+  "lat": 0.142,
+  "lon": 15.9,
+  "name_en": "Congo",
+  "name_zh": "刚果（布）",
+  "region": "africa"
+ },
+ "CH": {
+  "lat": 46.719,
+  "lon": 7.464,
+  "name_en": "Switzerland",
+  "name_zh": "瑞士",
+  "region": "europe"
+ },
+ "CI": {
+  "lat": 7.491,
+  "lon": -5.569,
+  "name_en": "Côte d'Ivoire",
+  "name_zh": "科特迪瓦",
+  "region": "africa"
+ },
+ "CL": {
+  "lat": -38.152,
+  "lon": -72.319,
+  "name_en": "Chile",
+  "name_zh": "智利",
+  "region": "latin_america"
+ },
+ "CM": {
+  "lat": 4.585,
+  "lon": 12.473,
+  "name_en": "Cameroon",
+  "name_zh": "喀麦隆",
+  "region": "africa"
+ },
+ "CN": {
+  "lat": 32.498,
+  "lon": 106.337,
+  "name_en": "China",
+  "name_zh": "中国",
+  "region": "east_asia"
+ },
+ "CO": {
+  "lat": 3.373,
+  "lon": -73.174,
+  "name_en": "Colombia",
+  "name_zh": "哥伦比亚",
+  "region": "latin_america"
+ },
+ "CR": {
+  "lat": 10.065,
+  "lon": -84.078,
+  "name_en": "Costa Rica",
+  "name_zh": "哥斯达黎加",
+  "region": "latin_america"
+ },
+ "CU": {
+  "lat": 21.334,
+  "lon": -77.976,
+  "name_en": "Cuba",
+  "name_zh": "古巴",
+  "region": "latin_america"
+ },
+ "CY": {
+  "lat": 34.913,
+  "lon": 33.084,
+  "name_en": "Cyprus",
+  "name_zh": "塞浦路斯",
+  "region": "middle_east"
+ },
+ "CZ": {
+  "lat": 49.882,
+  "lon": 15.378,
+  "name_en": "Czechia",
+  "name_zh": "捷克",
+  "region": "europe"
+ },
+ "DE": {
+  "lat": 50.962,
+  "lon": 9.678,
+  "name_en": "Germany",
+  "name_zh": "德国",
+  "region": "europe"
+ },
+ "DJ": {
+  "lat": 11.976,
+  "lon": 42.499,
+  "name_en": "Djibouti",
+  "name_zh": "吉布提",
+  "region": "africa"
+ },
+ "DK": {
+  "lat": 55.967,
+  "lon": 9.018,
+  "name_en": "Denmark",
+  "name_zh": "丹麦",
+  "region": "europe"
+ },
+ "DO": {
+  "lat": 19.104,
+  "lon": -70.654,
+  "name_en": "Dominican Rep.",
+  "name_zh": "多米尼加共和国",
+  "region": "latin_america"
+ },
+ "DZ": {
+  "lat": 27.397,
+  "lon": 2.808,
+  "name_en": "Algeria",
+  "name_zh": "阿尔及利亚",
+  "region": "africa"
+ },
+ "EC": {
+  "lat": -1.259,
+  "lon": -78.188,
+  "name_en": "Ecuador",
+  "name_zh": "厄瓜多尔",
+  "region": "latin_america"
+ },
+ "EE": {
+  "lat": 58.725,
+  "lon": 25.867,
+  "name_en": "Estonia",
+  "name_zh": "爱沙尼亚",
+  "region": "europe"
+ },
+ "EG": {
+  "lat": 26.186,
+  "lon": 29.446,
+  "name_en": "Egypt",
+  "name_zh": "埃及",
+  "region": "middle_east"
+ },
+ "EH": {
+  "lat": 23.968,
+  "lon": -12.63,
+  "name_en": "W. Sahara",
+  "name_zh": "西撒哈拉",
+  "region": "africa"
+ },
+ "ER": {
+  "lat": 15.787,
+  "lon": 38.286,
+  "name_en": "Eritrea",
+  "name_zh": "厄立特里亚",
+  "region": "africa"
+ },
+ "ES": {
+  "lat": 40.091,
+  "lon": -3.465,
+  "name_en": "Spain",
+  "name_zh": "西班牙",
+  "region": "europe"
+ },
+ "ET": {
+  "lat": 8.033,
+  "lon": 39.089,
+  "name_en": "Ethiopia",
+  "name_zh": "埃塞俄比亚",
+  "region": "africa"
+ },
+ "FI": {
+  "lat": 63.252,
+  "lon": 27.276,
+  "name_en": "Finland",
+  "name_zh": "芬兰",
+  "region": "europe"
+ },
+ "FJ": {
+  "lat": -17.826,
+  "lon": 177.975,
+  "name_en": "Fiji",
+  "name_zh": "斐济",
+  "region": "oceania"
+ },
+ "FK": {
+  "lat": -51.609,
+  "lon": -58.739,
+  "name_en": "Falkland Is.",
+  "name_zh": "福克兰群岛",
+  "region": "latin_america"
+ },
+ "FR": {
+  "lat": 46.696,
+  "lon": 2.552,
+  "name_en": "France",
+  "name_zh": "法国",
+  "region": "europe"
+ },
+ "GA": {
+  "lat": -0.438,
+  "lon": 11.836,
+  "name_en": "Gabon",
+  "name_zh": "加蓬",
+  "region": "africa"
+ },
+ "GB": {
+  "lat": 54.403,
+  "lon": -2.116,
+  "name_en": "United Kingdom",
+  "name_zh": "英国",
+  "region": "europe"
+ },
+ "GE": {
+  "lat": 41.87,
+  "lon": 43.736,
+  "name_en": "Georgia",
+  "name_zh": "格鲁吉亚",
+  "region": "middle_east"
+ },
+ "GH": {
+  "lat": 7.718,
+  "lon": -1.037,
+  "name_en": "Ghana",
+  "name_zh": "加纳",
+  "region": "africa"
+ },
+ "GL": {
+  "lat": 74.319,
+  "lon": -39.335,
+  "name_en": "Greenland",
+  "name_zh": "格陵兰",
+  "region": "north_america"
+ },
+ "GM": {
+  "lat": 13.642,
+  "lon": -14.998,
+  "name_en": "Gambia",
+  "name_zh": "冈比亚",
+  "region": "africa"
+ },
+ "GN": {
+  "lat": 10.619,
+  "lon": -10.016,
+  "name_en": "Guinea",
+  "name_zh": "几内亚",
+  "region": "africa"
+ },
+ "GQ": {
+  "lat": 2.333,
+  "lon": 8.99,
+  "name_en": "Eq. Guinea",
+  "name_zh": "赤道几内亚",
+  "region": "africa"
+ },
+ "GR": {
+  "lat": 39.493,
+  "lon": 21.726,
+  "name_en": "Greece",
+  "name_zh": "希腊",
+  "region": "europe"
+ },
+ "GT": {
+  "lat": 14.982,
+  "lon": -90.497,
+  "name_en": "Guatemala",
+  "name_zh": "危地马拉",
+  "region": "latin_america"
+ },
+ "GW": {
+  "lat": 12.164,
+  "lon": -14.524,
+  "name_en": "Guinea-Bissau",
+  "name_zh": "几内亚比绍",
+  "region": "africa"
+ },
+ "GY": {
+  "lat": 5.124,
+  "lon": -58.943,
+  "name_en": "Guyana",
+  "name_zh": "圭亚那",
+  "region": "latin_america"
+ },
+ "HK": {
+  "lat": 22.32,
+  "lon": 114.17,
+  "name_en": "Hong Kong",
+  "name_zh": "中国香港",
+  "region": "east_asia"
+ },
+ "HN": {
+  "lat": 14.795,
+  "lon": -86.888,
+  "name_en": "Honduras",
+  "name_zh": "洪都拉斯",
+  "region": "latin_america"
+ },
+ "HR": {
+  "lat": 45.806,
+  "lon": 16.372,
+  "name_en": "Croatia",
+  "name_zh": "克罗地亚",
+  "region": "europe"
+ },
+ "HT": {
+  "lat": 19.264,
+  "lon": -72.224,
+  "name_en": "Haiti",
+  "name_zh": "海地",
+  "region": "latin_america"
+ },
+ "HU": {
+  "lat": 47.087,
+  "lon": 19.448,
+  "name_en": "Hungary",
+  "name_zh": "匈牙利",
+  "region": "europe"
+ },
+ "ID": {
+  "lat": -0.954,
+  "lon": 101.893,
+  "name_en": "Indonesia",
+  "name_zh": "印度尼西亚",
+  "region": "southeast_asia"
+ },
+ "IE": {
+  "lat": 53.079,
+  "lon": -7.799,
+  "name_en": "Ireland",
+  "name_zh": "爱尔兰",
+  "region": "europe"
+ },
+ "IL": {
+  "lat": 30.911,
+  "lon": 34.848,
+  "name_en": "Israel",
+  "name_zh": "以色列",
+  "region": "middle_east"
+ },
+ "IN": {
+  "lat": 22.687,
+  "lon": 79.358,
+  "name_en": "India",
+  "name_zh": "印度",
+  "region": "south_asia"
+ },
+ "IQ": {
+  "lat": 33.094,
+  "lon": 43.262,
+  "name_en": "Iraq",
+  "name_zh": "伊拉克",
+  "region": "middle_east"
+ },
+ "IR": {
+  "lat": 32.166,
+  "lon": 54.931,
+  "name_en": "Iran",
+  "name_zh": "伊朗",
+  "region": "middle_east"
+ },
+ "IS": {
+  "lat": 64.779,
+  "lon": -18.674,
+  "name_en": "Iceland",
+  "name_zh": "冰岛",
+  "region": "europe"
+ },
+ "IT": {
+  "lat": 44.732,
+  "lon": 11.077,
+  "name_en": "Italy",
+  "name_zh": "意大利",
+  "region": "europe"
+ },
+ "JM": {
+  "lat": 18.137,
+  "lon": -77.319,
+  "name_en": "Jamaica",
+  "name_zh": "牙买加",
+  "region": "latin_america"
+ },
+ "JO": {
+  "lat": 30.805,
+  "lon": 36.376,
+  "name_en": "Jordan",
+  "name_zh": "约旦",
+  "region": "middle_east"
+ },
+ "JP": {
+  "lat": 36.143,
+  "lon": 138.442,
+  "name_en": "Japan",
+  "name_zh": "日本",
+  "region": "east_asia"
+ },
+ "KE": {
+  "lat": 0.549,
+  "lon": 37.908,
+  "name_en": "Kenya",
+  "name_zh": "肯尼亚",
+  "region": "africa"
+ },
+ "KG": {
+  "lat": 41.669,
+  "lon": 74.533,
+  "name_en": "Kyrgyzstan",
+  "name_zh": "吉尔吉斯斯坦",
+  "region": "central_asia"
+ },
+ "KH": {
+  "lat": 12.648,
+  "lon": 104.505,
+  "name_en": "Cambodia",
+  "name_zh": "柬埔寨",
+  "region": "southeast_asia"
+ },
+ "KP": {
+  "lat": 39.885,
+  "lon": 126.445,
+  "name_en": "North Korea",
+  "name_zh": "朝鲜",
+  "region": "east_asia"
+ },
+ "KR": {
+  "lat": 36.385,
+  "lon": 128.13,
+  "name_en": "South Korea",
+  "name_zh": "韩国",
+  "region": "east_asia"
+ },
+ "KW": {
+  "lat": 29.414,
+  "lon": 47.314,
+  "name_en": "Kuwait",
+  "name_zh": "科威特",
+  "region": "middle_east"
+ },
+ "KZ": {
+  "lat": 49.054,
+  "lon": 68.686,
+  "name_en": "Kazakhstan",
+  "name_zh": "哈萨克斯坦",
+  "region": "central_asia"
+ },
+ "LA": {
+  "lat": 19.432,
+  "lon": 102.534,
+  "name_en": "Laos",
+  "name_zh": "老挝",
+  "region": "southeast_asia"
+ },
+ "LB": {
+  "lat": 34.133,
+  "lon": 35.993,
+  "name_en": "Lebanon",
+  "name_zh": "黎巴嫩",
+  "region": "middle_east"
+ },
+ "LK": {
+  "lat": 7.581,
+  "lon": 80.705,
+  "name_en": "Sri Lanka",
+  "name_zh": "斯里兰卡",
+  "region": "south_asia"
+ },
+ "LR": {
+  "lat": 6.447,
+  "lon": -9.46,
+  "name_en": "Liberia",
+  "name_zh": "利比里亚",
+  "region": "africa"
+ },
+ "LS": {
+  "lat": -29.48,
+  "lon": 28.247,
+  "name_en": "Lesotho",
+  "name_zh": "莱索托",
+  "region": "africa"
+ },
+ "LT": {
+  "lat": 55.104,
+  "lon": 24.09,
+  "name_en": "Lithuania",
+  "name_zh": "立陶宛",
+  "region": "europe"
+ },
+ "LU": {
+  "lat": 49.734,
+  "lon": 6.078,
+  "name_en": "Luxembourg",
+  "name_zh": "卢森堡",
+  "region": "europe"
+ },
+ "LV": {
+  "lat": 57.067,
+  "lon": 25.459,
+  "name_en": "Latvia",
+  "name_zh": "拉脱维亚",
+  "region": "europe"
+ },
+ "LY": {
+  "lat": 26.639,
+  "lon": 18.011,
+  "name_en": "Libya",
+  "name_zh": "利比亚",
+  "region": "africa"
+ },
+ "MA": {
+  "lat": 31.651,
+  "lon": -7.187,
+  "name_en": "Morocco",
+  "name_zh": "摩洛哥",
+  "region": "africa"
+ },
+ "MD": {
+  "lat": 47.435,
+  "lon": 28.488,
+  "name_en": "Moldova",
+  "name_zh": "摩尔多瓦",
+  "region": "europe"
+ },
+ "ME": {
+  "lat": 42.803,
+  "lon": 19.144,
+  "name_en": "Montenegro",
+  "name_zh": "黑山",
+  "region": "europe"
+ },
+ "MG": {
+  "lat": -18.628,
+  "lon": 46.704,
+  "name_en": "Madagascar",
+  "name_zh": "马达加斯加",
+  "region": "africa"
+ },
+ "MK": {
+  "lat": 41.558,
+  "lon": 21.556,
+  "name_en": "North Macedonia",
+  "name_zh": "北马其顿",
+  "region": "europe"
+ },
+ "ML": {
+  "lat": 18.693,
+  "lon": -2.038,
+  "name_en": "Mali",
+  "name_zh": "马里",
+  "region": "africa"
+ },
+ "MM": {
+  "lat": 21.574,
+  "lon": 95.804,
+  "name_en": "Myanmar",
+  "name_zh": "缅甸",
+  "region": "southeast_asia"
+ },
+ "MN": {
+  "lat": 45.997,
+  "lon": 104.15,
+  "name_en": "Mongolia",
+  "name_zh": "蒙古",
+  "region": "east_asia"
+ },
+ "MO": {
+  "lat": 22.2,
+  "lon": 113.54,
+  "name_en": "Macao",
+  "name_zh": "中国澳门",
+  "region": "east_asia"
+ },
+ "MR": {
+  "lat": 19.587,
+  "lon": -9.74,
+  "name_en": "Mauritania",
+  "name_zh": "毛里塔尼亚",
+  "region": "africa"
+ },
+ "MW": {
+  "lat": -13.387,
+  "lon": 33.608,
+  "name_en": "Malawi",
+  "name_zh": "马拉维",
+  "region": "africa"
+ },
+ "MX": {
+  "lat": 23.92,
+  "lon": -102.289,
+  "name_en": "Mexico",
+  "name_zh": "墨西哥",
+  "region": "latin_america"
+ },
+ "MY": {
+  "lat": 2.529,
+  "lon": 113.837,
+  "name_en": "Malaysia",
+  "name_zh": "马来西亚",
+  "region": "southeast_asia"
+ },
+ "MZ": {
+  "lat": -13.943,
+  "lon": 37.838,
+  "name_en": "Mozambique",
+  "name_zh": "莫桑比克",
+  "region": "africa"
+ },
+ "NA": {
+  "lat": -20.575,
+  "lon": 17.108,
+  "name_en": "Namibia",
+  "name_zh": "纳米比亚",
+  "region": "africa"
+ },
+ "NC": {
+  "lat": -21.065,
+  "lon": 165.084,
+  "name_en": "New Caledonia",
+  "name_zh": "新喀里多尼亚",
+  "region": "oceania"
+ },
+ "NE": {
+  "lat": 17.446,
+  "lon": 9.504,
+  "name_en": "Niger",
+  "name_zh": "尼日尔",
+  "region": "africa"
+ },
+ "NG": {
+  "lat": 9.44,
+  "lon": 7.503,
+  "name_en": "Nigeria",
+  "name_zh": "尼日利亚",
+  "region": "africa"
+ },
+ "NI": {
+  "lat": 12.671,
+  "lon": -85.069,
+  "name_en": "Nicaragua",
+  "name_zh": "尼加拉瓜",
+  "region": "latin_america"
+ },
+ "NL": {
+  "lat": 52.422,
+  "lon": 5.611,
+  "name_en": "Netherlands",
+  "name_zh": "荷兰",
+  "region": "europe"
+ },
+ "NO": {
+  "lat": 61.357,
+  "lon": 9.68,
+  "name_en": "Norway",
+  "name_zh": "挪威",
+  "region": "europe"
+ },
+ "NP": {
+  "lat": 28.298,
+  "lon": 83.64,
+  "name_en": "Nepal",
+  "name_zh": "尼泊尔",
+  "region": "south_asia"
+ },
+ "NZ": {
+  "lat": -39.759,
+  "lon": 172.787,
+  "name_en": "New Zealand",
+  "name_zh": "新西兰",
+  "region": "oceania"
+ },
+ "OM": {
+  "lat": 22.12,
+  "lon": 57.337,
+  "name_en": "Oman",
+  "name_zh": "阿曼",
+  "region": "middle_east"
+ },
+ "PA": {
+  "lat": 8.722,
+  "lon": -80.352,
+  "name_en": "Panama",
+  "name_zh": "巴拿马",
+  "region": "latin_america"
+ },
+ "PE": {
+  "lat": -12.977,
+  "lon": -72.9,
+  "name_en": "Peru",
+  "name_zh": "秘鲁",
+  "region": "latin_america"
+ },
+ "PG": {
+  "lat": -5.695,
+  "lon": 143.91,
+  "name_en": "Papua New Guinea",
+  "name_zh": "巴布亚新几内亚",
+  "region": "oceania"
+ },
+ "PH": {
+  "lat": 11.198,
+  "lon": 122.465,
+  "name_en": "Philippines",
+  "name_zh": "菲律宾",
+  "region": "southeast_asia"
+ },
+ "PK": {
+  "lat": 29.328,
+  "lon": 68.546,
+  "name_en": "Pakistan",
+  "name_zh": "巴基斯坦",
+  "region": "south_asia"
+ },
+ "PL": {
+  "lat": 51.99,
+  "lon": 19.49,
+  "name_en": "Poland",
+  "name_zh": "波兰",
+  "region": "europe"
+ },
+ "PR": {
+  "lat": 18.235,
+  "lon": -66.481,
+  "name_en": "Puerto Rico",
+  "name_zh": "波多黎各",
+  "region": "latin_america"
+ },
+ "PS": {
+  "lat": 32.047,
+  "lon": 35.291,
+  "name_en": "Palestine",
+  "name_zh": "巴勒斯坦",
+  "region": "middle_east"
+ },
+ "PT": {
+  "lat": 39.607,
+  "lon": -8.272,
+  "name_en": "Portugal",
+  "name_zh": "葡萄牙",
+  "region": "europe"
+ },
+ "PY": {
+  "lat": -21.675,
+  "lon": -60.146,
+  "name_en": "Paraguay",
+  "name_zh": "巴拉圭",
+  "region": "latin_america"
+ },
+ "QA": {
+  "lat": 25.237,
+  "lon": 51.144,
+  "name_en": "Qatar",
+  "name_zh": "卡塔尔",
+  "region": "middle_east"
+ },
+ "RO": {
+  "lat": 45.733,
+  "lon": 24.973,
+  "name_en": "Romania",
+  "name_zh": "罗马尼亚",
+  "region": "europe"
+ },
+ "RS": {
+  "lat": 44.19,
+  "lon": 20.788,
+  "name_en": "Serbia",
+  "name_zh": "塞尔维亚",
+  "region": "europe"
+ },
+ "RU": {
+  "lat": 58.249,
+  "lon": 44.686,
+  "name_en": "Russia",
+  "name_zh": "俄罗斯",
+  "region": "europe"
+ },
+ "RW": {
+  "lat": -1.897,
+  "lon": 30.104,
+  "name_en": "Rwanda",
+  "name_zh": "卢旺达",
+  "region": "africa"
+ },
+ "SA": {
+  "lat": 23.807,
+  "lon": 44.7,
+  "name_en": "Saudi Arabia",
+  "name_zh": "沙特阿拉伯",
+  "region": "middle_east"
+ },
+ "SB": {
+  "lat": -8.03,
+  "lon": 159.17,
+  "name_en": "Solomon Is.",
+  "name_zh": "所罗门群岛",
+  "region": "oceania"
+ },
+ "SD": {
+  "lat": 16.331,
+  "lon": 29.261,
+  "name_en": "Sudan",
+  "name_zh": "苏丹",
+  "region": "africa"
+ },
+ "SE": {
+  "lat": 65.859,
+  "lon": 19.017,
+  "name_en": "Sweden",
+  "name_zh": "瑞典",
+  "region": "europe"
+ },
+ "SG": {
+  "lat": 1.35,
+  "lon": 103.82,
+  "name_en": "Singapore",
+  "name_zh": "新加坡",
+  "region": "southeast_asia"
+ },
+ "SI": {
+  "lat": 46.061,
+  "lon": 14.915,
+  "name_en": "Slovenia",
+  "name_zh": "斯洛文尼亚",
+  "region": "europe"
+ },
+ "SK": {
+  "lat": 48.734,
+  "lon": 19.05,
+  "name_en": "Slovakia",
+  "name_zh": "斯洛伐克",
+  "region": "europe"
+ },
+ "SL": {
+  "lat": 8.617,
+  "lon": -11.764,
+  "name_en": "Sierra Leone",
+  "name_zh": "塞拉利昂",
+  "region": "africa"
+ },
+ "SN": {
+  "lat": 15.138,
+  "lon": -14.779,
+  "name_en": "Senegal",
+  "name_zh": "塞内加尔",
+  "region": "africa"
+ },
+ "SO": {
+  "lat": 3.569,
+  "lon": 45.192,
+  "name_en": "Somalia",
+  "name_zh": "索马里",
+  "region": "africa"
+ },
+ "SR": {
+  "lat": 4.144,
+  "lon": -55.911,
+  "name_en": "Suriname",
+  "name_zh": "苏里南",
+  "region": "latin_america"
+ },
+ "SS": {
+  "lat": 7.23,
+  "lon": 30.39,
+  "name_en": "S. Sudan",
+  "name_zh": "南苏丹",
+  "region": "africa"
+ },
+ "SV": {
+  "lat": 13.685,
+  "lon": -88.89,
+  "name_en": "El Salvador",
+  "name_zh": "萨尔瓦多",
+  "region": "latin_america"
+ },
+ "SY": {
+  "lat": 35.007,
+  "lon": 38.278,
+  "name_en": "Syria",
+  "name_zh": "叙利亚",
+  "region": "middle_east"
+ },
+ "SZ": {
+  "lat": -26.534,
+  "lon": 31.467,
+  "name_en": "eSwatini",
+  "name_zh": "斯威士兰",
+  "region": "africa"
+ },
+ "TD": {
+  "lat": 15.143,
+  "lon": 18.645,
+  "name_en": "Chad",
+  "name_zh": "乍得",
+  "region": "africa"
+ },
+ "TG": {
+  "lat": 8.807,
+  "lon": 1.058,
+  "name_en": "Togo",
+  "name_zh": "多哥",
+  "region": "africa"
+ },
+ "TH": {
+  "lat": 15.46,
+  "lon": 101.073,
+  "name_en": "Thailand",
+  "name_zh": "泰国",
+  "region": "southeast_asia"
+ },
+ "TJ": {
+  "lat": 38.2,
+  "lon": 72.587,
+  "name_en": "Tajikistan",
+  "name_zh": "塔吉克斯坦",
+  "region": "central_asia"
+ },
+ "TL": {
+  "lat": -8.804,
+  "lon": 125.855,
+  "name_en": "Timor-Leste",
+  "name_zh": "东帝汶",
+  "region": "southeast_asia"
+ },
+ "TM": {
+  "lat": 39.855,
+  "lon": 58.677,
+  "name_en": "Turkmenistan",
+  "name_zh": "土库曼斯坦",
+  "region": "central_asia"
+ },
+ "TN": {
+  "lat": 33.687,
+  "lon": 9.008,
+  "name_en": "Tunisia",
+  "name_zh": "突尼斯",
+  "region": "africa"
+ },
+ "TR": {
+  "lat": 39.345,
+  "lon": 34.508,
+  "name_en": "Turkey",
+  "name_zh": "土耳其",
+  "region": "middle_east"
+ },
+ "TT": {
+  "lat": 10.999,
+  "lon": -60.918,
+  "name_en": "Trinidad and Tobago",
+  "name_zh": "特立尼达和多巴哥",
+  "region": "latin_america"
+ },
+ "TW": {
+  "lat": 23.652,
+  "lon": 120.868,
+  "name_en": "Taiwan",
+  "name_zh": "中国台湾",
+  "region": "east_asia"
+ },
+ "TZ": {
+  "lat": -6.052,
+  "lon": 34.959,
+  "name_en": "Tanzania",
+  "name_zh": "坦桑尼亚",
+  "region": "africa"
+ },
+ "UA": {
+  "lat": 49.725,
+  "lon": 32.141,
+  "name_en": "Ukraine",
+  "name_zh": "乌克兰",
+  "region": "europe"
+ },
+ "UG": {
+  "lat": 1.973,
+  "lon": 32.949,
+  "name_en": "Uganda",
+  "name_zh": "乌干达",
+  "region": "africa"
+ },
+ "US": {
+  "lat": 39.538,
+  "lon": -97.483,
+  "name_en": "United States of America",
+  "name_zh": "美国",
+  "region": "north_america"
+ },
+ "UY": {
+  "lat": -32.961,
+  "lon": -55.967,
+  "name_en": "Uruguay",
+  "name_zh": "乌拉圭",
+  "region": "latin_america"
+ },
+ "UZ": {
+  "lat": 41.694,
+  "lon": 64.005,
+  "name_en": "Uzbekistan",
+  "name_zh": "乌兹别克斯坦",
+  "region": "central_asia"
+ },
+ "VE": {
+  "lat": 7.182,
+  "lon": -64.599,
+  "name_en": "Venezuela",
+  "name_zh": "委内瑞拉",
+  "region": "latin_america"
+ },
+ "VN": {
+  "lat": 21.715,
+  "lon": 105.387,
+  "name_en": "Vietnam",
+  "name_zh": "越南",
+  "region": "southeast_asia"
+ },
+ "VU": {
+  "lat": -15.372,
+  "lon": 166.909,
+  "name_en": "Vanuatu",
+  "name_zh": "瓦努阿图",
+  "region": "oceania"
+ },
+ "XK": {
+  "lat": 42.594,
+  "lon": 20.861,
+  "name_en": "Kosovo",
+  "name_zh": "科索沃",
+  "region": "europe"
+ },
+ "YE": {
+  "lat": 15.328,
+  "lon": 45.874,
+  "name_en": "Yemen",
+  "name_zh": "也门",
+  "region": "middle_east"
+ },
+ "ZA": {
+  "lat": -29.709,
+  "lon": 23.666,
+  "name_en": "South Africa",
+  "name_zh": "南非",
+  "region": "africa"
+ },
+ "ZM": {
+  "lat": -14.661,
+  "lon": 26.395,
+  "name_en": "Zambia",
+  "name_zh": "赞比亚",
+  "region": "africa"
+ },
+ "ZW": {
+  "lat": -18.912,
+  "lon": 29.925,
+  "name_en": "Zimbabwe",
+  "name_zh": "津巴布韦",
+  "region": "africa"
+ }
+}
