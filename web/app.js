@@ -471,15 +471,22 @@
 
     for (const id of view.translated) {
       const article = articleById(id);
-      const cached = state.translationCache.get(id);
       const card = article?.querySelector(".card");
-      if (!card || !cached) continue;
+      if (!card) continue;
+      const manual = state.translationCache.get(id);
+      const auto = state.autoTranslationCache.get(id);
+      if (!manual && !auto) continue;
       let box = card.querySelector(".translation");
       if (!box) {
         box = document.createElement("p");
-        box.className = "translation";
+        box.className = manual ? "translation" : "translation auto";
         card.querySelector(".card-content")?.after(box);
       }
+      if (!manual) {
+        box.classList.add("auto");
+        box.classList.remove("pending");
+      }
+      const cached = manual || auto;
       setTranslationContent(box, cached.text, cached.provider);
       box.hidden = false;
       const button = card.querySelector('[data-action="translate"]');
@@ -2049,7 +2056,7 @@
       : "自动翻译非中文新闻标题";
   }
 
-  function setAutoTranslate(enabled, { persist = true } = {}) {
+  function setAutoTranslate(enabled, { persist = true, remove = true } = {}) {
     state.autoTranslate = Boolean(enabled);
     if (persist) {
       localStorage.setItem("gnt-auto-translate", state.autoTranslate ? "1" : "0");
@@ -2072,6 +2079,7 @@
     state.visibleArticles.clear();
     state.autoTranslateQueue = [];
     state.autoTranslated.clear();
+    if (!remove) return;
     document.querySelectorAll(".translation.auto").forEach((element) => {
       const card = element.closest(".card");
       const button = card?.querySelector('[data-action="translate"]');
@@ -2144,11 +2152,12 @@
       autoTranslateCard(job.article, job.item)
         .then(() => { state.autoTranslateFailures = 0; })
         .catch(() => {
-          job.article.querySelector(".translation.auto.pending")?.remove();
+          const live = liveArticle(job.item.id) || job.article;
+          live.querySelector(".translation.auto.pending")?.remove();
           state.autoTranslated.delete(job.item.id);
           state.autoTranslateFailures += 1;
           if (state.autoTranslateFailures >= 3) {
-            setAutoTranslate(false);
+            setAutoTranslate(false, { remove: false });
             toast("自动翻译已暂停：翻译服务不可用或免费额度已用尽", true);
           }
         })
@@ -2159,10 +2168,20 @@
     }
   }
 
+  function liveArticle(itemId) {
+    return document.querySelector(
+      `#timeline .article[data-id="${cssEscape(itemId)}"]`
+    );
+  }
+
   async function autoTranslateCard(article, item) {
     if (!state.autoTranslate) return;
-    const card = article.querySelector(".card");
-    if (!card) return;
+    article = liveArticle(item.id) || article;
+    let card = article?.querySelector(".card");
+    if (!card) {
+      state.autoTranslated.delete(item.id);
+      return;
+    }
     const existing = card.querySelector(".translation");
     if (existing && !existing.classList.contains("auto")) return;
     let cached = state.autoTranslationCache.get(item.id);
@@ -2179,6 +2198,15 @@
       state.autoTranslationCache.set(item.id, cached);
     }
     if (!state.autoTranslate) return;
+    // The timeline may have been rebuilt while the request was in flight.
+    article = liveArticle(item.id) || article;
+    card = article?.querySelector(".card");
+    if (!card) {
+      state.autoTranslated.delete(item.id);
+      return;
+    }
+    const current = card.querySelector(".translation");
+    if (current && !current.classList.contains("auto")) return;
     let box = card.querySelector(".translation.auto");
     if (!box) {
       box = document.createElement("p");
