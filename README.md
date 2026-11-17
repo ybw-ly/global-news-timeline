@@ -678,6 +678,8 @@ http://127.0.0.1:8765/#story=<article-id>&tr=1     # 打开详情并自动翻译
 
 ## 7. 部署
 
+完整的部署、更新、备份、验证与回滚步骤见 **[deploy/README.md](deploy/README.md)**。
+
 ### 本机 / 小主机
 
 ```sh
