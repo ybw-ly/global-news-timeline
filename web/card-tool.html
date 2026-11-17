@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#070b11">
+  <meta name="description" content="经纬 · 新闻卡片工具：把标题、摘要与来源生成可分享的 PNG 图片卡片。">
+  <title>新闻卡片工具 · 经纬</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/share-card.css">
+</head>
+<body class="card-tool-page">
+  <header class="card-tool-top">
+    <a href="/">← 返回时间线</a>
+    <strong>新闻卡片工具</strong>
+    <a href="/customize.html">自定义中心 ↗</a>
+  </header>
+
+  <main class="card-tool-shell">
+    <section class="card-tool-form">
+      <h1>生成一张新闻卡片</h1>
+      <p>填写标题、摘要与来源，右侧实时预览。卡片完全在浏览器本地生成，不上传任何内容。</p>
+
+      <div class="card-field">
+        <label for="ct-title">标题 *</label>
+        <textarea id="ct-title" placeholder="粘贴新闻标题…" required></textarea>
+      </div>
+      <div class="card-field">
+        <label for="ct-summary">摘要</label>
+        <textarea id="ct-summary" placeholder="可选：一两句背景或关键数字"></textarea>
+      </div>
+      <div class="card-field">
+        <label for="ct-source">来源</label>
+        <input id="ct-source" type="text" placeholder="例如 Reuters / BBC">
+      </div>
+      <div class="card-field">
+        <label for="ct-time">发布时间</label>
+        <input id="ct-time" type="text" placeholder="2026-11-17 12:30 或留空">
+      </div>
+      <div class="card-field">
+        <label for="ct-place">事件地点</label>
+        <input id="ct-place" type="text" placeholder="例如 中国 / 中东">
+      </div>
+      <div class="card-field">
+        <label for="ct-category">分类</label>
+        <select id="ct-category">
+          <option value="economy">经济</option>
+          <option value="politics">政治</option>
+          <option value="military">军事</option>
+          <option value="other" selected>其他</option>
+        </select>
+      </div>
+      <div class="card-field">
+        <label for="ct-language">原文语言</label>
+        <input id="ct-language" type="text" placeholder="例如 英语">
+      </div>
+      <div class="card-field">
+        <label for="ct-url">原文链接</label>
+        <input id="ct-url" type="url" placeholder="https://…">
+      </div>
+      <div class="card-field">
+        <label for="ct-image">配图链接（可选）</label>
+        <input id="ct-image" type="url" placeholder="https://…（需允许跨域）">
+      </div>
+      <div class="card-field">
+        <label for="ct-theme">主题</label>
+        <select id="ct-theme">
+          <option value="dark">深色</option>
+          <option value="light">浅色</option>
+          <option value="paper">纸张</option>
+        </select>
+      </div>
+
+      <div class="card-tool-actions">
+        <button class="card-btn primary" type="button" id="ct-download">下载 PNG</button>
+        <button class="card-btn" type="button" id="ct-copy">复制图片</button>
+        <button class="card-btn" type="button" id="ct-share">系统分享</button>
+      </div>
+      <p class="card-tool-status" id="ct-status"></p>
+    </section>
+
+    <section class="card-tool-preview">
+      <canvas id="ct-canvas" width="1080" height="1350"></canvas>
+    </section>
+  </main>
+
+  <script src="/share-card.js" defer></script>
+  <script src="/card-tool.js" defer></script>
+</body>
+</html>

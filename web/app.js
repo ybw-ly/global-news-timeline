@@ -1837,6 +1837,7 @@
       <div class="dossier-actions">
         <a class="primary-btn" href="${esc(safeUrl(item.url))}" target="_blank" rel="noopener noreferrer">阅读原文 ↗</a>
         ${canTranslate ? `<button class="ghost-btn" type="button" id="dossier-translate">译成中文</button>` : ""}
+        <button class="ghost-btn" type="button" id="dossier-card">分享卡片</button>
         <button class="ghost-btn" type="button" id="dossier-share">P2P 推送</button>
       </div>
       <div class="translation-box" id="dossier-translation" hidden></div>
@@ -1874,6 +1875,7 @@
       </div>`;
 
     $("#dossier-translate")?.addEventListener("click", () => translateDrawer(item));
+    $("#dossier-card")?.addEventListener("click", () => window.NewsCard?.open(item));
     $("#dossier-share")?.addEventListener("click", () => window.NewsP2P?.open("story"));
 
     const drawer = $("#drawer");
