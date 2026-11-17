@@ -64,7 +64,7 @@ from translation_specs import detect_key_hints
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
-VERSION = "1.16.0"
+VERSION = "1.16.1"
 LOG = logging.getLogger("server")
 
 HOST = os.environ.get("HOST", "127.0.0.1")

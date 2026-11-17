@@ -1,10 +1,10 @@
 # 部署与更新手册
 
-适用于 **Global News Timeline / 经纬** v1.16.0 及之后的版本。
+适用于 **Global News Timeline / 经纬** v1.16.1 及之后的版本。
 
 - Release：<https://github.com/ybw-ly/global-news-timeline/releases>
-- 当前版本安装包：`global-news-timeline-v1.16.0.zip`
-- 当前版本 SHA256：`9fdf2abaee78a898f25799b2467eae11588570e78cd40409d7cc3093349f8f80`
+- 当前版本安装包：`global-news-timeline-v1.16.1.zip`
+- 当前版本 SHA256：以 Release 页面的 `SHA256SUMS.txt` 为准
 
 ---
 
@@ -71,7 +71,7 @@ global-news-timeline/
 
 ### 方式 A：Windows 一键包
 
-1. 下载并解压 `global-news-timeline-v1.16.0.zip`。
+1. 下载并解压 `global-news-timeline-v1.16.1.zip`。
 2. 双击 `deploy\one-click-deploy.bat`。
 3. 脚本会检查 Python 3.10+、启动服务并打开浏览器。
 4. 关闭最小化的 **Meridian News Timeline** 控制台窗口即可停止服务。
@@ -169,7 +169,7 @@ curl -fsS http://127.0.0.1:8765/api/health
 应返回包含：
 
 ```json
-{"ok": true, "version": "1.16.0"}
+{"ok": true, "version": "1.16.1"}
 ```
 
 Windows PowerShell：
@@ -215,7 +215,7 @@ Compress-Archive -Path .\data -DestinationPath ..\gnt-backup-$(Get-Date -Format 
 
 ---
 
-## 5. 从旧版本更新到 v1.16.0
+## 5. 从旧版本更新到 v1.16.1
 
 ### 方式 A：zip 部署（Windows / Linux 通用，最稳）
 
@@ -231,13 +231,13 @@ cd /opt/global-news-timeline
 tar czf /opt/gnt-data-backup-$(date +%F).tar.gz data
 
 # 3. 下载并校验新包
-curl -L -o /tmp/gnt-v1.16.0.zip \
-  https://github.com/ybw-ly/global-news-timeline/releases/download/v1.16.0/global-news-timeline-v1.16.0.zip
-sha256sum /tmp/gnt-v1.16.0.zip
-# 应为 9fdf2abaee78a898f25799b2467eae11588570e78cd40409d7cc3093349f8f80
+curl -L -o /tmp/gnt-v1.16.1.zip \
+  https://github.com/ybw-ly/global-news-timeline/releases/download/v1.16.1/global-news-timeline-v1.16.1.zip
+sha256sum /tmp/gnt-v1.16.1.zip
+# 与 Release 页面的 SHA256SUMS.txt 对比
 
 # 4. 解压到新目录
-unzip -q /tmp/gnt-v1.16.0.zip -d /opt/gnt-new
+unzip -q /tmp/gnt-v1.16.1.zip -d /opt/gnt-new
 
 # 5. 复制旧 data 到新目录（不要反过来覆盖旧数据）
 mkdir -p /opt/gnt-new/global-news-timeline/data
@@ -291,7 +291,7 @@ cp -a data data.backup-$(date +%F)
 
 # 3. 更新源码
 git pull --ff-only origin main
-# 或：下载 v1.16.0 zip，覆盖程序文件但保留 data/、.env、docker-compose.yml 的自定义配置
+# 或：下载 v1.16.1 zip，覆盖程序文件但保留 data/、.env、docker-compose.yml 的自定义配置
 
 # 4. 重建并启动
 docker compose build --pull
@@ -307,13 +307,15 @@ curl http://127.0.0.1:8765/api/health
 ### 方式 D：Windows 一键包更新
 
 1. 关闭旧服务窗口。
-2. 下载 v1.16.0 zip，解压到新目录。
+2. 下载 v1.16.1 zip，解压到新目录。
 3. 把旧目录的 `data` 文件夹复制到新目录。
 4. 把旧的 `.env` / 自定义启动参数带过去。
 5. 双击新目录的 `deploy\one-click-deploy.bat` 或 `launch-desktop.bat`。
-6. 打开页面，确认版本 1.16.0；旧目录留作回滚。
+6. 打开页面，确认版本 1.16.1；旧目录留作回滚。
 
-### v1.16.0 的配置变化
+### v1.16.0 / v1.16.1 的配置变化
+
+- **v1.16.1**：修复自动翻译行在后台同步重建时间线后消失的问题；其余配置与 v1.16.0 相同。
 
 - 运行设置从“多个免费/付费策略开关”简化为 **直接选择翻译接口**；手动翻译和浏览自动翻译使用同一个接口。
 - 旧的 `free_only`、`fallback`、`local_first`、`auto_paid` 字段会被忽略，并在下次保存时清理。
@@ -330,7 +332,7 @@ curl http://127.0.0.1:8765/api/health
 curl -fsS http://127.0.0.1:8765/api/health
 ```
 
-- [ ] 返回 `version` 为 `1.16.0`
+- [ ] 返回 `version` 为 `1.16.1`
 - [ ] 首页能打开，新闻列表正常
 - [ ] `customize.html#runtime` 能打开
 - [ ] 运行设置只剩“翻译接口”下拉框，没有旧的免费/付费策略开关
@@ -352,7 +354,7 @@ sudo mv /opt/global-news-timeline-old /opt/global-news-timeline
 sudo systemctl start global-news-timeline
 ```
 
-数据仍在 `data/`；v1.16.0 没有改数据库 schema，旧版本可以继续读取。
+数据仍在 `data/`；v1.16.x 没有改数据库 schema，旧版本可以继续读取。
 
 ### Docker
 
@@ -403,7 +405,7 @@ python server\app.py
 
 ### 页面打不开 / 更新后还是旧界面
 
-1. 确认 `/api/health` 返回 `1.16.0`。
+1. 确认 `/api/health` 返回 `1.16.1`。
 2. 浏览器按 **Ctrl+F5**。
 3. 检查是否有多个 Python 进程占用不同端口：
 
@@ -459,16 +461,16 @@ python3 scripts/ingest_once.py
 
 ```bash
 # Linux
-sha256sum global-news-timeline-v1.16.0.zip
+sha256sum global-news-timeline-v1.16.1.zip
 
 # Windows PowerShell
-Get-FileHash .\global-news-timeline-v1.16.0.zip -Algorithm SHA256
+Get-FileHash .\global-news-timeline-v1.16.1.zip -Algorithm SHA256
 ```
 
 当前版本：
 
 ```text
-SHA256 9fdf2abaee78a898f25799b2467eae11588570e78cd40409d7cc3093349f8f80
+SHA256 以 Release 页面的 `SHA256SUMS.txt` 为准
 ```
 
-下载页：<https://github.com/ybw-ly/global-news-timeline/releases/tag/v1.16.0>
+下载页：<https://github.com/ybw-ly/global-news-timeline/releases/tag/v1.16.1>
