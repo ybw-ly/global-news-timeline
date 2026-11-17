@@ -20,7 +20,12 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from brazil import fetch_results as fetch_brazil_results
+from elections import (
+    default_election,
+    fetch_election_results,
+    get_election,
+    list_elections,
+)
 from db import (
     connect,
     count_articles,
@@ -55,7 +60,7 @@ from translate import translate
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
-VERSION = "1.8.0"
+VERSION = "1.9.0"
 LOG = logging.getLogger("server")
 
 HOST = os.environ.get("HOST", "127.0.0.1")
@@ -454,9 +459,37 @@ class Handler(BaseHTTPRequestHandler):
             finally:
                 conn.close()
             return
+        if path == "/api/elections":
+            default = default_election()
+            self._json(
+                {
+                    "ok": True,
+                    "default": default.get("id") if default else None,
+                    "elections": list_elections(),
+                }
+            )
+            return
+        if path.startswith("/api/elections/"):
+            parts = [part for part in path.split("/") if part]
+            if len(parts) in (3, 4):
+                election_id = parts[2]
+                election = get_election(election_id)
+                if not election:
+                    self._error(404, "Unknown election")
+                    return
+                if len(parts) == 3:
+                    self._json({"ok": True, "election": election})
+                    return
+                if parts[3] == "results":
+                    scope = (query.get("scope") or ["br"])[0]
+                    self._json(fetch_election_results(election_id, scope))
+                    return
+            self._error(404, "Not found")
+            return
+        # Backwards compatibility for the original Brazil-only endpoint.
         if path == "/api/brazil/results":
             scope = (query.get("scope") or ["br"])[0]
-            self._json(fetch_brazil_results(scope))
+            self._json(fetch_election_results("brazil-2026", scope))
             return
         if path == "/api/status":
             conn = connect()

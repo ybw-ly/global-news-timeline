@@ -1,0 +1,1001 @@
+{
+  "version": 1,
+  "default": "auto",
+  "elections": [
+    {
+      "id": "nigeria-2027",
+      "country_code": "NG",
+      "country": "Nigeria",
+      "name_zh": "尼日利亚 2027 大选",
+      "name_en": "Nigeria 2027 general election",
+      "round_zh": "总统与议会",
+      "status": "upcoming",
+      "election_date": "2027-01-16",
+      "election_end": "2027-01-16T13:30:00Z",
+      "timezone": "Africa/Lagos",
+      "timezone_label": "WAT / UTC+1",
+      "dek": "2027 年 1 月 16 日举行总统与国民议会选举，2 月 6 日举行州长与州议会选举。INEC 已按 2026 年新选举法调整时间表。",
+      "official_url": "https://www.inecnigeria.org/",
+      "official_label": "INEC 官方",
+      "adapter": {
+        "type": "none"
+      },
+      "status_facts": [
+        {
+          "label": "总统 / 国民议会",
+          "value": "2027-01-16"
+        },
+        {
+          "label": "州长 / 州议会",
+          "value": "2027-02-06"
+        },
+        {
+          "label": "投票时间",
+          "value": "08:30–14:30"
+        },
+        {
+          "label": "认证方式",
+          "value": "BVAS"
+        }
+      ],
+      "candidates": [],
+      "scopes": [],
+      "overseas": [],
+      "result_summary": [],
+      "timeline": [
+        {
+          "date": "2026",
+          "time": "08/19",
+          "tag": "竞选期",
+          "title": "总统与国民议会竞选活动开始",
+          "body": "INEC 时间表显示，总统和国民议会竞选于 2026 年 8 月 19 日开始；州长与州议会竞选于 9 月 9 日开始。",
+          "source": "https://english.news.cn/africa/20260227/757f4062425145818ec38f7b664f94af/c.html",
+          "sourceLabel": "Xinhua"
+        },
+        {
+          "date": "2027",
+          "time": "01/16",
+          "tag": "投票日",
+          "title": "总统与国民议会选举",
+          "body": "全国 36 个州和联邦首都区投票，认证与投票同时进行，使用 BVAS 核验选民身份。",
+          "source": "https://www.inecnigeria.org/elections/calendar",
+          "sourceLabel": "INEC",
+          "major": true
+        },
+        {
+          "date": "2027",
+          "time": "02/06",
+          "tag": "投票日",
+          "title": "州长与州议会选举",
+          "body": "全国选举两周后举行州长与州议会选举。",
+          "source": "https://www.inecnigeria.org/elections/calendar",
+          "sourceLabel": "INEC",
+          "major": true
+        },
+        {
+          "date": "2027",
+          "time": "05/29",
+          "tag": "交接",
+          "title": "当选总统宣誓就职",
+          "body": "尼日利亚总统任期于 5 月 29 日开始；最终日期以官方安排为准。",
+          "source": "https://www.inecnigeria.org/",
+          "sourceLabel": "INEC"
+        }
+      ],
+      "polls": null,
+      "watchlist": [
+        {
+          "title": "INEC 时间表与法律变更",
+          "body": "2026 年新选举法替代 2022 年选举法后，INEC 把总统选举从 2 月 20 日提前到 1 月 16 日。后续任何时间表调整都需要重点跟踪。",
+          "signal": "读数：INEC 官方公告与州级准备进度"
+        },
+        {
+          "title": "BVAS 与投票认证",
+          "body": "选民需持 PVC，通过 Bimodal Voter Accreditation System 完成认证；认证与投票同时进行，时间为 08:30–14:30。设备故障和网络覆盖是常见风险点。",
+          "signal": "读数：故障选区数量与补投安排"
+        },
+        {
+          "title": "两场选举的两周间隔",
+          "body": "总统/国民议会与州长/州议会相隔三周。全国结果可能影响州级投票，也可能放大地方暴力与买票风险。",
+          "signal": "读数：两轮之间的暴力事件与竞选支出"
+        },
+        {
+          "title": "36 州 + FCT 的地理差异",
+          "body": "尼日利亚的选举结果高度依赖州与地方结构；北部、中部地带和三角洲地区的投票率与安全问题差异很大。",
+          "signal": "读数：各州投票率与结果偏离"
+        }
+      ],
+      "sources": [
+        {
+          "group": "官方 / 数据",
+          "items": [
+            {
+              "tag": "INEC",
+              "title": "INEC 官方网站",
+              "url": "https://www.inecnigeria.org/",
+              "note": "选举时间表、候选人名单与结果"
+            },
+            {
+              "tag": "INEC",
+              "title": "完整选举日历",
+              "url": "https://www.inecnigeria.org/elections/calendar",
+              "note": "2027 总统、国民议会、州长与州议会日期"
+            }
+          ]
+        },
+        {
+          "group": "通讯社 / 国际",
+          "items": [
+            {
+              "tag": "XINHUA",
+              "title": "尼日利亚调整 2027 大选时间表",
+              "url": "https://english.news.cn/africa/20260227/757f4062425145818ec38f7b664f94af/c.html",
+              "note": "新选举法与日期调整"
+            },
+            {
+              "tag": "NAN",
+              "title": "INEC 重新安排 2027 大选",
+              "url": "https://nannews.ng/election-15/",
+              "note": "总统选举提前至 1 月 16 日"
+            }
+          ]
+        }
+      ],
+      "method_note": "本页只展示已确认的选举制度、日期与公开来源。候选人名单以 INEC 最终公布为准；未接入实时计票 API。",
+      "footer_note": "NOT AFFILIATED WITH INEC"
+    },
+    {
+      "id": "france-2027",
+      "country_code": "FR",
+      "country": "France",
+      "name_zh": "法国 2027 总统选举",
+      "name_en": "France 2027 presidential election",
+      "round_zh": "两轮制",
+      "status": "upcoming",
+      "election_date": "2027-04-18",
+      "election_end": "2027-04-18T18:00:00Z",
+      "timezone": "Europe/Paris",
+      "timezone_label": "CEST / UTC+2",
+      "dek": "首轮 2027 年 4 月 18 日，第二轮 5 月 2 日。法国总统由直接普选产生，采用两轮绝对多数制。",
+      "official_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1940",
+      "official_label": "Service-Public 官方",
+      "adapter": {
+        "type": "none"
+      },
+      "status_facts": [
+        {
+          "label": "首轮",
+          "value": "2027-04-18"
+        },
+        {
+          "label": "第二轮",
+          "value": "2027-05-02"
+        },
+        {
+          "label": "制度",
+          "value": "两轮绝对多数"
+        },
+        {
+          "label": "海外领地",
+          "value": "提前一天投票"
+        }
+      ],
+      "candidates": [],
+      "scopes": [],
+      "overseas": [],
+      "result_summary": [],
+      "timeline": [
+        {
+          "date": "2027",
+          "time": "04/18",
+          "tag": "首轮",
+          "title": "总统选举第一轮",
+          "body": "法国本土周日投票；瓜德罗普、马提尼克、法属圭亚那、留尼汪等海外领地为配合时差提前一天投票。",
+          "source": "https://www.reuters.com/world/france-sets-presidential-election-dates-2026-07-01/",
+          "sourceLabel": "Reuters",
+          "major": true
+        },
+        {
+          "date": "2027",
+          "time": "05/02",
+          "tag": "第二轮",
+          "title": "总统选举第二轮",
+          "body": "若首轮无人获得绝对多数，得票最高的两名候选人进入第二轮。",
+          "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1940",
+          "sourceLabel": "Service-Public",
+          "major": true
+        }
+      ],
+      "polls": null,
+      "watchlist": [
+        {
+          "title": "候选人推荐（parrainages）",
+          "body": "法国总统候选人需要获得至少 500 名民选官员的推荐，且推荐人需来自至少 30 个省。推荐名单是判断谁能进入首轮的关键门槛。",
+          "signal": "读数：宪法委员会公布的推荐名单"
+        },
+        {
+          "title": "两轮之间的整合",
+          "body": "首轮出局候选人的选民流向、左翼与极右翼阵营的合并谈判，通常决定第二轮结果。",
+          "signal": "读数：首轮后 48 小时的公开背书"
+        },
+        {
+          "title": "海外领地与时差",
+          "body": "部分海外领地提前一天投票，且结果公布受法国本土投票结束时间限制，容易出现信息泄漏与市场波动。",
+          "signal": "读数：海外领地投票率与出口民调"
+        },
+        {
+          "title": "欧盟与外交议题",
+          "body": "法国总统选举结果会影响欧盟财政、对乌政策和对美关系；候选人的欧洲政策表态值得单独跟踪。",
+          "signal": "读数：候选人欧洲政策差异"
+        }
+      ],
+      "sources": [
+        {
+          "group": "官方 / 数据",
+          "items": [
+            {
+              "tag": "SERVICE-PUBLIC",
+              "title": "法国总统选举制度与日期",
+              "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1940",
+              "note": "首轮 4 月 18 日、第二轮 5 月 2 日"
+            },
+            {
+              "tag": "CONSEIL",
+              "title": "宪法委员会",
+              "url": "https://www.conseil-constitutionnel.fr/",
+              "note": "候选人推荐、选举争议与结果确认"
+            }
+          ]
+        },
+        {
+          "group": "通讯社 / 国际",
+          "items": [
+            {
+              "tag": "REUTERS",
+              "title": "法国确定 2027 总统选举日期",
+              "url": "https://www.reuters.com/world/france-sets-presidential-election-dates-2026-07-01/",
+              "note": "政府确认首轮与第二轮日期"
+            },
+            {
+              "tag": "BLOOMBERG",
+              "title": "France to Hold First Round April 18",
+              "url": "https://www.bloomberg.com/news/articles/2026-07-01/france-to-hold-first-round-of-presidential-election-april-18",
+              "note": "日期与制度背景"
+            }
+          ]
+        }
+      ],
+      "method_note": "本页只展示已确认的日期与制度信息。候选人尚未正式登记，名单以宪法委员会公布为准；未接入实时计票 API。",
+      "footer_note": "NOT AFFILIATED WITH THE FRENCH GOVERNMENT"
+    },
+    {
+      "id": "kenya-2027",
+      "country_code": "KE",
+      "country": "Kenya",
+      "name_zh": "肯尼亚 2027 大选",
+      "name_en": "Kenya 2027 general election",
+      "round_zh": "总统与议会",
+      "status": "upcoming",
+      "election_date": "2027-08-10",
+      "election_end": "2027-08-10T14:00:00Z",
+      "timezone": "Africa/Nairobi",
+      "timezone_label": "EAT / UTC+3",
+      "dek": "2027 年 8 月 10 日举行总统、国民议会和参议院选举。总统需获得超过 50% 的有效票，并在至少 24 个县获得 25% 以上选票。",
+      "official_url": "https://www.iebc.or.ke/",
+      "official_label": "IEBC 官方",
+      "adapter": {
+        "type": "none"
+      },
+      "status_facts": [
+        {
+          "label": "选举日",
+          "value": "2027-08-10"
+        },
+        {
+          "label": "职位",
+          "value": "总统 / 国民议会 / 参议院"
+        },
+        {
+          "label": "总统门槛",
+          "value": "50%+1 · 24 县"
+        },
+        {
+          "label": "时区",
+          "value": "EAT / UTC+3"
+        }
+      ],
+      "candidates": [],
+      "scopes": [],
+      "overseas": [],
+      "result_summary": [],
+      "timeline": [
+        {
+          "date": "2027",
+          "time": "08/10",
+          "tag": "投票日",
+          "title": "肯尼亚大选投票",
+          "body": "选民同时选举总统、国民议会议员、参议员、县长和县议会议员。总统选举采用两轮制。",
+          "source": "https://www.iebc.or.ke/",
+          "sourceLabel": "IEBC",
+          "major": true
+        }
+      ],
+      "polls": null,
+      "watchlist": [
+        {
+          "title": "IEBC 的准备与透明度",
+          "body": "选举委员会的技术准备、选民登记、投票设备与结果传输系统是争议焦点。2022 年大选曾出现结果传输延迟与服务器争议。",
+          "signal": "读数：IEBC 公告与观察员报告"
+        },
+        {
+          "title": "总统 50%+1 门槛",
+          "body": "总统候选人需要超过 50% 的有效票，并在至少 24 个县获得 25% 以上选票；否则进入第二轮。",
+          "signal": "读数：首轮得票率与县分布"
+        },
+        {
+          "title": "47 个县的投票率",
+          "body": "肯尼亚选举结果高度依赖县一级的投票率与阵营动员；北部干旱地区和城市青年投票率变化可能改变结果。",
+          "signal": "读数：各县投票率与登记选民差异"
+        },
+        {
+          "title": "选举争议与司法程序",
+          "body": "总统选举结果可在最高法院挑战；2017 年最高法院曾裁定总统选举无效。司法时间表是观察重点。",
+          "signal": "读数：最高法院受理与裁决时间"
+        }
+      ],
+      "sources": [
+        {
+          "group": "官方 / 数据",
+          "items": [
+            {
+              "tag": "IEBC",
+              "title": "肯尼亚独立选举与边界委员会",
+              "url": "https://www.iebc.or.ke/",
+              "note": "选民登记、候选人名单与官方结果"
+            }
+          ]
+        },
+        {
+          "group": "背景 / 国际",
+          "items": [
+            {
+              "tag": "WIKIPEDIA",
+              "title": "2027 Kenyan general election",
+              "url": "https://en.wikipedia.org/wiki/2027_Kenyan_general_election",
+              "note": "日期、职位与制度概览"
+            },
+            {
+              "tag": "REUTERS",
+              "title": "Kenya election coverage",
+              "url": "https://www.reuters.com/world/africa/",
+              "note": "东非与肯尼亚选举报道"
+            }
+          ]
+        }
+      ],
+      "method_note": "本页只展示已确认的日期与制度信息。候选人名单以 IEBC 公布为准；未接入实时计票 API。",
+      "footer_note": "NOT AFFILIATED WITH IEBC"
+    },
+    {
+      "id": "us-2026-midterms",
+      "country_code": "US",
+      "country": "United States",
+      "name_zh": "美国 2026 中期选举",
+      "name_en": "United States 2026 midterm elections",
+      "round_zh": "国会与州长",
+      "status": "finished",
+      "election_date": "2026-11-03",
+      "election_end": "2026-11-04T05:00:00Z",
+      "timezone": "America/New_York",
+      "timezone_label": "ET / UTC−5",
+      "dek": "2026 年 11 月 3 日改选全部 435 个众议院席位、35 个参议院席位和 39 个州长职位。据 AP、BBC、NPR 报道，民主党夺回参众两院多数。",
+      "official_url": "https://www.usa.gov/election",
+      "official_label": "USA.gov 选举信息",
+      "adapter": {
+        "type": "none"
+      },
+      "status_facts": [
+        {
+          "label": "选举日",
+          "value": "2026-11-03"
+        },
+        {
+          "label": "众议院",
+          "value": "435 席全部改选"
+        },
+        {
+          "label": "参议院",
+          "value": "35 / 100 席"
+        },
+        {
+          "label": "州长",
+          "value": "39 个"
+        }
+      ],
+      "candidates": [],
+      "scopes": [],
+      "overseas": [],
+      "result_summary": [
+        {
+          "label": "众议院",
+          "value": "民主党获得多数",
+          "note": "据 AP / BBC / NPR 报道"
+        },
+        {
+          "label": "参议院",
+          "value": "民主党获得多数",
+          "note": "至少翻转 8 席；阿拉斯加席位截至 11 月 12 日仍未 call"
+        },
+        {
+          "label": "州长",
+          "value": "民主党至少净增 5 席",
+          "note": "自 2010 年以来首次占多数"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026",
+          "time": "11/03",
+          "tag": "投票日",
+          "title": "中期选举投票",
+          "body": "众议院全部 435 席、参议院 35 席和 39 个州长职位改选，另有大量州与地方选举。",
+          "source": "https://en.wikipedia.org/wiki/2026_United_States_elections",
+          "sourceLabel": "Wikipedia",
+          "major": true
+        },
+        {
+          "date": "2026",
+          "time": "11/04",
+          "tag": "结果",
+          "title": "民主党夺回参众两院",
+          "body": "据 AP、BBC、NPR 报道，民主党赢得众议院和参议院多数；阿拉斯加参议院席位截至 11 月 12 日仍未 call。",
+          "source": "https://www.bbc.com/news/live/cj1dw0ydn595t",
+          "sourceLabel": "BBC",
+          "major": true
+        },
+        {
+          "date": "2027",
+          "time": "01/03",
+          "tag": "交接",
+          "title": "第 120 届国会就职",
+          "body": "新一届国会于 2027 年 1 月 3 日宣誓就职；众议院议长选举与委员会席位分配随之展开。",
+          "source": "https://www.congress.gov/",
+          "sourceLabel": "Congress.gov"
+        }
+      ],
+      "polls": null,
+      "watchlist": [
+        {
+          "title": "认证与重新计票",
+          "body": "部分选区差距较小，可能触发重新计票或法律挑战；各州认证截止日期不同。",
+          "signal": "读数：州务卿认证公告与诉讼"
+        },
+        {
+          "title": "阿拉斯加参议院席位",
+          "body": "截至 11 月 12 日，阿拉斯加参议院席位仍未 call；该席位会影响最终多数差距。",
+          "signal": "读数：剩余选票与排名选择计票"
+        },
+        {
+          "title": "众议院议长选举",
+          "body": "民主党夺回多数后，众议院议长选举将检验党内团结；微弱多数可能放大少数派影响力。",
+          "signal": "读数：议长候选人票数"
+        },
+        {
+          "title": "对 2028 的影响",
+          "body": "中期选举结果会改变总统初选格局、立法议程与联邦—州关系，是观察 2028 的早期信号。",
+          "signal": "读数：关键州州长与参议员构成"
+        }
+      ],
+      "sources": [
+        {
+          "group": "通讯社 / 国际",
+          "items": [
+            {
+              "tag": "AP",
+              "title": "2026 中期选举实时报道",
+              "url": "https://apnews.com/live/midterm-election-2026",
+              "note": "结果、计票与各州动态"
+            },
+            {
+              "tag": "BBC",
+              "title": "美国中期选举实时更新",
+              "url": "https://www.bbc.com/news/live/cj1dw0ydn595t",
+              "note": "民主党夺回国会"
+            },
+            {
+              "tag": "NPR",
+              "title": "民主党赢得参众两院",
+              "url": "https://www.npr.org/2026/11/03/g-s1-149526/2026-midterms-congress-balance-of-power",
+              "note": "席位与权力平衡分析"
+            }
+          ]
+        },
+        {
+          "group": "官方 / 背景",
+          "items": [
+            {
+              "tag": "USA.GOV",
+              "title": "美国选举官方信息",
+              "url": "https://www.usa.gov/election",
+              "note": "登记、投票与结果入口"
+            },
+            {
+              "tag": "WIKIPEDIA",
+              "title": "2026 United States elections",
+              "url": "https://en.wikipedia.org/wiki/2026_United_States_elections",
+              "note": "席位、结果与时间线概览"
+            }
+          ]
+        }
+      ],
+      "method_note": "本页结果摘要来自 AP、BBC、NPR 的公开报道，未接入实时计票 API；最终结果以各州认证与官方公布为准。",
+      "footer_note": "NOT AFFILIATED WITH ANY US AGENCY"
+    },
+    {
+      "id": "brazil-2026",
+      "country_code": "BR",
+      "country": "Brazil",
+      "name_zh": "巴西 2026 总统大选",
+      "name_en": "Brazil 2026 presidential election",
+      "round_zh": "第二轮",
+      "status": "finished",
+      "election_date": "2026-10-25",
+      "election_end": "2026-10-25T20:00:00Z",
+      "timezone": "America/Sao_Paulo",
+      "timezone_label": "BRT / UTC−3",
+      "dek": "卢拉（PT）与弗拉维奥·博索纳罗（PL）进入第二轮。2026 年 10 月 25 日投票，巴西利亚时间 17:00 起公布官方计票。本页把 TSE 官方数据、民调、投票日事件与关键观察点放在同一条时间线上。",
+      "official_url": "https://resultados.tse.jus.br/oficial/app/index.html",
+      "official_label": "TSE 官方结果",
+      "adapter": {
+        "type": "tse",
+        "root": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados",
+        "file_suffix": "c0001-e006258-u.json",
+        "scopes": [
+          "br",
+          "mg",
+          "sp",
+          "rj"
+        ]
+      },
+      "status_facts": [
+        {
+          "label": "时区",
+          "value": "BRT / UTC−3"
+        },
+        {
+          "label": "投票时间",
+          "value": "08:00–17:00"
+        },
+        {
+          "label": "合格选民",
+          "value": "158,745,463"
+        },
+        {
+          "label": "首轮投票率",
+          "value": "78.9%"
+        }
+      ],
+      "candidates": [
+        {
+          "key": "lula",
+          "name": "卢拉",
+          "full_name": "Luiz Inácio Lula da Silva",
+          "party": "PT",
+          "number": "13",
+          "role": "现任总统",
+          "tag": "执政党",
+          "color": "#ef4444",
+          "first_round_pct": 45.16,
+          "first_round_votes": 53879538,
+          "first_round_rank": "首轮第二",
+          "note": "80 岁，寻求史无前例的第四个非连续任期。竞选主轴：社会福利、最低工资、国家投资与“民主防线”。"
+        },
+        {
+          "key": "flavio",
+          "name": "弗拉维奥·博索纳罗",
+          "full_name": "Flávio Bolsonaro",
+          "party": "PL",
+          "number": "22",
+          "role": "参议员",
+          "tag": "反对党",
+          "color": "#3b82f6",
+          "first_round_pct": 47.03,
+          "first_round_votes": 56104503,
+          "first_round_rank": "首轮第一",
+          "note": "45 岁，前总统雅伊尔·博索纳罗之子。其父因 2022 年政变案被判 27 年，正在服刑并支持儿子参选。竞选主轴：治安、降低生活成本、削减开支与亲美路线。"
+        }
+      ],
+      "scopes": [
+        {
+          "code": "mg",
+          "name": "米纳斯吉拉斯",
+          "note": "MG · 风向标"
+        },
+        {
+          "code": "sp",
+          "name": "圣保罗",
+          "note": "SP · 最大选举团"
+        },
+        {
+          "code": "rj",
+          "name": "里约热内卢",
+          "note": "RJ · 弗拉维奥主场"
+        }
+      ],
+      "overseas": [
+        {
+          "name": "日本",
+          "winner_key": "flavio",
+          "text": "弗拉维奥 80.08%",
+          "note": "28,538 票"
+        },
+        {
+          "name": "中国大陆",
+          "winner_key": "lula",
+          "text": "卢拉 73.67%",
+          "note": "北京 / 上海 / 广州"
+        },
+        {
+          "name": "澳大利亚",
+          "winner_key": "lula",
+          "text": "卢拉 63.46%",
+          "note": "6,017 票"
+        },
+        {
+          "name": "香港",
+          "winner_key": "flavio",
+          "text": "弗拉维奥 51.15%",
+          "note": "48.85% 对 51.15%"
+        }
+      ],
+      "result_summary": [],
+      "timeline": [
+        {
+          "date": "10/04",
+          "time": "一轮投票",
+          "tag": "官方结果",
+          "title": "首轮无人过半，弗拉维奥第一、卢拉第二",
+          "body": "弗拉维奥·博索纳罗 47.03%（56,104,503 票），卢拉 45.16%（53,879,538 票），差距 1.87 个百分点。有效票 119,300,788，登记选民 158,745,463，投票率约 78.9%。第二轮定于 10 月 25 日。",
+          "source": "https://www.theguardian.com/world/ng-interactive/2026/oct/04/brazil-presidential-election-2026-first-round-live-results",
+          "sourceLabel": "Guardian / TSE",
+          "major": true
+        },
+        {
+          "date": "10/05",
+          "time": "选后重组",
+          "tag": "选情",
+          "title": "卢拉从落后一方进入第二轮",
+          "body": "首轮结果打破了许多此前的民调预期。卢拉阵营需要在三周内整合中间派与弃权选民；弗拉维奥则试图把首轮优势转化为“改变”叙事。",
+          "source": "https://www.theguardian.com/world/ng-interactive/2026/oct/04/brazil-presidential-election-2026-first-round-live-results",
+          "sourceLabel": "Guardian"
+        },
+        {
+          "date": "10/18",
+          "time": "Band 辩论",
+          "tag": "辩论",
+          "title": "第一场电视辩论：卢拉表现受质疑",
+          "body": "Band 主办的辩论被视为卢拉阵营的一次失误，内部人士和分析人士认为他的表现低于预期；弗拉维奥采取更具攻击性的姿态。",
+          "source": "https://www.bbc.com/portuguese/articles/cmx2351xpe2lo",
+          "sourceLabel": "BBC Brasil",
+          "alert": true
+        },
+        {
+          "date": "10/22",
+          "time": "Datafolha",
+          "tag": "民调",
+          "title": "Datafolha：有效票 50% 对 50%",
+          "body": "Datafolha 在 10 月 22 日给出两人各 50% 的有效票，显示第二轮进入完全胶着状态。",
+          "source": "https://noticias.uol.com.br/eleicoes/2026/10/24/ultimas-pesquisas-do-segundo-turno-para-presidente-veja-numeros-de-flavio-e-lula.ghtm",
+          "sourceLabel": "UOL"
+        },
+        {
+          "date": "10/23",
+          "time": "Globo 辩论",
+          "tag": "辩论",
+          "title": "最后一场辩论：语气转缓，但仍有“九根手指”冲突",
+          "body": "TV Globo 主办的第二场、也是最后一场辩论更侧重政策。弗拉维奥用卢拉的断指事故做攻击，随后道歉；卢拉则提 Ana Clara 案与弗拉维奥的警察辩护记录。双方还就 Banco Master、Lulinha 等议题互相攻击。",
+          "source": "https://www.bbc.com/portuguese/articles/cjly03x90ky4o",
+          "sourceLabel": "BBC Brasil",
+          "major": true
+        },
+        {
+          "date": "10/24",
+          "time": "最后冲刺",
+          "tag": "民调 / 集会",
+          "title": "八家民调全部在误差范围内，弗拉维奥均略微领先",
+          "body": "卢拉在里约、弗拉维奥在贝洛奥里藏特做最后动员。Datafolha、Quaest 均给出 51% 对 49% 的有效票；AtlasIntel 50.8% 对 49.2%；BTG/Nexus 50.5% 对 49.5%。BBC 聚合器显示弗拉维奥领先约 2 个百分点。",
+          "source": "https://veja.abril.com.br/politica/lula-x-flavio-o-que-dizem-as-sete-principais-pesquisas-da-vespera-do-segundo-turno/",
+          "sourceLabel": "Veja / UOL",
+          "major": true
+        },
+        {
+          "date": "10/25",
+          "time": "08:00",
+          "tag": "投票日",
+          "title": "投票开始，158,745,463 名选民合格",
+          "body": "投票站于巴西利亚时间 8 点开放，17 点关闭。TSE 主席 Kassio Nunes Marques 投票后表示，希望选举“在和平与正常中”进行。",
+          "source": "https://www.bbc.com/portuguese/live/c6vg0rrxzx13t",
+          "sourceLabel": "BBC Brasil live",
+          "major": true
+        },
+        {
+          "date": "10/25",
+          "time": "08:31",
+          "tag": "投票日",
+          "title": "弗拉维奥在里约 Vila Isabel 投票",
+          "body": "弗拉维奥与妻子 Fernanda、母亲 Rogéria 一起投票，里约当选州长 Douglas Ruas 陪同。他称“改变的时刻到了”。",
+          "source": "https://www.bbc.com/portuguese/live/c6vg0rrxzx13t",
+          "sourceLabel": "BBC Brasil live"
+        },
+        {
+          "date": "10/25",
+          "time": "10:01",
+          "tag": "投票日",
+          "title": "卢拉在圣贝尔纳多-杜坎普投票",
+          "body": "卢拉在其政治起点圣保罗州圣贝尔纳多-杜坎普投票，妻子 Janja、副总统 Alckmin、Haddad、Simone Tebet、Marina Silva 等陪同。他说：“我一生没见过人民在第二轮做出这样的事。”",
+          "source": "https://noticias.uol.com.br/eleicoes/2026/10/25/lula-vota-em-sao-bernardo-segundo-turno.ghtm",
+          "sourceLabel": "UOL"
+        },
+        {
+          "date": "10/25",
+          "time": "10:05",
+          "tag": "安全",
+          "title": "司法部通报：32 起选举犯罪记录、3 人被捕",
+          "body": "截至上午 9 点的通报：12 个州共 32 起选举犯罪记录，里约格兰德苏尔 11 起、巴伊亚 7 起、伯南布哥 3 起；8 人被带到警局，2 辆车被扣。多数为违规竞选宣传。",
+          "source": "https://noticias.uol.com.br/eleicoes/2026/10/25/boletim-ministerio-da-justica-segundo-turno.ghtm",
+          "sourceLabel": "UOL",
+          "alert": true
+        },
+        {
+          "date": "10/25",
+          "time": "10:41",
+          "tag": "海外投票",
+          "title": "亚洲/大洋洲部分选区结果：日本弗拉维奥、中国大陆卢拉",
+          "body": "日本：弗拉维奥 80.08%（28,538 票）；中国大陆（北京/上海/广州）：卢拉 73.67%；澳大利亚：卢拉 63.46%；香港：弗拉维奥 51.15%。这些是部分海外选区，不是全国结果。",
+          "source": "https://www.bbc.com/portuguese/live/c6vg0rrxzx13t",
+          "sourceLabel": "BBC Brasil live"
+        },
+        {
+          "date": "10/25",
+          "time": "17:00",
+          "tag": "计票",
+          "title": "投票关闭，TSE 开始公布官方计票",
+          "body": "TSE 的 JSON 文件在 17 点后开始更新。首批数据通常来自已关闭的海外选区和南部/东南部州；全国结果需要数小时。",
+          "source": "https://resultados.tse.jus.br/oficial/app/index.html",
+          "sourceLabel": "TSE",
+          "major": true
+        },
+        {
+          "date": "2027",
+          "time": "01/05",
+          "tag": "交接",
+          "title": "当选总统将于 2027 年 1 月 5 日就职",
+          "body": "无论谁胜出，都将在 2027 年 1 月 5 日接任。若卢拉胜出，他将在 80 岁开始第四个非连续任期；若弗拉维奥胜出，他将成为博索纳罗家族第一位出任总统的成员。",
+          "source": "https://www.theguardian.com/world/ng-interactive/2026/oct/04/brazil-presidential-election-2026-first-round-live-results",
+          "sourceLabel": "Guardian"
+        }
+      ],
+      "polls": {
+        "columns": [
+          "机构",
+          "日期",
+          "卢拉",
+          "弗拉维奥",
+          "误差",
+          "备注"
+        ],
+        "rows": [
+          [
+            "Datafolha",
+            "10/24",
+            "49.0%",
+            "51.0%",
+            "±2",
+            "有效票；总票数 47–48"
+          ],
+          [
+            "Quaest",
+            "10/24",
+            "49.0%",
+            "51.0%",
+            "±2",
+            "有效票；总票数 45–46"
+          ],
+          [
+            "AtlasIntel",
+            "10/24",
+            "49.2%",
+            "50.8%",
+            "±1",
+            "有效票；总票数 48.4–49.9"
+          ],
+          [
+            "BTG/Nexus",
+            "10/24",
+            "49.5%",
+            "50.5%",
+            "±2.2",
+            "有效票；总票数 46–47"
+          ],
+          [
+            "CNT/MDA",
+            "10/24",
+            "49.3%",
+            "50.7%",
+            "±2.2",
+            "有效票；总票数 45–46.3"
+          ],
+          [
+            "Gerp",
+            "10/24",
+            "48.0%",
+            "52.0%",
+            "±2",
+            "有效票；总票数 46–49"
+          ],
+          [
+            "Palver",
+            "10/24",
+            "49.0%",
+            "50.0%",
+            "±2.2",
+            "仅公布总票数口径"
+          ],
+          [
+            "Futura",
+            "10/24",
+            "49.9%",
+            "50.1%",
+            "±2.2",
+            "仅公布有效票口径"
+          ]
+        ],
+        "callout": {
+          "title": "技术性平局",
+          "body": "10 月 24 日公布的 8 家主要民调全部在误差范围内；弗拉维奥在每一家都略微领先。BBC 聚合器给出的差距约为 2 个百分点。"
+        },
+        "note": "来源：UOL、Veja 对 TSE 登记民调的汇总。Palver、Futura 仅公布部分口径；表中以有效票为主，括号内为总票数口径。"
+      },
+      "watchlist": [
+        {
+          "title": "米纳斯吉拉斯：风向标",
+          "body": "自 1980 年代民主化以来，没有候选人能在输掉米纳斯吉拉斯的情况下赢得总统。2022 年卢拉在这里仅赢不到 5 万票；2018 年博索纳罗在这里赢了 170 多万票。",
+          "signal": "读数：谁在 MG 领先 > 2 个百分点"
+        },
+        {
+          "title": "弃权率与“可能选民”",
+          "body": "全国有 1.587 亿合格选民。BTG/Nexus 的“可能选民”模型假设 21% 弃权，在这一情景下弗拉维奥以 52.4% 对 47.6% 领先。实际投票率会改变双方的结构。",
+          "signal": "读数：17:00 后 TSE 的弃权率"
+        },
+        {
+          "title": "里约热内卢：弗拉维奥主场",
+          "body": "弗拉维奥是里约前州议员、现任参议员，家族政治基地在里约。卢拉不需要赢下里约，但需要把差距压到足以被其他州抵消。",
+          "signal": "读数：弗拉维奥在 RJ 的领先幅度"
+        },
+        {
+          "title": "圣保罗：最大选举团",
+          "body": "圣保罗州是巴西最大选举团，也是卢拉的政治起点。首轮弗拉维奥在全国领先，但圣保罗的城市带与内陆差异很大；这里的城市投票率和郊区转向很关键。",
+          "signal": "读数：SP 的城市 vs 内陆分割"
+        },
+        {
+          "title": "国会与州长第二轮",
+          "body": "10 月 4 日已选出众议院和部分参议院席位；10 月 25 日同时举行多个州的州长第二轮。总统胜出者能否执政，取决于国会版图和州长联盟。",
+          "signal": "读数：PL / PT 阵营的州长净增数"
+        },
+        {
+          "title": "美国因素",
+          "body": "2025 年美国对巴西加征 50% 关税；2026 年 5 月又把 PCC 和 Comando Vermelho 列为外国恐怖组织，两天前弗拉维奥与爱德华多·博索纳罗刚在白宫会见特朗普。卢拉称这是干涉；弗拉维奥视特朗普为盟友。",
+          "signal": "读数：选后关税/制裁是否调整"
+        }
+      ],
+      "sources": [
+        {
+          "group": "官方 / 数据",
+          "items": [
+            {
+              "tag": "TSE",
+              "title": "TSE 官方结果",
+              "url": "https://resultados.tse.jus.br/oficial/app/index.html",
+              "note": "巴西高等选举法院；本页计票数据源"
+            },
+            {
+              "tag": "TSE",
+              "title": "结果公布技术说明",
+              "url": "https://www.tse.jus.br/eleicoes/informacoes-tecnicas-sobre-a-divulgacao-de-resultados",
+              "note": "JSON 路径、选举代码 6258、访问限制"
+            },
+            {
+              "tag": "IFES",
+              "title": "Brazil Presidency 2026 Round 1",
+              "url": "https://electionguide.org/elections/id/5091/",
+              "note": "首轮完整结果与制度背景"
+            }
+          ]
+        },
+        {
+          "group": "通讯社 / 国际",
+          "items": [
+            {
+              "tag": "REUTERS",
+              "title": "Brazil election second round live map",
+              "url": "https://www.reuters.com/graphics/BRAZIL-ELECTION/RESULTS/znpngxgarvl/runoff/",
+              "note": "州级实时结果与地图"
+            },
+            {
+              "tag": "AP",
+              "title": "Brazil election latest",
+              "url": "https://apnews.com/article/brazil-election-lula-bolsonaro-latest-b68d2e2e315644e62de8f6839e8ddcff",
+              "note": "投票日滚动报道"
+            },
+            {
+              "tag": "BBC",
+              "title": "Brazil 2026 election live",
+              "url": "https://www.bbc.com/portuguese/live/c6vg0rrxzx13t",
+              "note": "投票日直播、海外选区快照"
+            },
+            {
+              "tag": "GUARDIAN",
+              "title": "First-round live results",
+              "url": "https://www.theguardian.com/world/ng-interactive/2026/oct/04/brazil-presidential-election-2026-first-round-live-results",
+              "note": "首轮结果、制度与 Minas Gerais 背景"
+            }
+          ]
+        },
+        {
+          "group": "当地媒体",
+          "items": [
+            {
+              "tag": "UOL",
+              "title": "第二轮计票直播",
+              "url": "https://noticias.uol.com.br/eleicoes/2026/ao-vivo/apuracao-eleicoes-2026-resultados-segundo-turno.ghtm",
+              "note": "计票、事件与候选人动态"
+            },
+            {
+              "tag": "UOL",
+              "title": "最后一批民调汇总",
+              "url": "https://noticias.uol.com.br/eleicoes/2026/10/24/ultimas-pesquisas-do-segundo-turno-para-presidente-veja-numeros-de-flavio-e-lula.ghtm",
+              "note": "Datafolha、Quaest、AtlasIntel 等"
+            },
+            {
+              "tag": "VEJA",
+              "title": "八家民调对比",
+              "url": "https://veja.abril.com.br/politica/lula-x-flavio-o-que-dizem-as-sete-principais-pesquisas-da-vespera-do-segundo-turno/",
+              "note": "误差范围与技术性平局"
+            },
+            {
+              "tag": "G1",
+              "title": "第二轮计票直播",
+              "url": "https://g1.globo.com/politica/eleicoes/2026/ao-vivo/apuracao-eleicoes-2026-resultados-segundo-turno.ghtml",
+              "note": "Globo 的实时计票与地图"
+            }
+          ]
+        },
+        {
+          "group": "背景 / 核查",
+          "items": [
+            {
+              "tag": "BBC",
+              "title": "Globo 辩论主要时刻",
+              "url": "https://www.bbc.com/portuguese/articles/cjly03x90ky4o",
+              "note": "“九根手指”、Ana Clara、Banco Master"
+            },
+            {
+              "tag": "BBC",
+              "title": "辩论谁赢谁输",
+              "url": "https://www.bbc.com/portuguese/articles/cmx2351xpe2lo",
+              "note": "专家对最后一场辩论的评估"
+            },
+            {
+              "tag": "CSM",
+              "title": "美国是否干预巴西选举",
+              "url": "https://www.csmonitor.com/World/Americas/2026/1020/Brazil-US-election-meddling",
+              "note": "关税、恐怖组织认定与特朗普因素"
+            }
+          ]
+        }
+      ],
+      "method_note": "计票数字来自 TSE 公开 JSON，页面只做格式化与本地缓存，不修改原始数值。开票前文件为 0，属于正常状态。海外选区、投票日事件与民调来自公开报道，可能滞后于官方数据；事件类信息以当地媒体和官方通报为准，不以单条社交媒体视频定性。",
+      "footer_note": "NOT AFFILIATED WITH TSE"
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#070b11">
+  <meta name="description" content="大选 OSINT 追踪：选择任意正在进行或即将举行的大选，查看时间线、官方计票、民调与开源情报来源。">
+  <title>大选 OSINT 追踪 · 经纬</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/election-osint.css">
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <a class="back-link" href="/">
+      <span aria-hidden="true">←</span>
+      经纬 · 全球新闻时间线
+    </a>
+    <div class="masthead-meta">
+      <span class="mono">OSINT / ELECTION TRACKER</span>
+      <div class="election-picker">
+        <label for="election-select">选择选举</label>
+        <select id="election-select" aria-label="选择要观察的选举"></select>
+      </div>
+      <span class="mono" id="clock">--:--:--</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span><span id="eyebrow">OSINT / ELECTION</span></div>
+        <h1 id="title">正在载入选举…</h1>
+        <p class="dek" id="dek"></p>
+        <div class="hero-actions">
+          <a class="button primary" id="official-link" href="#" target="_blank" rel="noopener">官方结果</a>
+          <button class="button" id="copy-brief" type="button">复制态势摘要</button>
+          <button class="button" id="download-json" type="button">导出当前 JSON</button>
+        </div>
+      </div>
+
+      <aside class="status-card" aria-live="polite">
+        <div class="status-head">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-label">正在载入</span>
+        </div>
+        <div class="countdown" id="countdown">--:--:--</div>
+        <div class="countdown-label" id="countdown-label">距投票结束</div>
+        <dl class="status-facts" id="status-facts"></dl>
+        <p class="status-note" id="status-note">正在读取选举配置。</p>
+      </aside>
+    </section>
+
+    <section class="section-head hidden" id="candidates-head">
+      <div>
+        <span class="section-kicker">01 / CANDIDATES</span>
+        <h2>候选人</h2>
+      </div>
+      <p id="candidates-note"></p>
+    </section>
+    <section class="candidate-grid" id="candidate-grid"></section>
+
+    <section class="live-board hidden" id="live-board">
+      <div class="live-head">
+        <div>
+          <span class="section-kicker">02 / LIVE COUNT</span>
+          <h2 id="live-title">官方计票</h2>
+          <p class="live-sub" id="live-sub"></p>
+        </div>
+        <div class="live-tools">
+          <span class="freshness" id="freshness">等待首次读取</span>
+          <button class="icon-button" id="refresh" type="button" title="立即刷新" aria-label="立即刷新">↻</button>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <div class="progress-label">
+          <span>已统计选区</span>
+          <strong id="counted-pct">0.00%</strong>
+        </div>
+        <div class="progress-track"><i id="progress-fill"></i></div>
+        <div class="progress-meta">
+          <span id="sections-counted">0 / 0 个选区</span>
+          <span id="valid-votes">有效票 0</span>
+          <span id="abstention">弃权 0.00%</span>
+        </div>
+      </div>
+
+      <div class="result-rows" id="result-rows"></div>
+
+      <div class="state-grid" id="state-grid"></div>
+
+      <div class="overseas hidden" id="overseas">
+        <div class="overseas-head">
+          <h3>海外选区快照</h3>
+          <span>部分已结束投票的选区，非全国结果</span>
+        </div>
+        <div class="overseas-grid" id="overseas-grid"></div>
+      </div>
+    </section>
+
+    <section class="panel no-data hidden" id="no-data-panel">
+      <span class="section-kicker">LIVE DATA / NOT CONNECTED</span>
+      <h2>实时计票尚未接入</h2>
+      <p id="no-data-text"></p>
+      <a class="button" id="no-data-link" href="#" target="_blank" rel="noopener">查看官方结果 ↗</a>
+      <div class="result-summary" id="result-summary"></div>
+    </section>
+
+    <section class="section-head hidden" id="timeline-head">
+      <div>
+        <span class="section-kicker">03 / TIMELINE</span>
+        <h2>选举时间线</h2>
+      </div>
+      <p id="timeline-note">所有时间均为该选举所在时区的时间。</p>
+    </section>
+    <section class="timeline" id="timeline" aria-label="选举时间线"></section>
+
+    <section class="section-head hidden" id="polls-head">
+      <div>
+        <span class="section-kicker">04 / POLLING</span>
+        <h2>民调</h2>
+      </div>
+      <p id="polls-note">不同机构方法不同，不能直接当作结果预测。</p>
+    </section>
+    <section class="panel polls-panel hidden" id="polls-panel">
+      <div class="poll-callout" id="poll-callout"></div>
+      <div class="table-wrap">
+        <table class="poll-table">
+          <thead id="poll-head"></thead>
+          <tbody id="poll-body"></tbody>
+        </table>
+      </div>
+      <p class="table-note" id="poll-note"></p>
+    </section>
+
+    <section class="section-head hidden" id="watch-head">
+      <div>
+        <span class="section-kicker">05 / WATCHLIST</span>
+        <h2>观察清单</h2>
+      </div>
+      <p>不是预测，而是读数和核查清单。</p>
+    </section>
+    <section class="watch-grid" id="watch-grid"></section>
+
+    <section class="section-head hidden" id="sources-head">
+      <div>
+        <span class="section-kicker">06 / SOURCES</span>
+        <h2>开源情报源</h2>
+      </div>
+      <p>官方数据优先；通讯社与当地媒体用于交叉验证。</p>
+    </section>
+    <section class="panel sources-panel hidden" id="sources-panel">
+      <div class="source-columns" id="source-columns"></div>
+      <div class="method-note">
+        <h3>方法与边界</h3>
+        <p id="method-note"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>经纬 · OSINT tracker</span>
+    <span id="footer-updated">页面载入中</span>
+    <span class="mono" id="footer-note">NOT AFFILIATED</span>
+  </footer>
+
+  <script src="/election-osint.js" defer></script>
+</body>
+</html>

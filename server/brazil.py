@@ -28,7 +28,7 @@ _UFS = {
     "sp", "se", "to",
 }
 _SCOPES = {"br"} | _UFS
-_CACHE: dict[str, tuple[float, dict]] = {}
+_CACHE: dict[tuple[str, str, str], tuple[float, dict]] = {}
 _LOCK = threading.Lock()
 _SCOPE_RE = re.compile(r"^(br|[a-z]{2})$")
 
@@ -98,13 +98,13 @@ def _normalise(payload: dict, scope: str) -> dict:
     }
 
 
-def _url(scope: str) -> str:
-    return f"{TSE_ROOT}/{scope}/{scope}-{TSE_FILE_SUFFIX}"
+def _url(scope: str, root: str = TSE_ROOT, file_suffix: str = TSE_FILE_SUFFIX) -> str:
+    return f"{root.rstrip('/')}/{scope}/{scope}-{file_suffix}"
 
 
-def _download(scope: str) -> dict:
+def _download(scope: str, root: str = TSE_ROOT, file_suffix: str = TSE_FILE_SUFFIX) -> dict:
     request = urllib.request.Request(
-        _url(scope),
+        _url(scope, root, file_suffix),
         headers={
             "User-Agent": "GlobalNewsTimeline/1.0 (local OSINT tracker)",
             "Accept": "application/json",
@@ -115,25 +115,34 @@ def _download(scope: str) -> dict:
     return json.loads(raw.decode("utf-8-sig"))
 
 
-def fetch_results(scope: str = "br") -> dict:
+def fetch_results(
+    scope: str = "br",
+    *,
+    root: str = TSE_ROOT,
+    file_suffix: str = TSE_FILE_SUFFIX,
+    allowed_scopes: list[str] | None = None,
+) -> dict:
     """Return a compact, browser-friendly snapshot for one scope.
 
-    ``scope`` is ``br`` or a two-letter Brazilian state code.  The last good
-    snapshot is kept and returned with ``stale=true`` if the TSE is temporarily
-    unreachable.
+    ``scope`` is ``br`` or a two-letter Brazilian state code.  ``root`` and
+    ``file_suffix`` let the election registry point at a different TSE contest.
+    The last good snapshot is kept and returned with ``stale=true`` if the TSE
+    is temporarily unreachable.
     """
     scope = (scope or "br").strip().lower()
-    if not _SCOPE_RE.match(scope) or scope not in _SCOPES:
+    valid_scopes = {s.lower() for s in allowed_scopes} if allowed_scopes else _SCOPES
+    if not _SCOPE_RE.match(scope) or scope not in valid_scopes:
         return {"ok": False, "scope": scope, "error": "Unsupported scope"}
 
+    cache_key = (root.rstrip("/"), file_suffix, scope)
     now = time.monotonic()
     with _LOCK:
-        cached = _CACHE.get(scope)
+        cached = _CACHE.get(cache_key)
     if cached and now - cached[0] < CACHE_TTL:
         return cached[1]
 
     try:
-        payload = _download(scope)
+        payload = _download(scope, root, file_suffix)
         data = _normalise(payload, scope)
     except (
         urllib.error.URLError,
@@ -155,5 +164,5 @@ def fetch_results(scope: str = "br") -> dict:
         }
 
     with _LOCK:
-        _CACHE[scope] = (now, data)
+        _CACHE[cache_key] = (now, data)
     return data

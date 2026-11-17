@@ -32,3 +32,6 @@ data/*.db-*
 credentials.json
 secrets.json
 *.log
+
+# release build output
+dist/

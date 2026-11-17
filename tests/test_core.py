@@ -18,6 +18,9 @@ from db import (  # noqa: E402
     connect, count_articles, facet_counts, init_db, insert_articles, kpis,
     query_articles, search_summary, unlocated_count,
 )
+from elections import (  # noqa: E402
+    default_election, fetch_election_results, get_election, list_elections,
+)
 from eventgraph import EventGraph  # noqa: E402
 import query_expand as query_expand_module  # noqa: E402
 from query_expand import terms_for_variant  # noqa: E402
@@ -945,6 +948,29 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(count_articles(self.conn), 4)
         facets = facet_counts(self.conn, {"hours": 24})
         self.assertEqual(sum(entry["count"] for entry in facets["category"]), 3)
+
+
+class ElectionsRegistryTests(unittest.TestCase):
+    def test_registry_lists_configured_elections(self):
+        elections = list_elections()
+        ids = {item["id"] for item in elections}
+        self.assertIn("brazil-2026", ids)
+        self.assertIn("nigeria-2027", ids)
+        self.assertTrue(any(item["status"] == "upcoming" for item in elections))
+
+    def test_default_prefers_upcoming_election(self):
+        default = default_election()
+        self.assertIsNotNone(default)
+        self.assertEqual(default["status"], "upcoming")
+
+    def test_unknown_election_is_none(self):
+        self.assertIsNone(get_election("does-not-exist"))
+
+    def test_non_live_adapter_returns_structured_error(self):
+        data = fetch_election_results("france-2027", "br")
+        self.assertFalse(data["ok"])
+        self.assertEqual(data["adapter"], "none")
+        self.assertIn("official_url", data)
 
 
 if __name__ == "__main__":
