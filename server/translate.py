@@ -17,6 +17,7 @@ import sqlite3
 import urllib.error
 import urllib.parse
 import urllib.request
+from functools import partial
 from urllib.parse import urlsplit
 from hashlib import sha1
 
@@ -168,7 +169,7 @@ def _ollama(text: str, target: str, source: str) -> tuple[str, str]:
     return translated, f"ollama:{cfg['ollama_model']}"
 
 
-def _mymemory(text: str, target: str, source: str) -> tuple[str, str]:
+def _mymemory(text: str, target: str, source: str, timeout: int = 10) -> tuple[str, str]:
     src = SOURCE_CODES.get(source, source or "en")
     tgt = TARGET_CODES.get(target, target)
     query = urllib.parse.urlencode(
@@ -179,7 +180,7 @@ def _mymemory(text: str, target: str, source: str) -> tuple[str, str]:
         headers={"User-Agent": "GlobalNewsTimeline/1.0 (local news timeline)"},
     )
     try:
-        with urllib.request.urlopen(request, timeout=10) as response:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
             body = json.loads(response.read().decode("utf-8"))
     except Exception as exc:
         raise TranslationError(f"MyMemory 请求失败：{str(exc)[:120]}") from exc
@@ -191,7 +192,7 @@ def _mymemory(text: str, target: str, source: str) -> tuple[str, str]:
     return translated, "mymemory"
 
 
-def _libre(text: str, target: str, source: str) -> tuple[str, str]:
+def _libre(text: str, target: str, source: str, timeout: int = 35) -> tuple[str, str]:
     cfg = settings()
     if not cfg["libre_url"]:
         raise TranslationError("未配置 LibreTranslate")
@@ -210,7 +211,7 @@ def _libre(text: str, target: str, source: str) -> tuple[str, str]:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=35) as response:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
             body = json.loads(response.read().decode("utf-8"))
     except Exception as exc:
         raise TranslationError(f"LibreTranslate 请求失败：{str(exc)[:120]}") from exc
@@ -235,7 +236,7 @@ def _is_local_url(url: str) -> bool:
         return host.endswith(".local")
 
 
-def _chain() -> list[tuple[str, object]]:
+def _chain(fast: bool = False) -> list[tuple[str, object]]:
     # Free-only mode is fail-closed for external LibreTranslate. MyMemory's
     # anonymous endpoint is free (it returns an error when the free quota is
     # exhausted; it is never upgraded to a paid plan by this application).
@@ -243,6 +244,18 @@ def _chain() -> list[tuple[str, object]]:
     libre_allowed = bool(cfg["libre_url"]) and (
         not cfg["free_only"] or _is_local_url(cfg["libre_url"])
     )
+
+    if fast:
+        # Auto-translation while browsing must stay responsive: never fall
+        # back to a slow local 8B model. Use local LibreTranslate (fast) and/or
+        # the anonymous MyMemory endpoint with a short timeout.
+        chain: list[tuple[str, object]] = []
+        if cfg["provider"] in ("auto", "libre") and libre_allowed:
+            chain.append(("libre", partial(_libre, timeout=5)))
+        if cfg["provider"] in ("auto", "mymemory") and cfg["fallback"]:
+            chain.append(("mymemory", partial(_mymemory, timeout=5)))
+        return chain
+
     if cfg["provider"] == "ollama":
         return [("ollama", _ollama)]
     if cfg["provider"] == "mymemory":
@@ -286,7 +299,11 @@ def cached_translation(
 
 
 def translate(
-    conn: sqlite3.Connection, text: str, target: str = "zh", source: str | None = None
+    conn: sqlite3.Connection,
+    text: str,
+    target: str = "zh",
+    source: str | None = None,
+    fast: bool = False,
 ) -> dict:
     text = (text or "").strip()
     if not text:
@@ -301,7 +318,7 @@ def translate(
         return {"ok": True, **cached}
 
     cfg = settings()
-    chain = _chain()
+    chain = _chain(fast=fast)
     if not chain:
         return {
             "ok": False,

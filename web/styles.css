@@ -579,6 +579,7 @@ h1 {
 .source-link { margin-left: auto; font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.02em; }
 .terms { font-family: var(--mono); font-size: 8px; color: rgba(255, 255, 255, 0.22); }
 .translation-source { display: block; margin-top: 5px; font-family: var(--mono); font-size: 8px; color: var(--faint); }
+.translation.pending { color: var(--faint); font-style: italic; }
 .translation {
   margin: 7px 0 0;
   padding: 7px 9px;

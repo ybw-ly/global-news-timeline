@@ -374,6 +374,23 @@ class FreeTranslationTests(unittest.TestCase):
             translate_module.TRANSLATE_PROVIDER = old_provider
             translate_module.TRANSLATE_FREE_ONLY = old_free
 
+    def test_fast_chain_skips_ollama(self):
+        old_url = translate_module.LIBRE_URL
+        old_provider = translate_module.TRANSLATE_PROVIDER
+        old_fallback = translate_module.TRANSLATE_FALLBACK
+        try:
+            translate_module.TRANSLATE_PROVIDER = "auto"
+            translate_module.LIBRE_URL = ""
+            translate_module.TRANSLATE_FALLBACK = True
+            self.assertEqual(
+                [name for name, _ in translate_module._chain(fast=True)],
+                ["mymemory"],
+            )
+        finally:
+            translate_module.LIBRE_URL = old_url
+            translate_module.TRANSLATE_PROVIDER = old_provider
+            translate_module.TRANSLATE_FALLBACK = old_fallback
+
 
 class RoleTests(unittest.TestCase):
     def member(self, title, publisher, published_at, feed_id="direct", summary=""):

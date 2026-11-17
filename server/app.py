@@ -63,7 +63,7 @@ from translate import translate
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
-VERSION = "1.15.0"
+VERSION = "1.15.1"
 LOG = logging.getLogger("server")
 
 HOST = os.environ.get("HOST", "127.0.0.1")
@@ -734,6 +734,7 @@ class Handler(BaseHTTPRequestHandler):
                     str(payload.get("text", "")),
                     str(payload.get("target", "zh")),
                     str(payload.get("source") or "") or None,
+                    fast=bool(payload.get("fast", False)),
                 )
                 self._json(result, 200 if result.get("ok") else 503)
             finally:

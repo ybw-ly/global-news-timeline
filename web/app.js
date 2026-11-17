@@ -93,6 +93,8 @@
     autoTranslated: new Set(),
     autoTranslationCache: new Map(),
     autoTranslateObserver: null,
+    visibleArticles: new Set(),
+    autoScanTimer: null,
     multiOnly: false,
     searchRetryTimer: null,
     searchRetryKey: "",
@@ -1918,19 +1920,33 @@
     }, 320);
   }
 
-  async function requestTranslation(text, source) {
-    const response = await fetch("/api/translate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text, target: "zh", source }),
-    });
-    const data = await response.json().catch(() => ({ ok: false, error: "翻译服务返回异常" }));
-    if (!response.ok || !data.ok) {
-      const details = Array.isArray(data.providers) && data.providers.length
-        ? `（${data.providers.join("；")}）` : "";
-      throw new Error(`${data.error || "翻译失败"}${details}`);
+  async function requestTranslation(
+    text,
+    source,
+    { fast = false, timeoutMs = 30000 } = {},
+  ) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, target: "zh", source, fast }),
+        signal: controller.signal,
+      });
+      const data = await response.json().catch(() => ({ ok: false, error: "翻译服务返回异常" }));
+      if (!response.ok || !data.ok) {
+        const details = Array.isArray(data.providers) && data.providers.length
+          ? `（${data.providers.join("；")}）` : "";
+        throw new Error(`${data.error || "翻译失败"}${details}`);
+      }
+      return data;
+    } catch (error) {
+      if (error.name === "AbortError") throw new Error("翻译超时");
+      throw error;
+    } finally {
+      clearTimeout(timer);
     }
-    return data;
   }
 
   function setTranslationContent(box, text, providerLabel) {
@@ -2049,6 +2065,11 @@
       state.autoTranslateObserver.disconnect();
       state.autoTranslateObserver = null;
     }
+    if (state.autoScanTimer) {
+      clearTimeout(state.autoScanTimer);
+      state.autoScanTimer = null;
+    }
+    state.visibleArticles.clear();
     state.autoTranslateQueue = [];
     state.autoTranslated.clear();
     document.querySelectorAll(".translation.auto").forEach((element) => {
@@ -2064,23 +2085,52 @@
       state.autoTranslateObserver.disconnect();
       state.autoTranslateObserver = null;
     }
+    state.visibleArticles = new Set();
     if (!state.autoTranslate || !("IntersectionObserver" in window)) return;
     const observer = new IntersectionObserver((entries) => {
       if (!state.autoTranslate) return;
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const article = entry.target;
-        const item = state.itemMap.get(article.dataset.id);
-        if (item && item.language !== "zh" && !state.autoTranslated.has(item.id)) {
-          state.autoTranslated.add(item.id);
-          state.autoTranslateQueue.push({ article, item });
-        }
-        observer.unobserve(article);
+        if (entry.isIntersecting) state.visibleArticles.add(entry.target);
+        else state.visibleArticles.delete(entry.target);
       }
-      pumpAutoTranslate();
-    }, { rootMargin: "240px 0px" });
+      scheduleAutoTranslateScan();
+    }, { rootMargin: "80px 0px" });
     state.autoTranslateObserver = observer;
     document.querySelectorAll("#timeline .article").forEach((article) => observer.observe(article));
+    scheduleAutoTranslateScan(150);
+  }
+
+  function scheduleAutoTranslateScan(delay = 250) {
+    if (!state.autoTranslate) return;
+    if (state.autoScanTimer) clearTimeout(state.autoScanTimer);
+    state.autoScanTimer = setTimeout(() => {
+      state.autoScanTimer = null;
+      scanVisibleForTranslation();
+    }, delay);
+  }
+
+  function addAutoPlaceholder(article) {
+    const card = article.querySelector(".card");
+    if (!card || card.querySelector(".translation")) return;
+    const box = document.createElement("p");
+    box.className = "translation auto pending";
+    box.textContent = "自动翻译中…";
+    card.querySelector(".card-content")?.after(box);
+  }
+
+  function scanVisibleForTranslation() {
+    if (!state.autoTranslate) return;
+    const articles = Array.from(document.querySelectorAll("#timeline .article"))
+      .filter((article) => state.visibleArticles.has(article));
+    for (const article of articles) {
+      if (article.querySelector(".translation:not(.auto)")) continue;
+      const item = state.itemMap.get(article.dataset.id);
+      if (!item || item.language === "zh" || state.autoTranslated.has(item.id)) continue;
+      state.autoTranslated.add(item.id);
+      addAutoPlaceholder(article);
+      state.autoTranslateQueue.push({ article, item });
+    }
+    pumpAutoTranslate();
   }
 
   function pumpAutoTranslate() {
@@ -2094,6 +2144,7 @@
       autoTranslateCard(job.article, job.item)
         .then(() => { state.autoTranslateFailures = 0; })
         .catch(() => {
+          job.article.querySelector(".translation.auto.pending")?.remove();
           state.autoTranslated.delete(job.item.id);
           state.autoTranslateFailures += 1;
           if (state.autoTranslateFailures >= 3) {
@@ -2116,7 +2167,10 @@
     if (existing && !existing.classList.contains("auto")) return;
     let cached = state.autoTranslationCache.get(item.id);
     if (!cached) {
-      const data = await requestTranslation(item.title, item.language);
+      const data = await requestTranslation(item.title, item.language, {
+        fast: true,
+        timeoutMs: 6000,
+      });
       if (!state.autoTranslate) return;
       cached = {
         text: data.translation,
@@ -2131,6 +2185,7 @@
       box.className = "translation auto";
       card.querySelector(".card-content")?.after(box);
     }
+    box.classList.remove("pending");
     setTranslationContent(box, cached.text, cached.provider);
     box.hidden = false;
     const button = card.querySelector('[data-action="translate"]');
