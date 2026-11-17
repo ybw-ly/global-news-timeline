@@ -17,6 +17,7 @@ data/*.out
 data/*.json
 data/*.txt
 data/*.csv
+data/*.md
 
 # generated database snapshots
 data/*.db

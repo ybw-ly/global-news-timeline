@@ -767,7 +767,26 @@ P2P 推送不依赖 Python 单元测试；已用两个真实浏览器标签页�
 
 ---
 
-## 12. 参考
+## 12. 仓库评论整理
+
+`scripts/comment_triage.py` 负责每日检查 GitHub 仓库的 Issue、PR 评审和提交评论：
+
+- 按关键词与结构特征分类为 bug / feature / question / docs / security / spam
+- 自动打 `type:*`、`valuable`、`triage` 标签
+- 把提交评论中的有价值反馈自动建成跟踪 Issue（按来源去重）
+- 折叠（minimize）疑似广告评论
+- 输出 Markdown 简报
+
+```bash
+python scripts/comment_triage.py --dry-run   # 只看简报，不写 GitHub
+python scripts/comment_triage.py --apply     # 打标签、建 Issue、折叠广告
+```
+
+Token 依次读取 `GITHUB_TOKEN`、`GH_TOKEN`，都没有时复用 `git credential fill` 保存的本机 GitHub 凭据。运行状态保存在 `data/comment-triage-state.json`（已在 `.gitignore` 中忽略）。
+
+---
+
+## 13. 参考
 
 - NewsNow — <https://github.com/ourongxing/newsnow>
 - TrendRadar — <https://github.com/sansan0/TrendRadar>
