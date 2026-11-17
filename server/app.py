@@ -21,6 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+import article_meta
 import customization
 from elections import (
     default_election,
@@ -62,7 +63,7 @@ from translate import translate
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
-VERSION = "1.13.0"
+VERSION = "1.14.0"
 LOG = logging.getLogger("server")
 
 HOST = os.environ.get("HOST", "127.0.0.1")
@@ -636,6 +637,18 @@ class Handler(BaseHTTPRequestHandler):
             payload = json.loads(raw.decode("utf-8") or "{}")
         except Exception:
             payload = {}
+
+        if path == "/api/article/description":
+            if not self._admin_allowed():
+                self._error(403, "需要管理员令牌（ADMIN_TOKEN）")
+                return
+            url = str(payload.get("url") or "").strip()
+            if not url:
+                self._error(400, "url is required")
+                return
+            result = article_meta.fetch_description(url)
+            self._json(result, 200 if result.get("ok") else 502)
+            return
 
         if path.startswith("/api/customize/"):
             if not self._admin_allowed():

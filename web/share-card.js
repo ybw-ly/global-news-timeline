@@ -35,6 +35,7 @@
     modal: null,
     busy: false,
     translating: false,
+    fetchingDetail: false,
     openJob: 0,
   };
   const translationCache = new Map();
@@ -190,6 +191,21 @@
     return result;
   }
 
+  async function fetchArticleDetail(url) {
+    if (!url) return "";
+    try {
+      const response = await fetch("/api/article/description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json().catch(() => ({}));
+      return response.ok && data.ok ? (data.description || "") : "";
+    } catch {
+      return "";
+    }
+  }
+
   async function translateItem(item) {
     const source = item.language || "";
     if (!source || source === "zh") return;
@@ -226,6 +242,8 @@
       category: item.category || "other",
       category_label: item.category_label || "",
       content_type_label: item.content_type_label || "",
+      coverage: item.coverage || 1,
+      coverage_languages: item.coverage_languages || item.language_count || 1,
       url: item.url || "",
       image_url: item.image_url || item.image || "",
       accent: item.accent || "",
@@ -353,6 +371,42 @@
           y += 40;
         }
       }
+    } else {
+      const panelY = y + 24;
+      const available = footerTop - panelY - 10;
+      if (available >= 140) {
+        const rows = [
+          ["事件地点", item.event_label || "未识别"],
+          ["内容类型", item.content_type_label || "—"],
+          ["独立信源", `${Number(item.coverage) || 1} 家${Number(item.coverage_languages) > 1 ? ` · ${item.coverage_languages} 种语言` : ""}`],
+          ["新闻分类", item.category_label || "—"],
+        ];
+        const rowHeight = 46;
+        const maxRows = Math.max(1, Math.min(rows.length, Math.floor((available - 56) / rowHeight)));
+        const shown = rows.slice(0, maxRows);
+        const panelHeight = 56 + shown.length * rowHeight;
+        ctx.fillStyle = theme.panel;
+        roundRect(ctx, PAD, panelY, maxWidth, panelHeight, 16);
+        ctx.fill();
+        ctx.strokeStyle = theme.line;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = accent;
+        ctx.font = `600 16px ${MONO}`;
+        ctx.fillText("详情 / DETAILS", PAD + 24, panelY + 34);
+        let rowY = panelY + 70;
+        for (const [label, value] of shown) {
+          ctx.font = `500 18px ${SANS}`;
+          ctx.fillStyle = theme.faint;
+          ctx.fillText(label, PAD + 24, rowY);
+          ctx.font = `500 19px ${SANS}`;
+          ctx.fillStyle = theme.text;
+          const valueLines = truncateLines(ctx, value, maxWidth - 220, 1);
+          ctx.fillText(valueLines[0] || "—", PAD + 160, rowY);
+          rowY += rowHeight;
+        }
+        y = panelY + panelHeight;
+      }
     }
 
     const metaParts = [
@@ -363,12 +417,14 @@
       showTranslation && item.translation_provider ? `译文 ${item.translation_provider}` : "",
     ].filter(Boolean);
     if (metaParts.length) {
-      y = Math.min(y + 28, footerTop - 18);
-      ctx.font = `500 21px ${SANS}`;
-      ctx.fillStyle = theme.faint;
-      const meta = metaParts.join("   ·   ");
-      const metaLines = truncateLines(ctx, meta, maxWidth, 1);
-      ctx.fillText(metaLines[0] || "", PAD, y);
+      const metaY = y + 28;
+      if (metaY <= footerTop - 6) {
+        ctx.font = `500 21px ${SANS}`;
+        ctx.fillStyle = theme.faint;
+        const meta = metaParts.join("   ·   ");
+        const metaLines = truncateLines(ctx, meta, maxWidth, 1);
+        ctx.fillText(metaLines[0] || "", PAD, metaY);
+      }
     }
 
     ctx.strokeStyle = theme.line;
@@ -489,7 +545,12 @@
     const modal = ensureModal();
     if (!state.item) return;
     const job = ++state.job;
-    setStatus(state.translating ? "正在翻译标题与摘要…" : "正在生成卡片…");
+    const pending = state.fetchingDetail
+      ? "正在获取原文详情…"
+      : state.translating
+        ? "正在翻译标题与摘要…"
+        : "正在生成卡片…";
+    setStatus(pending);
     const canvas = await buildCanvas(state.item, state.theme);
     if (job !== state.job) return;
     state.canvas = canvas;
@@ -497,10 +558,46 @@
     preview.width = canvas.width;
     preview.height = canvas.height;
     preview.getContext("2d").drawImage(canvas, 0, 0);
-    setStatus(state.translating ? "正在翻译标题与摘要…" : "卡片已生成");
+    setStatus(state.fetchingDetail ? "正在获取原文详情…" : state.translating ? "正在翻译标题与摘要…" : "卡片已生成");
     const shareButton = $("#news-card-share", modal);
     const supported = Boolean(navigator.share);
     shareButton.hidden = !supported;
+  }
+
+  async function enrichAndRender(job, needsTranslation, checkbox) {
+    if (!state.item) return;
+    if (!state.item.summary_original && state.item.url) {
+      state.fetchingDetail = true;
+      render();
+      const description = await fetchArticleDetail(state.item.url);
+      if (job !== state.openJob) return;
+      state.fetchingDetail = false;
+      if (description) {
+        state.item.summary_original = description;
+        state.item.detail_source = "article";
+      }
+    }
+    if (needsTranslation && !state.item.title_translated) {
+      state.translating = true;
+      render();
+      try {
+        await translateItem(state.item);
+        if (job !== state.openJob) return;
+        state.translating = false;
+        state.item.translation_enabled = true;
+        checkbox.checked = true;
+        checkbox.disabled = false;
+      } catch (error) {
+        if (job !== state.openJob) return;
+        state.translating = false;
+        state.item.translation_enabled = false;
+        checkbox.checked = false;
+        checkbox.disabled = true;
+        render().then(() => setStatus(`翻译失败：${error.message}`, true));
+        return;
+      }
+    }
+    render();
   }
 
   function open(item) {
@@ -509,6 +606,7 @@
     state.item = normalize(item);
     state.theme = "dark";
     state.translating = false;
+    state.fetchingDetail = false;
     const select = $("#news-card-theme", modal);
     if (select) select.value = state.theme;
 
@@ -523,29 +621,7 @@
     modal.hidden = false;
     document.body.classList.add("card-modal-open");
 
-    if (needsTranslation && !state.item.title_translated) {
-      state.translating = true;
-      render();
-      translateItem(state.item)
-        .then(() => {
-          if (job !== state.openJob) return;
-          state.translating = false;
-          state.item.translation_enabled = true;
-          checkbox.checked = true;
-          checkbox.disabled = false;
-          render();
-        })
-        .catch((error) => {
-          if (job !== state.openJob) return;
-          state.translating = false;
-          state.item.translation_enabled = false;
-          checkbox.checked = false;
-          checkbox.disabled = true;
-          render().then(() => setStatus(`翻译失败：${error.message}`, true));
-        });
-    } else {
-      render();
-    }
+    enrichAndRender(job, needsTranslation, checkbox);
   }
 
   function close() {

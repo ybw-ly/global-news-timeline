@@ -11,6 +11,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "server"))
 
+from article_meta import _extract as extract_meta_description  # noqa: E402
+from article_meta import _public_host, fetch_description  # noqa: E402
 from brazil import _normalise, _url, fetch_results  # noqa: E402
 from classifier import Classifier  # noqa: E402
 from contenttype import ContentTypeClassifier  # noqa: E402
@@ -1019,6 +1021,28 @@ class CustomizationTests(unittest.TestCase):
     def test_invalid_accent_is_rejected(self):
         with self.assertRaises(self.customization.ConfigError):
             self.customization.save_ui({"accent": "red"})
+
+
+class ArticleMetaTests(unittest.TestCase):
+    def test_meta_description_is_extracted_and_unescaped(self):
+        page = '<html><head><meta name="description" content="Hello &amp; world"></head></html>'
+        self.assertEqual(extract_meta_description(page), "Hello & world")
+
+    def test_og_description_is_used(self):
+        page = '<meta property="og:description" content="OpenGraph summary">'
+        self.assertEqual(extract_meta_description(page), "OpenGraph summary")
+
+    def test_jsonld_description_is_fallback(self):
+        page = '<script type="application/ld+json">{"description":"JSON-LD summary"}</script>'
+        self.assertEqual(extract_meta_description(page), "JSON-LD summary")
+
+    def test_private_hosts_are_blocked(self):
+        self.assertFalse(_public_host("127.0.0.1"))
+        self.assertFalse(_public_host("10.0.0.1"))
+        self.assertFalse(_public_host("localhost"))
+
+    def test_non_http_url_is_rejected(self):
+        self.assertFalse(fetch_description("ftp://example.com/article")["ok"])
 
 
 if __name__ == "__main__":
