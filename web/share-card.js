@@ -113,6 +113,36 @@
     return kept;
   }
 
+  function drawQr(ctx, text, x, y, size) {
+    if (!text || typeof window.qrcode !== "function") return false;
+    try {
+      const qr = window.qrcode(0, "M");
+      qr.addData(text);
+      qr.make();
+      const count = qr.getModuleCount();
+      const quiet = 4;
+      const cell = size / (count + quiet * 2);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(x, y, size, size);
+      ctx.fillStyle = "#0a111a";
+      for (let row = 0; row < count; row += 1) {
+        for (let col = 0; col < count; col += 1) {
+          if (qr.isDark(row, col)) {
+            ctx.fillRect(
+              x + (col + quiet) * cell,
+              y + (row + quiet) * cell,
+              Math.ceil(cell),
+              Math.ceil(cell),
+            );
+          }
+        }
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   function drawCover(ctx, image, x, y, width, height) {
     const scale = Math.max(width / image.width, height / image.height);
     const sourceW = width / scale;
@@ -309,7 +339,7 @@
       y += 6;
     }
 
-    const footerTop = CARD_H - 172;
+    const footerTop = CARD_H - 220;
     if (primarySummary) {
       y += 18;
       ctx.font = `400 27px ${SANS}`;
@@ -344,22 +374,42 @@
     ctx.strokeStyle = theme.line;
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(PAD, CARD_H - 126);
-    ctx.lineTo(CARD_W - PAD, CARD_H - 126);
+    ctx.moveTo(PAD, CARD_H - 200);
+    ctx.lineTo(CARD_W - PAD, CARD_H - 200);
     ctx.stroke();
 
-    ctx.font = `500 17px ${MONO}`;
+    const qrSize = 128;
+    const qrX = PAD;
+    const qrY = CARD_H - 188;
+    const qrDrawn = drawQr(ctx, item.url, qrX, qrY, qrSize);
+    const linkX = qrDrawn ? qrX + qrSize + 20 : PAD;
+    const linkMax = CARD_W - PAD - linkX;
+    const linkY = qrDrawn ? qrY + 26 : CARD_H - 104;
+
+    ctx.fillStyle = accent;
+    ctx.font = `600 15px ${MONO}`;
+    ctx.fillText("扫码阅读原文 / SOURCE", linkX, linkY - 12);
+
     ctx.fillStyle = theme.faint;
-    const url = shortUrl(item.url);
-    const urlLines = truncateLines(ctx, url || "LOCAL NEWS TIMELINE", maxWidth - 230, 1);
-    ctx.fillText(urlLines[0] || "", PAD, CARD_H - 84);
+    ctx.font = `500 16px ${MONO}`;
+    const urlLines = truncateLines(
+      ctx,
+      shortUrl(item.url) || "无原文链接",
+      linkMax,
+      qrDrawn ? 3 : 1,
+    );
+    let urlY = linkY + 12;
+    for (const line of urlLines) {
+      ctx.fillText(line, linkX, urlY);
+      urlY += 22;
+    }
 
     ctx.textAlign = "right";
     ctx.font = `500 16px ${SANS}`;
     ctx.fillStyle = theme.faint;
-    ctx.fillText("经纬 · 全球新闻时间线", CARD_W - PAD, CARD_H - 92);
-    ctx.font = `400 13px ${MONO}`;
-    ctx.fillText(`GENERATED ${fmtNow()}`, CARD_W - PAD, CARD_H - 68);
+    ctx.fillText("经纬 · 全球新闻时间线", CARD_W - PAD, CARD_H - 52);
+    ctx.font = `400 12px ${MONO}`;
+    ctx.fillText(`GENERATED ${fmtNow()}`, CARD_W - PAD, CARD_H - 30);
     ctx.textAlign = "left";
 
     return canvas;
