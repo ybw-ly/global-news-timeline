@@ -416,6 +416,10 @@ h1 {
 .update-note { font-family: var(--mono); font-size: 8.5px; color: var(--faint); }
 .text-btn { border: 0; border-bottom: 1px solid var(--line-strong); background: none; color: var(--muted); padding: 1px 0; font-size: 9.5px; }
 .text-btn:hover { color: var(--accent); border-color: var(--accent-line); }
+.auto-translate-toggle { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.auto-translate-toggle i { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); transition: background 0.16s, box-shadow 0.16s; }
+.auto-translate-toggle[aria-pressed="true"] { color: var(--accent); border-color: var(--accent-line); }
+.auto-translate-toggle[aria-pressed="true"] i { background: var(--accent); box-shadow: 0 0 8px var(--accent-line); }
 .osint-entry { color: var(--accent); border-bottom-color: var(--accent-line); white-space: nowrap; letter-spacing: 0.02em; }
 .osint-entry:hover { color: var(--text); }
 

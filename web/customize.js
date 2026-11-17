@@ -506,6 +506,7 @@
       field("默认选举", "default_election", ui.default_election || "auto", { options: electionOptions }),
       field("强调色", "accent", ui.accent || "#76e0c2", { type: "color" }),
       `<div class="field"><label class="check"><input type="checkbox" data-field="compact" ${ui.compact ? "checked" : ""}> 紧凑模式</label><span class="help">缩小主时间线卡片间距</span></div>`,
+      `<div class="field"><label class="check"><input type="checkbox" data-field="auto_translate" ${ui.auto_translate ? "checked" : ""}> 浏览时自动翻译非中文标题</label><span class="help">滚动到新闻条时自动显示中文译文，可在首页顶部随时关闭</span></div>`,
     ].join("");
   }
 
@@ -520,6 +521,7 @@
         default_election: readField("default_election"),
         accent: readField("accent"),
         compact: readField("compact"),
+        auto_translate: readField("auto_translate"),
       };
       const data = await api("/api/customize/ui", {
         method: "POST",

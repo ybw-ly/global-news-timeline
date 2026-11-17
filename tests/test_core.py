@@ -1012,10 +1012,16 @@ class CustomizationTests(unittest.TestCase):
 
     def test_ui_roundtrip(self):
         ui = self.customization.save_ui(
-            {"default_hours": 72, "compact": True, "accent": "#f59e0b"}
+            {
+                "default_hours": 72,
+                "compact": True,
+                "accent": "#f59e0b",
+                "auto_translate": True,
+            }
         )
         self.assertEqual(ui["default_hours"], 72)
         self.assertTrue(ui["compact"])
+        self.assertTrue(ui["auto_translate"])
         self.assertEqual(self.customization.get_ui()["accent"], "#f59e0b")
 
     def test_invalid_accent_is_rejected(self):

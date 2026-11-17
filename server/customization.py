@@ -47,6 +47,7 @@ DEFAULT_UI: dict[str, Any] = {
     "compact": False,
     "accent": "#76e0c2",
     "default_election": "auto",
+    "auto_translate": False,
 }
 
 _LOCK = threading.RLock()
@@ -284,6 +285,8 @@ def _validate_ui(ui: Any) -> dict:
             raise ConfigError(f"ui.{key} must be a string")
     if not isinstance(clean["compact"], bool):
         raise ConfigError("ui.compact must be true/false")
+    if not isinstance(clean["auto_translate"], bool):
+        raise ConfigError("ui.auto_translate must be true/false")
     if not COLOR_RE.match(str(clean["accent"])):
         raise ConfigError("ui.accent must be a #RRGGBB color")
     return clean

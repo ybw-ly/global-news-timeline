@@ -85,7 +85,14 @@
     markerLayer: null,
     lastStatusAt: null,
     deepLinkStory: null,
+    deepLinkTranslate: false,
     autoTranslate: false,
+    autoTranslateFailures: 0,
+    autoTranslating: 0,
+    autoTranslateQueue: [],
+    autoTranslated: new Set(),
+    autoTranslationCache: new Map(),
+    autoTranslateObserver: null,
     multiOnly: false,
     searchRetryTimer: null,
     searchRetryKey: "",
@@ -213,7 +220,7 @@
     state.filters.q = params.get("q") || "";
     state.filters.geo = params.get("geo") === "source" ? "source" : "event";
     state.deepLinkStory = params.get("story") || null;
-    state.autoTranslate = params.get("tr") === "1";
+    state.deepLinkTranslate = params.get("tr") === "1";
     state.multiOnly = params.get("multi") === "1";
   }
 
@@ -300,9 +307,9 @@
         state.deepLinkStory = null;
         if (story) {
           openDrawer(story);
-          if (state.autoTranslate) setTimeout(() => translateDrawer(story), 250);
+          if (state.deepLinkTranslate) setTimeout(() => translateDrawer(story), 250);
         }
-        state.autoTranslate = false;
+        state.deepLinkTranslate = false;
       }
       const xl = data.search?.cross_language;
       if (!append && qKey && xl?.partial && state.searchRetryKey !== qKey) {
@@ -1140,6 +1147,7 @@
 
     const more = $("#load-more-wrap");
     more.hidden = state.multiOnly || state.items.length >= state.total;
+    setupAutoTranslateObserver();
   }
 
   function branchPanel(item) {
@@ -1652,6 +1660,9 @@
     });
 
     $("#refresh-btn").addEventListener("click", refreshNow);
+    $("#auto-translate-toggle")?.addEventListener("click", () => {
+      setAutoTranslate(!state.autoTranslate);
+    });
     $("#map-clear").addEventListener("click", () => setFilter("country", "all", { toggle: false }));
 
     $("#timeline").addEventListener("click", (event) => {
@@ -1887,6 +1898,11 @@
     writeHash();
     body.scrollTop = 0;
     setTimeout(() => $("#drawer-close")?.focus(), 80);
+    if (state.autoTranslate && state.autoTranslateFailures < 3 && item.language !== "zh") {
+      setTimeout(() => {
+        if (state.drawerItem?.id === item.id) translateDrawer(item);
+      }, 300);
+    }
   }
 
   function closeDrawer() {
@@ -1934,6 +1950,7 @@
     const card = button.closest(".card");
     if (!card) return;
     let box = card.querySelector(".translation");
+    if (box) box.classList.remove("auto");
     const cached = state.translationCache.get(item.id);
     if (cached) {
       const existed = Boolean(box);
@@ -2003,6 +2020,123 @@
     }
   }
 
+  // ── auto translation while browsing ────────────────────────────────────
+  const AUTO_TRANSLATE_CONCURRENCY = 2;
+
+  function updateAutoTranslateButton() {
+    const button = $("#auto-translate-toggle");
+    if (!button) return;
+    button.setAttribute("aria-pressed", state.autoTranslate ? "true" : "false");
+    button.classList.toggle("on", state.autoTranslate);
+    button.title = state.autoTranslate
+      ? "已开启：滚动到非中文新闻条时自动翻译标题"
+      : "自动翻译非中文新闻标题";
+  }
+
+  function setAutoTranslate(enabled, { persist = true } = {}) {
+    state.autoTranslate = Boolean(enabled);
+    if (persist) {
+      localStorage.setItem("gnt-auto-translate", state.autoTranslate ? "1" : "0");
+    }
+    updateAutoTranslateButton();
+    if (state.autoTranslate) {
+      state.autoTranslateFailures = 0;
+      setupAutoTranslateObserver();
+      pumpAutoTranslate();
+      return;
+    }
+    if (state.autoTranslateObserver) {
+      state.autoTranslateObserver.disconnect();
+      state.autoTranslateObserver = null;
+    }
+    state.autoTranslateQueue = [];
+    state.autoTranslated.clear();
+    document.querySelectorAll(".translation.auto").forEach((element) => {
+      const card = element.closest(".card");
+      const button = card?.querySelector('[data-action="translate"]');
+      if (button) button.textContent = "译";
+      element.remove();
+    });
+  }
+
+  function setupAutoTranslateObserver() {
+    if (state.autoTranslateObserver) {
+      state.autoTranslateObserver.disconnect();
+      state.autoTranslateObserver = null;
+    }
+    if (!state.autoTranslate || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver((entries) => {
+      if (!state.autoTranslate) return;
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const article = entry.target;
+        const item = state.itemMap.get(article.dataset.id);
+        if (item && item.language !== "zh" && !state.autoTranslated.has(item.id)) {
+          state.autoTranslated.add(item.id);
+          state.autoTranslateQueue.push({ article, item });
+        }
+        observer.unobserve(article);
+      }
+      pumpAutoTranslate();
+    }, { rootMargin: "240px 0px" });
+    state.autoTranslateObserver = observer;
+    document.querySelectorAll("#timeline .article").forEach((article) => observer.observe(article));
+  }
+
+  function pumpAutoTranslate() {
+    if (!state.autoTranslate) return;
+    while (
+      state.autoTranslating < AUTO_TRANSLATE_CONCURRENCY
+      && state.autoTranslateQueue.length
+    ) {
+      const job = state.autoTranslateQueue.shift();
+      state.autoTranslating += 1;
+      autoTranslateCard(job.article, job.item)
+        .then(() => { state.autoTranslateFailures = 0; })
+        .catch(() => {
+          state.autoTranslated.delete(job.item.id);
+          state.autoTranslateFailures += 1;
+          if (state.autoTranslateFailures >= 3) {
+            setAutoTranslate(false);
+            toast("自动翻译已暂停：翻译服务不可用或免费额度已用尽", true);
+          }
+        })
+        .finally(() => {
+          state.autoTranslating -= 1;
+          pumpAutoTranslate();
+        });
+    }
+  }
+
+  async function autoTranslateCard(article, item) {
+    if (!state.autoTranslate) return;
+    const card = article.querySelector(".card");
+    if (!card) return;
+    const existing = card.querySelector(".translation");
+    if (existing && !existing.classList.contains("auto")) return;
+    let cached = state.autoTranslationCache.get(item.id);
+    if (!cached) {
+      const data = await requestTranslation(item.title, item.language);
+      if (!state.autoTranslate) return;
+      cached = {
+        text: data.translation,
+        provider: data.provider_label || data.provider || "",
+      };
+      state.autoTranslationCache.set(item.id, cached);
+    }
+    if (!state.autoTranslate) return;
+    let box = card.querySelector(".translation.auto");
+    if (!box) {
+      box = document.createElement("p");
+      box.className = "translation auto";
+      card.querySelector(".card-content")?.after(box);
+    }
+    setTranslationContent(box, cached.text, cached.provider);
+    box.hidden = false;
+    const button = card.querySelector('[data-action="translate"]');
+    if (button) button.textContent = "收起";
+  }
+
   // ── misc ────────────────────────────────────────────────────────────────
   let toastTimer = null;
   function toast(message, isError = false) {
@@ -2043,6 +2177,9 @@
     document.documentElement.style.setProperty("--accent-soft", hexToRgba(accent, 0.14));
     document.documentElement.style.setProperty("--accent-line", hexToRgba(accent, 0.36));
     document.body.classList.toggle("compact", Boolean(prefs.compact));
+    const storedAuto = localStorage.getItem("gnt-auto-translate");
+    state.autoTranslate = storedAuto !== null ? storedAuto === "1" : Boolean(prefs.auto_translate);
+    updateAutoTranslateButton();
   }
 
   async function init() {
