@@ -122,7 +122,9 @@ def _open(request: urllib.request.Request, timeout: int):
 
 
 def load_config() -> dict:
-    return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    import customization
+
+    return customization.read_json("feeds")
 
 
 def _local(tag: str) -> str:

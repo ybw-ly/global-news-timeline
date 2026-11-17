@@ -20,6 +20,7 @@ import urllib.request
 from urllib.parse import urlsplit
 from hashlib import sha1
 
+import customization
 from db import utcnow
 from taxonomy import detect_language
 
@@ -39,6 +40,40 @@ TRANSLATE_LOCAL_FIRST = os.environ.get("TRANSLATE_LOCAL_FIRST", "0").lower() not
 )
 MAX_CHARS = 2000
 MYMEMORY_MAX = 500
+
+
+def _as_bool(value) -> bool:
+    if isinstance(value, bool):
+        return value
+    return str(value).lower() not in ("0", "false", "off", "no", "")
+
+
+def settings() -> dict:
+    """Resolve translation settings from the GUI overlay, then module/env defaults."""
+    overrides = customization.translate_overrides()
+    values = {
+        "provider": str(TRANSLATE_PROVIDER).lower(),
+        "fallback": bool(TRANSLATE_FALLBACK),
+        "free_only": bool(TRANSLATE_FREE_ONLY),
+        "local_first": bool(TRANSLATE_LOCAL_FIRST),
+        "ollama_url": OLLAMA_URL,
+        "ollama_model": OLLAMA_MODEL,
+        "libre_url": LIBRE_URL,
+        "libre_key": LIBRE_KEY,
+    }
+    if overrides.get("provider"):
+        values["provider"] = str(overrides["provider"]).lower()
+    for key in ("fallback", "free_only", "local_first"):
+        if overrides.get(key) is not None:
+            values[key] = _as_bool(overrides[key])
+    for key in ("ollama_url", "ollama_model", "libre_url"):
+        if overrides.get(key):
+            values[key] = str(overrides[key])
+    if "libre_key" in overrides:
+        values["libre_key"] = str(overrides.get("libre_key") or "")
+    values["ollama_url"] = values["ollama_url"].rstrip("/")
+    values["libre_url"] = values["libre_url"].rstrip("/")
+    return values
 
 PROVIDER_LABELS = {
     "ollama": "本地 Ollama（免费）",
@@ -108,15 +143,16 @@ def _cache_put(
 
 
 def _ollama(text: str, target: str, source: str) -> tuple[str, str]:
+    cfg = settings()
     language = "Traditional Chinese" if target == "zh-Hant" else "Simplified Chinese"
     payload = {
-        "model": OLLAMA_MODEL,
+        "model": cfg["ollama_model"],
         "prompt": PROMPT.format(language=language, text=text),
         "stream": False,
         "options": {"temperature": 0.1, "num_predict": 360},
     }
     request = urllib.request.Request(
-        OLLAMA_URL + "/api/generate",
+        cfg["ollama_url"] + "/api/generate",
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"},
         method="POST",
@@ -129,7 +165,7 @@ def _ollama(text: str, target: str, source: str) -> tuple[str, str]:
     translated = (body.get("response") or "").strip()
     if not translated:
         raise TranslationError("Ollama 返回空译文")
-    return translated, f"ollama:{OLLAMA_MODEL}"
+    return translated, f"ollama:{cfg['ollama_model']}"
 
 
 def _mymemory(text: str, target: str, source: str) -> tuple[str, str]:
@@ -156,7 +192,8 @@ def _mymemory(text: str, target: str, source: str) -> tuple[str, str]:
 
 
 def _libre(text: str, target: str, source: str) -> tuple[str, str]:
-    if not LIBRE_URL:
+    cfg = settings()
+    if not cfg["libre_url"]:
         raise TranslationError("未配置 LibreTranslate")
     payload = {
         "q": text[:1500],
@@ -164,10 +201,10 @@ def _libre(text: str, target: str, source: str) -> tuple[str, str]:
         "target": TARGET_CODES.get(target, target),
         "format": "text",
     }
-    if LIBRE_KEY:
-        payload["api_key"] = LIBRE_KEY
+    if cfg["libre_key"]:
+        payload["api_key"] = cfg["libre_key"]
     request = urllib.request.Request(
-        LIBRE_URL + "/translate",
+        cfg["libre_url"] + "/translate",
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"},
         method="POST",
@@ -202,20 +239,21 @@ def _chain() -> list[tuple[str, object]]:
     # Free-only mode is fail-closed for external LibreTranslate. MyMemory's
     # anonymous endpoint is free (it returns an error when the free quota is
     # exhausted; it is never upgraded to a paid plan by this application).
-    libre_allowed = bool(LIBRE_URL) and (
-        not TRANSLATE_FREE_ONLY or _is_local_url(LIBRE_URL)
+    cfg = settings()
+    libre_allowed = bool(cfg["libre_url"]) and (
+        not cfg["free_only"] or _is_local_url(cfg["libre_url"])
     )
-    if TRANSLATE_PROVIDER == "ollama":
+    if cfg["provider"] == "ollama":
         return [("ollama", _ollama)]
-    if TRANSLATE_PROVIDER == "mymemory":
+    if cfg["provider"] == "mymemory":
         return [("mymemory", _mymemory)]
-    if TRANSLATE_PROVIDER == "libre":
+    if cfg["provider"] == "libre":
         return [("libre", _libre)] if libre_allowed else []
-    if TRANSLATE_LOCAL_FIRST:
+    if cfg["local_first"]:
         chain: list[tuple[str, object]] = [("ollama", _ollama)]
         if libre_allowed:
             chain.append(("libre", _libre))
-        if TRANSLATE_FALLBACK:
+        if cfg["fallback"]:
             chain.append(("mymemory", _mymemory))
         return chain
 
@@ -226,7 +264,7 @@ def _chain() -> list[tuple[str, object]]:
     chain = []
     if libre_allowed:
         chain.append(("libre", _libre))
-    if TRANSLATE_FALLBACK:
+    if cfg["fallback"]:
         chain.append(("mymemory", _mymemory))
     chain.append(("ollama", _ollama))
     return chain
@@ -262,16 +300,17 @@ def translate(
     if cached:
         return {"ok": True, **cached}
 
+    cfg = settings()
     chain = _chain()
     if not chain:
         return {
             "ok": False,
             "error": (
                 "免费模式已阻止外部 LibreTranslate。请使用本地 Ollama、"
-                "本地 LibreTranslate，或设置 TRANSLATE_FREE_ONLY=0 后自行承担费用。"
+                "本地 LibreTranslate，或在自定义中心关闭“仅免费”后自行承担费用。"
             ),
             "providers": [],
-            "free_only": TRANSLATE_FREE_ONLY,
+            "free_only": cfg["free_only"],
         }
 
     errors: list[str] = []
@@ -286,7 +325,7 @@ def translate(
                 "provider": provider,
                 "provider_label": PROVIDER_LABELS.get(provider, provider),
                 "cached": False,
-                "free_only": TRANSLATE_FREE_ONLY,
+                "free_only": cfg["free_only"],
             }
         except Exception as exc:
             errors.append(f"{PROVIDER_LABELS.get(provider, provider)}: {str(exc)[:160]}")
@@ -294,5 +333,5 @@ def translate(
         "ok": False,
         "error": "翻译失败。可启动本地 Ollama，或检查免费翻译额度/网络。",
         "providers": errors,
-        "free_only": TRANSLATE_FREE_ONLY,
+        "free_only": cfg["free_only"],
     }

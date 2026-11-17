@@ -7,7 +7,8 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=utf-8 \
     HOST=0.0.0.0 \
     PORT=8765 \
-    NEWS_DB=/app/data/news.db
+    NEWS_DB=/app/data/news.db \
+    CUSTOMIZATION_PATH=/app/data/customization.json
 
 WORKDIR /app
 

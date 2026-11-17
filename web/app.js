@@ -195,15 +195,17 @@
   // ── url hash ────────────────────────────────────────────────────────────
   function readHash() {
     const params = new URLSearchParams(location.hash.replace(/^#/, ""));
-    const hours = parseInt(params.get("h") || "24", 10);
-    state.filters.hours = HOURS.some((h) => h.key === hours) ? hours : 24;
-    const cat = params.get("cat") || "all";
+    const prefs = window.GNT_UI || {};
+    const defaultHours = Number(prefs.default_hours) || 24;
+    const hours = parseInt(params.get("h") || String(defaultHours), 10);
+    state.filters.hours = HOURS.some((h) => h.key === hours) ? hours : defaultHours;
+    const cat = params.get("cat") || prefs.default_category || "all";
     state.filters.category = CATEGORY_LABELS[cat] ? cat : "all";
-    const ctype = params.get("ctype") || "hard";
+    const ctype = params.get("ctype") || prefs.default_content_type || "hard";
     state.filters.content_type = CONTENT_TYPE_LABELS[ctype] ? ctype : "hard";
-    const region = params.get("reg") || "all";
+    const region = params.get("reg") || prefs.default_region || "all";
     state.filters.region = REGION_LABELS[region] ? region : "all";
-    const lang = params.get("lang") || "all";
+    const lang = params.get("lang") || prefs.default_language || "all";
     state.filters.language = LANGUAGES[lang] ? lang : "all";
     state.filters.publisher = params.get("pub") || "all";
     const country = (params.get("c") || "all").toUpperCase();
@@ -2016,7 +2018,33 @@
     $("#clock-zone").textContent = `${tzLabel()} · ${String(now.getMonth() + 1).padStart(2, "0")}.${String(now.getDate()).padStart(2, "0")}`;
   }
 
+  function hexToRgba(hex, alpha) {
+    const clean = String(hex || "").replace("#", "");
+    if (!/^[0-9a-fA-F]{6}$/.test(clean)) return `rgba(118, 224, 194, ${alpha})`;
+    const value = parseInt(clean, 16);
+    return `rgba(${(value >> 16) & 255}, ${(value >> 8) & 255}, ${value & 255}, ${alpha})`;
+  }
+
+  async function loadUiPrefs() {
+    try {
+      const response = await fetch("/api/customize/ui", { cache: "no-store" });
+      if (response.ok) {
+        const data = await response.json();
+        window.GNT_UI = data.ui || {};
+      }
+    } catch {
+      window.GNT_UI = window.GNT_UI || {};
+    }
+    const prefs = window.GNT_UI || {};
+    const accent = prefs.accent || "#76e0c2";
+    document.documentElement.style.setProperty("--accent", accent);
+    document.documentElement.style.setProperty("--accent-soft", hexToRgba(accent, 0.14));
+    document.documentElement.style.setProperty("--accent-line", hexToRgba(accent, 0.36));
+    document.body.classList.toggle("compact", Boolean(prefs.compact));
+  }
+
   async function init() {
+    await loadUiPrefs();
     readHash();
     $("#search").value = state.filters.q;
     window.NewsP2P?.init({

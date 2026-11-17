@@ -39,9 +39,16 @@ GENERIC = {
 
 
 class Classifier:
-    def __init__(self, path: Path | None = None) -> None:
-        path = path or ROOT / "config" / "lexicon.json"
-        raw = json.loads(path.read_text(encoding="utf-8"))
+    def __init__(self, path: Path | None = None, data: dict | None = None) -> None:
+        if data is None:
+            if path is not None:
+                raw = json.loads(path.read_text(encoding="utf-8"))
+            else:
+                import customization
+
+                raw = customization.read_json("lexicon")
+        else:
+            raw = data
         self.rules: dict[str, dict[str, list[tuple[str, float, re.Pattern | None]]]] = {}
         for category in CATEGORIES:
             self.rules[category] = {}

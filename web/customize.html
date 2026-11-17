@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#070b11">
+  <meta name="description" content="经纬 · Global News Timeline 图形化自定义中心：信源、选举、运行参数、质量过滤与高级配置。">
+  <title>自定义中心 · 经纬</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/customize.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span>←</span> 经纬 · 自定义中心</a>
+    <div class="top-actions">
+      <span class="status" id="connection-status">正在连接…</span>
+      <button class="button ghost" id="reload-btn" type="button">刷新配置</button>
+      <a class="button primary" href="/">返回时间线</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-heading">配置区域</div>
+      <nav class="nav" id="nav">
+        <button type="button" data-tab="overview" class="active">概览</button>
+        <button type="button" data-tab="feeds">信源管理</button>
+        <button type="button" data-tab="elections">选举管理</button>
+        <button type="button" data-tab="runtime">运行设置</button>
+        <button type="button" data-tab="ui">界面偏好</button>
+        <button type="button" data-tab="quality">质量过滤</button>
+        <button type="button" data-tab="advanced">高级配置</button>
+        <button type="button" data-tab="bundle">备份与恢复</button>
+      </nav>
+      <div class="side-note">
+        <strong>保存位置</strong>
+        <code id="overlay-path">data/customization.json</code>
+        <p>内置配置不会被覆盖；导出 JSON 即可迁移到另一台机器或 Docker 环境。</p>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="admin-banner hidden" id="admin-banner">
+        <div>
+          <strong>需要管理员令牌</strong>
+          <p>当前服务设置了 <code>ADMIN_TOKEN</code>。输入令牌后才能保存配置。</p>
+        </div>
+        <div class="admin-token-row" id="admin-token-row">
+          <input type="password" id="admin-token" placeholder="ADMIN_TOKEN" autocomplete="off">
+          <button class="button primary" id="admin-token-save" type="button">验证</button>
+        </div>
+      </div>
+
+      <section class="tab active" id="tab-overview">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">OVERVIEW</span>
+            <h1>自定义中心</h1>
+            <p>信源、选举、运行参数、界面偏好和底层规则都可以在浏览器里改，不需要编辑本地文件。</p>
+          </div>
+        </div>
+        <div class="stat-grid" id="overview-stats"></div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>快速操作</h2>
+            <span class="hint">修改会自动写入覆盖层，并立即对服务端生效（标注“需重启”的除外）。</span>
+          </div>
+          <div class="quick-actions">
+            <button class="button" type="button" id="quick-refresh">立即抓取新闻</button>
+            <button class="button" type="button" id="quick-export">导出自定义配置</button>
+            <button class="button" type="button" id="quick-import">导入配置</button>
+            <button class="button danger" type="button" id="quick-reset">恢复全部默认</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>覆盖状态</h2><span class="hint">“已覆盖”表示该项保存在 customization.json 中。</span></div>
+          <div class="table-wrap"><table class="table"><thead><tr><th>配置</th><th>条目</th><th>状态</th><th>生效方式</th></tr></thead><tbody id="overview-sections"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="tab" id="tab-feeds">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">FEEDS</span>
+            <h1>信源管理</h1>
+            <p>增删信源、调整刷新频率、启停单个源。修改后下一次调度会自动读取。</p>
+          </div>
+          <div class="head-actions">
+            <button class="button" type="button" id="add-feed">新增信源</button>
+            <button class="button primary" type="button" id="save-feeds">保存信源配置</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>全局抓取设置</h2><span class="hint">与 feeds.json 的 settings 对应。</span></div>
+          <div class="form-grid" id="feed-settings"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>信源列表 <span class="count" id="feed-count"></span></h2>
+            <div class="inline-tools">
+              <input type="search" id="feed-search" placeholder="搜索 ID / 名称 / 国家…">
+              <span class="dirty" id="feeds-dirty" hidden>有未保存修改</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table feeds-table">
+              <thead><tr><th>启用</th><th>ID</th><th>名称</th><th>国家</th><th>语言</th><th>类型</th><th>刷新</th><th>操作</th></tr></thead>
+              <tbody id="feed-rows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab" id="tab-elections">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">ELECTIONS</span>
+            <h1>选举管理</h1>
+            <p>新增或编辑任意选举。高级字段（候选人、时间线、民调、观察清单、来源）用 JSON 编辑，保存后立即出现在大选 OSINT 下拉框。</p>
+          </div>
+          <div class="head-actions">
+            <button class="button" type="button" id="add-election">新增选举</button>
+            <button class="button primary" type="button" id="save-elections">保存选举配置</button>
+          </div>
+        </div>
+        <div class="split">
+          <div class="panel">
+            <div class="panel-head"><h2>选举列表</h2><span class="count" id="election-count"></span></div>
+            <div id="election-list" class="list"></div>
+          </div>
+          <div class="panel editor-panel">
+            <div class="panel-head">
+              <h2 id="election-editor-title">选择一个选举</h2>
+              <div class="inline-tools">
+                <a class="button ghost" id="election-preview" href="#" target="_blank" rel="noopener">预览页面 ↗</a>
+                <button class="button danger ghost" type="button" id="delete-election">删除</button>
+              </div>
+            </div>
+            <p class="hint">完整对象编辑；保存前会校验 id、状态、日期和列表字段。</p>
+            <textarea id="election-json" class="code-editor" spellcheck="false" placeholder="从左侧选择一个选举，或点“新增选举”。"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab" id="tab-runtime">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">RUNTIME</span>
+            <h1>运行设置</h1>
+            <p>翻译提供链与本地模型地址。保存后立即生效，不需要改环境变量或重启。</p>
+          </div>
+          <div class="head-actions"><button class="button primary" type="button" id="save-runtime">保存运行设置</button></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>翻译</h2><span class="hint">默认优先 MyMemory 免费接口；本地 Ollama 作为回退。</span></div>
+          <div class="form-grid" id="runtime-form"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>说明</h2></div>
+          <ul class="notes">
+            <li>“仅免费”开启时，外部 LibreTranslate 会被阻止；本地地址（localhost / 私有 IP）不受影响。</li>
+            <li>Ollama 地址与模型可在本页修改；修改后下一次翻译请求就会使用新值。</li>
+            <li>LibreTranslate API Key 只保存在本机覆盖层，不会出现在导出文件里。</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="tab" id="tab-ui">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">INTERFACE</span>
+            <h1>界面偏好</h1>
+            <p>这些偏好保存在服务端，换浏览器或换设备后仍然生效。</p>
+          </div>
+          <div class="head-actions"><button class="button primary" type="button" id="save-ui">保存界面偏好</button></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>时间线默认值</h2></div>
+          <div class="form-grid" id="ui-form"></div>
+        </div>
+      </section>
+
+      <section class="tab" id="tab-quality">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">QUALITY</span>
+            <h1>质量过滤</h1>
+            <p>控制服务型内容、生活方式标题党和公关稿的入库规则。规则按顺序匹配，第一条命中即生效。</p>
+          </div>
+          <div class="head-actions">
+            <button class="button" type="button" id="reset-quality">恢复默认</button>
+            <button class="button primary" type="button" id="save-quality">保存质量规则</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>规则 JSON</h2><span class="hint" id="quality-hint"></span></div>
+          <textarea id="quality-json" class="code-editor tall" spellcheck="false"></textarea>
+        </div>
+      </section>
+
+      <section class="tab" id="tab-advanced">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">ADVANCED</span>
+            <h1>高级配置</h1>
+            <p>直接编辑底层 JSON。内容分类、词典、国家表和地名库修改后会在下一次请求生效；“国家表”需要重启。</p>
+          </div>
+          <div class="head-actions">
+            <button class="button" type="button" id="reset-advanced">恢复默认</button>
+            <button class="button primary" type="button" id="save-advanced">保存</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="inline-tools">
+              <label for="advanced-select">配置</label>
+              <select id="advanced-select">
+                <option value="content_types">content_types.json · 内容分类</option>
+                <option value="lexicon">lexicon.json · 分类词典</option>
+                <option value="countries">countries.json · 国家表（需重启）</option>
+                <option value="gazetteer">gazetteer.json · 地名/人物/主题库</option>
+              </select>
+            </div>
+            <span class="hint" id="advanced-hint"></span>
+          </div>
+          <textarea id="advanced-json" class="code-editor tall" spellcheck="false"></textarea>
+        </div>
+      </section>
+
+      <section class="tab" id="tab-bundle">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">BACKUP</span>
+            <h1>备份与恢复</h1>
+            <p>导出的 JSON 只包含自定义覆盖层，不包含新闻数据库和本地日志，适合跨机器迁移或版本管理。</p>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>导出</h2></div>
+          <div class="quick-actions">
+            <button class="button primary" type="button" id="export-bundle">下载 customization.json</button>
+          </div>
+          <p class="hint">导出不包含 LibreTranslate API Key。</p>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>导入</h2></div>
+          <div class="form-row">
+            <input type="file" id="import-file" accept="application/json,.json">
+            <label class="check"><input type="checkbox" id="import-merge" checked> 与现有覆盖层合并</label>
+          </div>
+          <textarea id="import-json" class="code-editor" spellcheck="false" placeholder="也可以直接粘贴导出的 JSON"></textarea>
+          <div class="quick-actions">
+            <button class="button primary" type="button" id="import-bundle">导入配置</button>
+          </div>
+        </div>
+        <div class="panel danger-panel">
+          <div class="panel-head"><h2>恢复全部默认</h2></div>
+          <p class="hint">删除 <code>data/customization.json</code>，所有自定义项回到内置配置。新闻数据库不受影响。</p>
+          <button class="button danger" type="button" id="reset-all">恢复全部默认</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="drawer-backdrop hidden" id="feed-drawer-backdrop"></div>
+  <aside class="drawer hidden" id="feed-drawer" aria-label="编辑信源">
+    <div class="drawer-head">
+      <h2 id="feed-drawer-title">编辑信源</h2>
+      <button class="icon-button" type="button" id="close-feed-drawer" aria-label="关闭">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="form-grid" id="feed-form"></div>
+      <div class="quick-actions">
+        <button class="button primary" type="button" id="apply-feed">应用到列表</button>
+        <button class="button" type="button" id="test-feed">测试抓取</button>
+        <button class="button" type="button" id="cancel-feed">取消</button>
+      </div>
+      <pre class="test-result hidden" id="feed-test-result"></pre>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="/customize.js" defer></script>
+</body>
+</html>

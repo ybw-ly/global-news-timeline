@@ -22,8 +22,14 @@ _WEAK = {"why ", "how ", "what ", "comment", "view"}
 
 
 class ContentTypeClassifier:
-    def __init__(self, path: Path | None = None) -> None:
-        data = json.loads((path or ROOT / "config" / "content_types.json").read_text(encoding="utf-8"))
+    def __init__(self, path: Path | None = None, data: dict | None = None) -> None:
+        if data is None:
+            if path is not None:
+                data = json.loads(path.read_text(encoding="utf-8"))
+            else:
+                import customization
+
+                data = customization.read_json("content_types")
         self.rules: dict[str, dict[str, list[tuple[str, float, re.Pattern | None]]]] = {}
         for category in ("opinion", "analysis", "hard"):
             self.rules[category] = {}
@@ -157,3 +163,8 @@ def classifier() -> ContentTypeClassifier:
     if _cache is None:
         _cache = ContentTypeClassifier()
     return _cache
+
+
+def reset() -> None:
+    global _cache
+    _cache = None

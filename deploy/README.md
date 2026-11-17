@@ -41,6 +41,8 @@ docker compose up -d
 | `HOST` | `127.0.0.1` | 监听地址；局域网访问可设为 `0.0.0.0` |
 | `NEWS_NO_FETCH` | 空 | 设为 `1` 时只启动界面，不抓取新闻 |
 | `NEWS_DB` | `data/news.db` | SQLite 数据库路径 |
+| `CUSTOMIZATION_PATH` | `data/customization.json` | 图形化自定义的覆盖层路径 |
+| `ADMIN_TOKEN` | 空 | 设置后自定义中心写操作需要令牌；局域网暴露时建议设置 |
 | `TRANSLATE_LOCAL_FIRST` | `0` | 设为 `1` 时优先使用本地 Ollama 翻译 |
 
 ## 常见问题

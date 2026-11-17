@@ -7,6 +7,7 @@ background RSS ingestion scheduler on launch.
 from __future__ import annotations
 
 import csv
+import hmac
 import io
 import json
 import logging
@@ -20,6 +21,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+import customization
 from elections import (
     default_election,
     fetch_election_results,
@@ -60,12 +62,13 @@ from translate import translate
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
-VERSION = "1.9.0"
+VERSION = "1.10.0"
 LOG = logging.getLogger("server")
 
 HOST = os.environ.get("HOST", "127.0.0.1")
 PORT = int(os.environ.get("PORT", "8765"))
 NO_FETCH = os.environ.get("NEWS_NO_FETCH", "").lower() in ("1", "true", "yes")
+ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "").strip()
 
 DEFAULT_CSP = (
     "default-src 'self'; img-src 'self' https: data:; "
@@ -119,7 +122,7 @@ def status_payload(conn) -> dict:
             "errors": health.get("errors") or 0,
         },
         "translation": {
-            "free_only": translate_module.TRANSLATE_FREE_ONLY,
+            "free_only": translate_module.settings()["free_only"],
             "providers": [name for name, _ in translate_module._chain()],
         },
     }
@@ -427,6 +430,13 @@ class Handler(BaseHTTPRequestHandler):
     def _error(self, code: int, message: str) -> None:
         self._json({"ok": False, "error": message}, code=code)
 
+    def _admin_allowed(self) -> bool:
+        if ADMIN_TOKEN:
+            provided = self.headers.get("X-Admin-Token", "")
+            return hmac.compare_digest(provided, ADMIN_TOKEN)
+        client = (self.client_address[0] or "").lower()
+        return client in ("127.0.0.1", "::1", "::ffff:127.0.0.1")
+
     def _static(self, path: str) -> None:
         if path in ("", "/"):
             path = "/index.html"
@@ -485,6 +495,42 @@ class Handler(BaseHTTPRequestHandler):
                     self._json(fetch_election_results(election_id, scope))
                     return
             self._error(404, "Not found")
+            return
+        if path == "/api/customize/state":
+            payload = customization.state()
+            payload["version"] = VERSION
+            payload["admin"] = {
+                "required": bool(ADMIN_TOKEN),
+                "authorized": self._admin_allowed(),
+            }
+            self._json({"ok": True, **payload})
+            return
+        if path == "/api/customize/ui":
+            self._json({"ok": True, "ui": customization.get_ui()})
+            return
+        if path == "/api/customize/export":
+            if ADMIN_TOKEN and not self._admin_allowed():
+                self._error(403, "需要管理员令牌（ADMIN_TOKEN）")
+                return
+            bundle = customization.export_bundle(include_secrets=False)
+            body = json.dumps(bundle, ensure_ascii=False, indent=2).encode("utf-8")
+            self._send(
+                200, body, "application/json; charset=utf-8",
+                {
+                    "Content-Disposition": 'attachment; filename="global-news-timeline-customization.json"',
+                    "Cache-Control": "no-store",
+                },
+            )
+            return
+        if path.startswith("/api/customize/config/"):
+            if ADMIN_TOKEN and not self._admin_allowed():
+                self._error(403, "需要管理员令牌（ADMIN_TOKEN）")
+                return
+            name = path.rsplit("/", 1)[-1]
+            try:
+                self._json({"ok": True, **customization.describe(name)})
+            except customization.ConfigError as exc:
+                self._error(404, str(exc))
             return
         # Backwards compatibility for the original Brazil-only endpoint.
         if path == "/api/brazil/results":
@@ -582,7 +628,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:
         path = urlsplit(self.path).path
         length = int(self.headers.get("Content-Length") or 0)
-        if length > 64_000:
+        if length > 8_000_000:
             self._error(413, "Request body too large")
             return
         raw = self.rfile.read(length) if length else b"{}"
@@ -590,6 +636,78 @@ class Handler(BaseHTTPRequestHandler):
             payload = json.loads(raw.decode("utf-8") or "{}")
         except Exception:
             payload = {}
+
+        if path.startswith("/api/customize/"):
+            if not self._admin_allowed():
+                self._error(403, "需要管理员令牌（ADMIN_TOKEN）")
+                return
+            try:
+                if path == "/api/customize/ui":
+                    ui = customization.save_ui(payload.get("ui", payload))
+                    self._json({"ok": True, "ui": ui})
+                    return
+                if path == "/api/customize/runtime":
+                    runtime = customization.save_runtime(payload)
+                    self._json({"ok": True, "runtime": runtime})
+                    return
+                if path == "/api/customize/reload":
+                    customization.reset_runtime_caches()
+                    self._json({"ok": True})
+                    return
+                if path == "/api/customize/reset-all":
+                    customization.reset_all()
+                    self._json({"ok": True})
+                    return
+                if path == "/api/customize/import":
+                    bundle = payload.get("bundle", payload)
+                    result = customization.import_bundle(
+                        bundle, bool(payload.get("merge", True))
+                    )
+                    self._json({"ok": True, **result})
+                    return
+                if path.startswith("/api/customize/config/"):
+                    name = path.rsplit("/", 1)[-1]
+                    result = customization.save_config(name, payload.get("data"))
+                    self._json({"ok": True, **result})
+                    return
+                if path.startswith("/api/customize/reset/"):
+                    name = path.rsplit("/", 1)[-1]
+                    result = customization.reset_config(name)
+                    self._json({"ok": True, **result})
+                    return
+                if path == "/api/customize/feeds/test":
+                    feed = payload.get("feed")
+                    if not isinstance(feed, dict) or not feed.get("url"):
+                        self._error(400, "feed.url is required")
+                        return
+                    import ingest
+
+                    result = ingest._fetch(
+                        feed, None, 15, "GlobalNewsTimeline/1.0", True
+                    )
+                    items = result.get("items") or []
+                    self._json(
+                        {
+                            "ok": result.get("status") in ("ok", "empty", "not_modified"),
+                            "status": result.get("status"),
+                            "seconds": result.get("seconds"),
+                            "error": result.get("error"),
+                            "count": len(items),
+                            "items": [
+                                {"title": item.get("title"), "url": item.get("url")}
+                                for item in items[:8]
+                            ],
+                        }
+                    )
+                    return
+            except customization.ConfigError as exc:
+                self._error(400, str(exc))
+                return
+            except Exception as exc:
+                self._error(500, f"配置操作失败：{str(exc)[:180]}")
+                return
+            self._error(404, "Unknown customization endpoint")
+            return
 
         if path == "/api/refresh":
             force = bool(payload.get("force", True))

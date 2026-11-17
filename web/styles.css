@@ -1087,3 +1087,10 @@ h1 {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
 }
+
+/* Interface preference: compact timeline cards */
+body.compact .article { grid-template-columns: 44px 16px minmax(0, 1fr); }
+body.compact .card { padding: 9px 11px 8px; }
+body.compact .card h3 { font-size: 14px; line-height: 1.45; }
+body.compact .card-foot { margin-top: 6px; padding-top: 5px; }
+body.compact .card-meta { font-size: 7.5px; }

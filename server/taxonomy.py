@@ -1,15 +1,14 @@
 """Shared controlled vocabularies: regions, languages, categories, countries."""
 from __future__ import annotations
 
-import json
 import re
 from pathlib import Path
 from urllib.parse import urlparse
 
+import customization
+
 ROOT = Path(__file__).resolve().parent.parent
-COUNTRIES: dict[str, dict] = json.loads(
-    (ROOT / "config" / "countries.json").read_text(encoding="utf-8")
-)
+COUNTRIES: dict[str, dict] = customization.read_json("countries")
 
 REGIONS: dict[str, str] = {
     "north_america": "北美",

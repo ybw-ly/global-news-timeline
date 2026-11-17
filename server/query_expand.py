@@ -22,6 +22,7 @@ import threading
 import time
 from pathlib import Path
 
+import customization
 from db import connect
 from taxonomy import LANGUAGES, detect_language
 from translate import PROVIDER_LABELS, cached_translation, translate
@@ -133,7 +134,7 @@ def _load_cjk_vocab() -> tuple[str, ...]:
             terms.add(term.casefold())
 
     try:
-        gazetteer = json.loads((ROOT / "config" / "gazetteer.json").read_text(encoding="utf-8"))
+        gazetteer = customization.read_json("gazetteer")
         for country in gazetteer.get("countries", {}).values():
             for key in ("label_zh", "aliases"):
                 value = country.get(key)
@@ -148,7 +149,7 @@ def _load_cjk_vocab() -> tuple[str, ...]:
                     add(entry["label_zh"])
                 for alias in entry.get("aliases", []):
                     add(alias)
-        lexicon = json.loads((ROOT / "config" / "lexicon.json").read_text(encoding="utf-8"))
+        lexicon = customization.read_json("lexicon")
         for languages in lexicon.values():
             for language, words in languages.items():
                 if language in ("zh", "zh-Hant", "ja", "th"):
@@ -232,7 +233,7 @@ def _load_alias_index() -> dict[str, dict]:
         index.setdefault(key, entry)
 
     try:
-        gazetteer = json.loads((ROOT / "config" / "gazetteer.json").read_text(encoding="utf-8"))
+        gazetteer = customization.read_json("gazetteer")
         for code, item in (gazetteer.get("countries") or {}).items():
             aliases = [item.get("label_zh")] + list(item.get("aliases") or [])
             entry = {
@@ -588,3 +589,9 @@ def expand_search(filters: dict) -> dict | None:
     filters["_variants"] = variants
     filters["_search_meta"] = meta
     return meta
+
+
+def reset() -> None:
+    global _CJK_VOCAB, _ALIAS_INDEX
+    _CJK_VOCAB = None
+    _ALIAS_INDEX = None

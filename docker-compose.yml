@@ -15,5 +15,8 @@ services:
       - TZ=Asia/Shanghai
       - OLLAMA_URL=http://host.docker.internal:11434
       - OLLAMA_MODEL=qwen3-vl:8b
+      - CUSTOMIZATION_PATH=/app/data/customization.json
+      # 通过局域网/反向代理暴露时启用，并在自定义中心填写同一令牌：
+      # - ADMIN_TOKEN=change-me
     extra_hosts:
       - "host.docker.internal:host-gateway"

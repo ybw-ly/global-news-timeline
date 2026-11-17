@@ -8,36 +8,19 @@ touching the front-end.
 """
 from __future__ import annotations
 
-import json
-import threading
 from pathlib import Path
 
 import brazil
+import customization
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = ROOT / "config" / "elections.json"
 
-_LOCK = threading.Lock()
-_CACHE: dict = {"mtime": None, "data": None}
-
 
 def _load() -> dict:
-    try:
-        mtime = CONFIG_PATH.stat().st_mtime
-    except OSError:
-        return {"version": 1, "default": "auto", "elections": []}
-
-    with _LOCK:
-        if _CACHE["mtime"] == mtime and _CACHE["data"] is not None:
-            return _CACHE["data"]
-
-    data = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    data = customization.read_json("elections")
     if not isinstance(data, dict) or not isinstance(data.get("elections"), list):
         raise ValueError("config/elections.json must contain an elections list")
-
-    with _LOCK:
-        _CACHE["mtime"] = mtime
-        _CACHE["data"] = data
     return data
 
 
@@ -76,6 +59,15 @@ def default_election() -> dict | None:
     elections = [item for item in data["elections"] if item.get("id")]
     if not elections:
         return None
+
+    try:
+        ui_preferred = customization.get_ui().get("default_election", "auto")
+    except Exception:
+        ui_preferred = "auto"
+    if ui_preferred and ui_preferred != "auto":
+        for item in elections:
+            if item.get("id") == ui_preferred:
+                return _summary(item)
 
     preferred = data.get("default", "auto")
     if preferred and preferred != "auto":

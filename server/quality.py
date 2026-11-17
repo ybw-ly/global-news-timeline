@@ -28,8 +28,14 @@ FIELDS = ("title", "summary", "url")
 
 
 class QualityFilter:
-    def __init__(self, path: Path | None = None) -> None:
-        data = json.loads((path or CONFIG_PATH).read_text(encoding="utf-8"))
+    def __init__(self, path: Path | None = None, data: dict | None = None) -> None:
+        if data is None:
+            if path is not None:
+                data = json.loads(path.read_text(encoding="utf-8"))
+            else:
+                import customization
+
+                data = customization.read_json("quality")
         self.enabled = bool(data.get("enabled", True))
         self.rules: list[dict[str, Any]] = []
         for index, rule in enumerate(data.get("rules", [])):
@@ -99,3 +105,8 @@ def quality_filter() -> QualityFilter:
     if _cache is None:
         _cache = QualityFilter()
     return _cache
+
+
+def reset() -> None:
+    global _cache
+    _cache = None

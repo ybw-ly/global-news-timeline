@@ -251,6 +251,21 @@ GitHub Releases 提供打包好的 zip（`global-news-timeline-v*.zip`）。解�
 
 脚本会检查 Python 3.10+、启动服务并打开浏览器；无需 pip 安装。详见 `deploy/README.md`。
 
+### 图形化自定义中心
+
+打开 <http://127.0.0.1:8765/customize.html>（首页顶栏“自定义”）。
+
+- **信源管理**：增删/启停信源，修改 URL、刷新频率、国家/语言/板块，支持单源抓取测试。
+- **选举管理**：新增/编辑任意选举；候选人、时间线、民调、观察清单用 JSON 编辑，保存后立即出现在大选 OSINT 下拉框。
+- **运行设置**：翻译提供链、Ollama 地址/模型、LibreTranslate、仅免费模式。
+- **界面偏好**：默认时间窗口、内容类型、地区/语言、强调色、紧凑模式、默认选举。
+- **质量过滤 / 高级配置**：直接编辑 `quality`、`content_types`、`lexicon`、`countries`、`gazetteer`。
+- **备份与恢复**：导出自定义 JSON、导入到另一台机器、恢复全部默认。
+
+所有修改写入 `data/customization.json`，不会覆盖 `config/` 内置文件；Docker 下 `./data` 已挂载，重启容器不丢失。`countries.json` 修改后需要重启，其余配置即时生效。
+
+如果服务通过局域网或反向代理暴露，请设置 `ADMIN_TOKEN`；自定义中心的写操作会要求 `X-Admin-Token`。本机回环访问默认无需令牌。
+
 ### 端口与监听地址
 
 | 环境变量 | 默认值 | 说明 |
@@ -259,6 +274,8 @@ GitHub Releases 提供打包好的 zip（`global-news-timeline-v*.zip`）。解�
 | `PORT` | `8765` | 端口被占用时自动尝试 8766–8784 |
 | `NEWS_DB` | `data/news.db` | SQLite 路径 |
 | `NEWS_NO_FETCH` | 空 | 设为 `1` 可关闭后台抓取（测试/只读演示） |
+| `ADMIN_TOKEN` | 空 | 设置后自定义中心写操作需 `X-Admin-Token`；不设置仅允许本机回环写入 |
+| `CUSTOMIZATION_PATH` | `data/customization.json` | 图形化自定义的覆盖层路径 |
 | `OLLAMA_URL` | `http://127.0.0.1:11434` | 本地翻译服务 |
 | `OLLAMA_MODEL` | `qwen3-vl:8b` | 翻译使用的 Ollama 模型 |
 | `TRANSLATE_PROVIDER` | `auto` | `auto` / `ollama` / `mymemory` / `libre` |
@@ -562,6 +579,15 @@ MyMemory 无需 key，但会把公开的标题/摘要或搜索词发到第三方
 | GET | `/api/elections/{id}` | 单个选举的完整配置（时间线、民调、观察点、来源） |
 | GET | `/api/elections/{id}/results?scope=br` | 已接入适配器的实时计票快照；目前为巴西 TSE |
 | GET | `/api/brazil/results?scope=br` | 兼容旧接口，等价于 `/api/elections/brazil-2026/results` |
+| GET | `/api/customize/state` | 自定义中心状态、覆盖项、界面与运行设置 |
+| GET | `/api/customize/config/{name}` | 读取有效配置（feeds / elections / quality / …） |
+| POST | `/api/customize/config/{name}` | 保存某项覆盖配置 |
+| POST | `/api/customize/reset/{name}` | 恢复某项内置配置 |
+| POST | `/api/customize/ui` | 保存界面偏好 |
+| POST | `/api/customize/runtime` | 保存翻译与运行设置 |
+| POST | `/api/customize/feeds/test` | 测试单个信源抓取 |
+| GET | `/api/customize/export` | 导出 customization bundle |
+| POST | `/api/customize/import` | 导入 customization bundle |
 | POST | `/api/refresh` | 异步强制同步；`{"force": true}` |
 | POST | `/api/translate` | 翻译；`{"text": "...", "target": "zh", "source": "en"}`；返回实际 provider |
 | GET | `/api/health` | 健康检查 |

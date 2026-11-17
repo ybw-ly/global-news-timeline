@@ -973,5 +973,53 @@ class ElectionsRegistryTests(unittest.TestCase):
         self.assertIn("official_url", data)
 
 
+class CustomizationTests(unittest.TestCase):
+    def setUp(self):
+        import customization
+
+        self.customization = customization
+        self.tmp = tempfile.TemporaryDirectory()
+        self.old_path = customization.PATH
+        customization.PATH = Path(self.tmp.name) / "customization.json"
+        customization._CACHE["overlay_mtime"] = None
+        customization._CACHE["overlay"] = {}
+
+    def tearDown(self):
+        self.customization.PATH = self.old_path
+        self.customization._CACHE["overlay_mtime"] = None
+        self.customization._CACHE["overlay"] = {}
+        self.tmp.cleanup()
+
+    def test_save_and_reset_override(self):
+        feeds = self.customization.read_json("feeds")
+        feeds["feeds"][0]["name"] = "Edited Feed"
+        self.customization.save_config("feeds", feeds)
+        self.assertTrue(self.customization.is_overridden("feeds"))
+        self.assertEqual(
+            self.customization.read_json("feeds")["feeds"][0]["name"],
+            "Edited Feed",
+        )
+        self.customization.reset_config("feeds")
+        self.assertFalse(self.customization.is_overridden("feeds"))
+
+    def test_duplicate_feed_is_rejected(self):
+        feeds = self.customization.read_json("feeds")
+        feeds["feeds"].append(dict(feeds["feeds"][0]))
+        with self.assertRaises(self.customization.ConfigError):
+            self.customization.save_config("feeds", feeds)
+
+    def test_ui_roundtrip(self):
+        ui = self.customization.save_ui(
+            {"default_hours": 72, "compact": True, "accent": "#f59e0b"}
+        )
+        self.assertEqual(ui["default_hours"], 72)
+        self.assertTrue(ui["compact"])
+        self.assertEqual(self.customization.get_ui()["accent"], "#f59e0b")
+
+    def test_invalid_accent_is_rejected(self):
+        with self.assertRaises(self.customization.ConfigError):
+            self.customization.save_ui({"accent": "red"})
+
+
 if __name__ == "__main__":
     unittest.main()

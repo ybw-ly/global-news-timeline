@@ -14,6 +14,8 @@ import unicodedata
 from pathlib import Path
 from typing import Any
 
+import customization
+
 ROOT = Path(__file__).resolve().parent.parent
 GAZETTEER_PATH = ROOT / "config" / "gazetteer.json"
 
@@ -96,8 +98,12 @@ def _first_pos(pattern: re.Pattern | None, subs: list[str], text: str) -> int:
 
 
 class EventGraph:
-    def __init__(self, path: Path | None = None) -> None:
-        data = json.loads((path or GAZETTEER_PATH).read_text(encoding="utf-8"))
+    def __init__(self, path: Path | None = None, data: dict | None = None) -> None:
+        if data is None:
+            if path is not None:
+                data = json.loads(path.read_text(encoding="utf-8"))
+            else:
+                data = customization.read_json("gazetteer")
         self.countries: dict[str, dict] = data["countries"]
         self.country_matchers: list[_Matcher] = []
         for iso, info in self.countries.items():
@@ -303,3 +309,8 @@ def graph() -> EventGraph:
     if _cache is None:
         _cache = EventGraph()
     return _cache
+
+
+def reset() -> None:
+    global _cache
+    _cache = None
