@@ -271,8 +271,15 @@
     const feed = readFeedForm();
     if (!feed.url) { toast("先填写 URL", true); return; }
     const result = $("#feed-test-result");
+    const button = $("#test-feed");
+    const label = button ? button.textContent : "";
+    if (button) {
+      button.disabled = true;
+      button.textContent = "抓取中…";
+    }
     result.hidden = false;
     result.textContent = "正在抓取…";
+    toast("正在测试信源…");
     try {
       const data = await api("/api/customize/feeds/test", {
         method: "POST",
@@ -288,8 +295,15 @@
         lines.push("", "示例：", ...data.items.map((item) => `- ${item.title || "(无标题)"}\n  ${item.url || ""}`));
       }
       result.textContent = lines.join("\n");
+      toast(data.error ? `测试失败：${data.error}` : `测试完成：${data.count ?? 0} 条`, Boolean(data.error));
     } catch (error) {
       result.textContent = `测试失败：${error.message}`;
+      toast(`测试失败：${error.message}`, true);
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.textContent = label || "测试抓取";
+      }
     }
   }
 
@@ -440,43 +454,174 @@
   }
 
   // ── runtime ──────────────────────────────────────────────────────────────
+  function providerFieldHtml(spec, field, data) {
+    const id = `provider-${spec.id}-${field.key}`;
+    const value = field.secret ? "" : (data[field.key] ?? field.default ?? "");
+    const isSet = field.secret && data[`${field.key}_set`];
+    const placeholder = field.secret && isSet
+      ? "已保存，留空保持不变"
+      : (field.placeholder || "");
+    const savedBadge = isSet ? ' <span class="key-saved">已保存</span>' : "";
+    const help = field.secret
+      ? (isSet ? "已保存密钥；留空保持不变" : (field.help || "未保存密钥"))
+      : (field.help || "");
+    const cls = field.full ? "field full" : "field";
+    let control;
+    if (field.type === "select") {
+      const options = field.options || [];
+      control = `<select id="${esc(id)}" data-provider-field="${esc(field.key)}">${options.map(([optionValue, label]) =>
+        `<option value="${esc(optionValue)}"${String(optionValue) === String(value) ? " selected" : ""}>${esc(label)}</option>`
+      ).join("")}</select>`;
+    } else if (field.type === "textarea") {
+      control = `<textarea id="${esc(id)}" data-provider-field="${esc(field.key)}" placeholder="${esc(placeholder)}">${esc(value)}</textarea>`;
+    } else {
+      const isSecret = field.type === "password";
+      const inputType = isSecret ? "text" : (field.type || "text");
+      const className = isSecret ? ' class="secret-input"' : "";
+      control = `<input id="${esc(id)}"${className} data-provider-field="${esc(field.key)}" type="${esc(inputType)}" value="${esc(value)}" placeholder="${esc(placeholder)}" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other">`;
+    }
+    return `<div class="${cls}"><label for="${esc(id)}">${esc(field.label)}${field.required ? ' <span class="req">*</span>' : ""}${savedBadge}</label>${control}${help ? `<span class="help">${esc(help)}</span>` : ""}</div>`;
+  }
+
+  function providerCard(spec, data, open) {
+    const fields = (spec.fields || []).map((field) => providerFieldHtml(spec, field, data)).join("");
+    const hasSecret = (spec.fields || []).some((field) => field.secret);
+    const presets = spec.presets || [];
+    const presetHtml = presets.length
+      ? `<div class="field full"><label for="provider-${esc(spec.id)}-preset">常见服务预设</label><select id="provider-${esc(spec.id)}-preset" data-provider-preset="${esc(spec.id)}"><option value="">自定义</option>${presets.map((preset) =>
+          `<option value="${esc(preset.label)}">${esc(preset.label)}</option>`
+        ).join("")}</select><span class="help">选择后自动填 Base URL 和模型，Key 仍需自己填。</span></div>`
+      : "";
+    return `<details class="provider-card" data-provider="${esc(spec.id)}" ${open ? "open" : ""}>
+      <summary><strong>${esc(spec.label)}</strong><span class="provider-state ${data.ready ? "ok" : ""}">${data.ready ? "已配置" : "未配置"}</span></summary>
+      ${spec.help ? `<p class="help">${esc(spec.help)}</p>` : ""}
+      <div class="form-grid">${presetHtml}${fields}</div>
+      ${hasSecret ? `<label class="check"><input type="checkbox" data-clear-provider="${esc(spec.id)}"> 清除该接口已保存的密钥</label>` : ""}
+    </details>`;
+  }
+
+  function providerSpec(providerId) {
+    return (state.runtime?.translation?.provider_specs || []).find((spec) => spec.id === providerId);
+  }
+
+  function setProviderField(providerId, key, value) {
+    const input = $(`[data-provider="${providerId}"] [data-provider-field="${key}"]`);
+    if (input) input.value = value;
+  }
+
+  function selectProvider(providerId, open = true) {
+    const select = $("[data-field='provider']");
+    if (select) select.value = providerId;
+    const card = $(`details[data-provider="${providerId}"]`);
+    if (card && open) card.open = true;
+  }
+
+  function applyKeyHint(hint, key) {
+    const spec = providerSpec(hint.provider);
+    if (!spec) return;
+    selectProvider(hint.provider, true);
+    for (const [field, value] of Object.entries(hint.fields || {})) {
+      setProviderField(hint.provider, field, value);
+    }
+    if (hint.fields?.preset) {
+      const presetSelect = $(`[data-provider="${hint.provider}"] [data-provider-preset]`);
+      if (presetSelect) presetSelect.value = hint.fields.preset;
+    }
+    const targetField = hint.target_field || "key";
+    const target = $(`[data-provider="${hint.provider}"] [data-provider-field="${targetField}"]`);
+    if (target) target.value = key;
+  }
+
+  async function detectKey() {
+    const input = $("#quick-key");
+    const result = $("#quick-key-result");
+    if (!input || !result) return;
+    const key = input.value.trim();
+    if (!key) {
+      result.textContent = "先粘贴 API Key";
+      return;
+    }
+    result.textContent = "识别中…";
+    try {
+      const data = await api("/api/customize/detect-key", {
+        method: "POST",
+        body: JSON.stringify({ key }),
+      });
+      const hints = data.hints || [];
+      if (!hints.length) {
+        result.textContent = "没有识别出供应商；请手动选择，或选择“OpenAI 兼容接口”后用预设。";
+        return;
+      }
+      const best = hints[0];
+      if (best.confidence === "low") {
+        const candidates = hints.map((hint) => providerSpec(hint.provider)?.label || hint.provider).join(" / ");
+        result.textContent = `可能是 ${candidates}；不能唯一确定，请手动确认。${best.note || ""}`;
+        return;
+      }
+      applyKeyHint(best, key);
+      const label = providerSpec(best.provider)?.label || best.provider;
+      result.textContent = `已识别为 ${label}${best.confidence === "high" ? "" : "（按格式猜测）"}，已填入对应字段（输入框保留 Key，方便核对）${best.provider === "openai" ? "；请用预设确认 OpenAI/DeepSeek 等服务" : ""}。${best.note || ""}`;
+    } catch (error) {
+      result.textContent = `识别失败：${error.message}`;
+    }
+  }
+
   function renderRuntime() {
     const runtime = state.runtime || {};
     const translation = runtime.translation || {};
+    const specs = translation.provider_specs || [];
+    const providers = translation.providers || {};
+    const selected = translation.provider || "auto";
+    const options = [
+      ["auto", "自动（Libre → MyMemory → Ollama）"],
+      ...specs.map((spec) => [spec.id, spec.label]),
+    ];
     $("#runtime-form").innerHTML = [
-      field("提供链", "provider", translation.provider || "auto", {
-        options: [["auto", "自动（Libre → MyMemory → Ollama）"], ["mymemory", "仅 MyMemory 免费接口"], ["ollama", "仅本地 Ollama"], ["libre", "仅 LibreTranslate"]],
+      field("翻译接口", "provider", selected, {
+        options,
+        help: "选中的接口同时用于手动翻译和浏览自动翻译；付费接口按量计费。",
       }),
-      field("Ollama 地址", "ollama_url", translation.ollama_url || ""),
-      field("Ollama 模型", "ollama_model", translation.ollama_model || ""),
-      field("LibreTranslate 地址", "libre_url", translation.libre_url || "", { full: true }),
-      field("LibreTranslate API Key", "libre_key", "", { type: "password", full: true, help: translation.libre_key_set ? "已保存密钥；留空保持不变" : "未保存密钥" }),
-      `<div class="field"><label class="check"><input type="checkbox" data-field="local_first" ${translation.local_first ? "checked" : ""}> 本地优先</label><span class="help">先 Ollama，再 Libre，最后 MyMemory</span></div>`,
-      `<div class="field"><label class="check"><input type="checkbox" data-field="fallback" ${translation.fallback ? "checked" : ""}> 允许回退到 MyMemory</label></div>`,
-      `<div class="field"><label class="check"><input type="checkbox" data-field="free_only" ${translation.free_only ? "checked" : ""}> 仅免费（阻止外部 LibreTranslate）</label></div>`,
-      `<div class="field"><label class="check"><input type="checkbox" data-field="clear_libre_key"> 清除已保存的 LibreTranslate 密钥</label></div>`,
+      `<div class="field full"><span class="help">“自动”只是免费链：LibreTranslate → MyMemory → Ollama；选其他接口就固定用那个接口，失败会直接提示。</span></div>`,
+      `<div class="provider-list">${specs.map((spec) => providerCard(spec, providers[spec.id] || {}, selected === spec.id)).join("")}</div>`,
     ].join("");
-    $$("#runtime-form [data-field]").forEach((element) => {
-      if (element.dataset.field === "provider") {
-        element.value = translation.provider || "auto";
-      }
-    });
+
+    const providerSelect = $("[data-field='provider']");
+    if (providerSelect) {
+      providerSelect.addEventListener("change", () => {
+        const spec = specs.find((item) => item.id === providerSelect.value);
+        if (!spec) return;
+        const card = $(`details[data-provider="${spec.id}"]`);
+        if (card) card.open = true;
+      });
+    }
   }
 
   async function saveRuntime() {
     try {
+      const specs = state.runtime?.translation?.provider_specs || [];
       const translation = {
         provider: readField("provider"),
-        local_first: readField("local_first"),
-        fallback: readField("fallback"),
-        free_only: readField("free_only"),
-        ollama_url: readField("ollama_url").trim(),
-        ollama_model: readField("ollama_model").trim(),
-        libre_url: readField("libre_url").trim(),
+        providers: {},
+        clear_keys: [],
       };
-      const key = readField("libre_key").trim();
-      if (readField("clear_libre_key")) translation.libre_key = "";
-      else if (key) translation.libre_key = key;
+      for (const spec of specs) {
+        const card = $(`[data-provider="${spec.id}"]`);
+        if (!card) continue;
+        const cfg = {};
+        for (const field of spec.fields || []) {
+          const element = card.querySelector(`[data-provider-field="${field.key}"]`);
+          if (!element) continue;
+          const value = element.value.trim();
+          if (field.secret) {
+            if (value) cfg[field.key] = value;
+          } else {
+            cfg[field.key] = value;
+          }
+        }
+        translation.providers[spec.id] = cfg;
+        const clear = card.querySelector(`[data-clear-provider="${spec.id}"]`);
+        if (clear && clear.checked) translation.clear_keys.push(spec.id);
+      }
       const data = await api("/api/customize/runtime", {
         method: "POST",
         body: JSON.stringify({ translation }),
@@ -486,6 +631,44 @@
       toast("运行设置已保存并立即生效");
     } catch (error) {
       toast(error.message, true);
+    }
+  }
+
+  async function testRuntime() {
+    const result = $("#runtime-test-result");
+    const button = $("#test-runtime");
+    const label = button ? button.textContent : "";
+    if (button) {
+      button.disabled = true;
+      button.textContent = "测试中…";
+    }
+    if (result) result.textContent = "测试中…（DeepSeek 等接口可能需要几秒）";
+    toast("正在测试当前翻译接口…");
+    try {
+      const text = `Hello, this is a translation test ${Date.now()}`;
+      const data = await api("/api/translate", {
+        method: "POST",
+        body: JSON.stringify({ text, target: "zh", source: "en", fast: false }),
+      });
+      if (data.ok) {
+        const message = `成功：${data.provider_label || data.provider}${data.model ? ` / ${data.model}` : ""} → ${data.translation}`;
+        if (result) result.textContent = message;
+        toast(`测试成功：${data.provider_label || data.provider}`);
+      } else {
+        const details = (data.providers || []).join("；");
+        const message = `失败：${data.error || "未知错误"}${details ? `（${details}）` : ""}`;
+        if (result) result.textContent = message;
+        toast(message, true);
+      }
+    } catch (error) {
+      const message = `失败：${error.message}`;
+      if (result) result.textContent = message;
+      toast(message, true);
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.textContent = label || "测试当前接口";
+      }
     }
   }
 
@@ -751,6 +934,24 @@
     });
 
     $("#save-runtime").addEventListener("click", saveRuntime);
+    $("#test-runtime").addEventListener("click", testRuntime);
+    $("#detect-key").addEventListener("click", detectKey);
+    $("#quick-key").addEventListener("paste", () => setTimeout(detectKey, 50));
+    $("#quick-key").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        detectKey();
+      }
+    });
+    $("#runtime-form").addEventListener("change", (event) => {
+      const preset = event.target.closest("[data-provider-preset]");
+      if (!preset) return;
+      const spec = providerSpec(preset.dataset.providerPreset);
+      const item = (spec?.presets || []).find((candidate) => candidate.label === preset.value);
+      if (!item) return;
+      setProviderField(spec.id, "base_url", item.base_url);
+      setProviderField(spec.id, "model", item.model);
+    });
     $("#save-ui").addEventListener("click", saveUI);
     $("#save-quality").addEventListener("click", saveQuality);
     $("#reset-quality").addEventListener("click", resetQuality);

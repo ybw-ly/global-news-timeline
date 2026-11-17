@@ -7,7 +7,7 @@
   <meta name="description" content="经纬 · Global News Timeline 图形化自定义中心：信源、选举、运行参数、质量过滤与高级配置。">
   <title>自定义中心 · 经纬</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/customize.css">
+  <link rel="stylesheet" href="/customize.css?v=1.16.0">
 </head>
 <body>
   <header class="topbar">
@@ -147,20 +147,34 @@
           <div>
             <span class="eyebrow">RUNTIME</span>
             <h1>运行设置</h1>
-            <p>翻译提供链与本地模型地址。保存后立即生效，不需要改环境变量或重启。</p>
+            <p>通用翻译接口、API Key 与本地模型地址。保存后立即生效，不需要改环境变量或重启。</p>
           </div>
-          <div class="head-actions"><button class="button primary" type="button" id="save-runtime">保存运行设置</button></div>
+          <div class="head-actions">
+            <button class="button ghost" type="button" id="test-runtime">测试当前接口</button>
+            <button class="button primary" type="button" id="save-runtime">保存运行设置</button>
+          </div>
+        </div>
+        <div class="panel quick-key-panel">
+          <div class="panel-head"><h2>快速识别 API Key</h2><span class="hint">按 Key 格式在本机服务内匹配，不发给第三方翻译商</span></div>
+          <div class="quick-key-row">
+            <input id="quick-key" type="text" class="secret-input" placeholder="粘贴 API Key，自动识别供应商并填入地址" autocomplete="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other">
+            <button class="button ghost" type="button" id="detect-key">识别并填入</button>
+          </div>
+          <p class="help">输入框使用掩码显示，不会触发浏览器密码保存；Key 只保留在本页和本机配置中。</p>
+          <div id="quick-key-result" class="runtime-test" aria-live="polite"></div>
         </div>
         <div class="panel">
-          <div class="panel-head"><h2>翻译</h2><span class="hint">默认优先 MyMemory 免费接口；本地 Ollama 作为回退。</span></div>
+          <div class="panel-head"><h2>翻译接口</h2><span class="hint">选中哪个接口，手动翻译和浏览自动翻译就用哪个；付费接口按量计费。</span></div>
+          <div id="runtime-test-result" class="runtime-test" aria-live="polite"></div>
           <div class="form-grid" id="runtime-form"></div>
         </div>
         <div class="panel">
           <div class="panel-head"><h2>说明</h2></div>
           <ul class="notes">
-            <li>“仅免费”开启时，外部 LibreTranslate 会被阻止；本地地址（localhost / 私有 IP）不受影响。</li>
-            <li>Ollama 地址与模型可在本页修改；修改后下一次翻译请求就会使用新值。</li>
-            <li>LibreTranslate API Key 只保存在本机覆盖层，不会出现在导出文件里。</li>
+            <li>API Key 只保存在本机 <code>data/customization.json</code>；读取接口只返回“是否已保存”，默认导出会移除所有密钥。</li>
+            <li>“自动”只是免费链：LibreTranslate → MyMemory → Ollama；选其他接口就固定用那个接口，失败会直接提示。</li>
+            <li>付费接口没有额外的“仅免费/回退”开关；选中即使用，请自行确认服务商计费。</li>
+            <li>公开部署时请设置 <code>ADMIN_TOKEN</code> 或用反向代理限制 <code>/api/translate</code>，避免他人消耗你的付费额度。</li>
           </ul>
         </div>
       </section>
@@ -280,6 +294,6 @@
   </aside>
 
   <div class="toast" id="toast" hidden></div>
-  <script src="/customize.js" defer></script>
+  <script src="/customize.js?v=1.16.0" defer></script>
 </body>
 </html>

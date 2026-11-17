@@ -16,6 +16,12 @@ services:
       - OLLAMA_URL=http://host.docker.internal:11434
       - OLLAMA_MODEL=qwen3-vl:8b
       - CUSTOMIZATION_PATH=/app/data/customization.json
+      # 付费翻译接口示例（取消注释并填入 Key）：
+      # 选中的接口同时用于手动和自动翻译，付费接口按量计费。
+      # - TRANSLATE_PROVIDER=openai
+      # - OPENAI_BASE_URL=https://api.openai.com/v1
+      # - OPENAI_API_KEY=sk-...
+      # - OPENAI_MODEL=gpt-4o-mini
       # 通过局域网/反向代理暴露时启用，并在自定义中心填写同一令牌：
       # - ADMIN_TOKEN=change-me
     extra_hosts:

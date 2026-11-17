@@ -293,3 +293,72 @@ code { font-family: var(--mono); font-size: 11px; color: var(--muted); }
   .topbar { flex-wrap: wrap; }
   .top-actions { width: 100%; justify-content: space-between; }
 }
+
+.provider-list { display: grid; gap: 10px; grid-column: 1 / -1; margin-top: 4px; }
+.provider-card {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+}
+.provider-card summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+.provider-card summary::-webkit-details-marker { display: none; }
+.provider-card summary strong { font-size: 13px; }
+.provider-state {
+  padding: 2px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--faint);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.provider-state.ok {
+  border-color: rgba(118, 224, 194, 0.35);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.provider-card .form-grid { margin-top: 10px; }
+.provider-card > .check { margin-top: 10px; }
+.provider-card > .help { margin: 6px 0 0; color: var(--faint); font-size: 11px; line-height: 1.5; }
+.field .req { color: var(--amber); }
+.runtime-test { min-height: 18px; margin-top: 12px; color: var(--muted); font-size: 12px; line-height: 1.6; word-break: break-word; }
+
+.quick-key-row { display: flex; gap: 10px; align-items: stretch; }
+.quick-key-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 11, 17, 0.7);
+  color: var(--text);
+  font: inherit;
+}
+.quick-key-row input:focus { outline: 0; border-color: rgba(118, 224, 194, 0.55); box-shadow: 0 0 0 3px var(--accent-soft); }
+@media (max-width: 820px) { .quick-key-row { flex-direction: column; } }
+
+.secret-input {
+  -webkit-text-security: disc;
+  text-security: disc;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+
+.key-saved {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid rgba(118, 224, 194, 0.35);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}

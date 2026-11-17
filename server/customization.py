@@ -20,6 +20,19 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from translation_specs import (
+    PROVIDER_IDS,
+    PROVIDER_SPECS,
+    SECRET_KEYS,
+    env_layer,
+    is_ready,
+    legacy_layer,
+    merge_config,
+    public_config,
+    public_specs,
+    strip_secrets,
+)
+
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 PATH = Path(os.environ.get("CUSTOMIZATION_PATH", DATA / "customization.json"))
@@ -87,6 +100,10 @@ def _write_overlay(data: dict) -> None:
     tmp = PATH.with_suffix(PATH.suffix + ".tmp")
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     os.replace(tmp, PATH)
+    try:
+        os.chmod(PATH, 0o600)
+    except OSError:
+        pass
     with _LOCK:
         _CACHE["overlay_mtime"] = None
         _CACHE["overlay"] = {}
@@ -363,29 +380,58 @@ def save_ui(ui: dict) -> dict:
     return clean
 
 
-def _env_bool(name: str, default: bool) -> bool:
-    value = os.environ.get(name)
-    if value is None:
-        return default
-    return value.lower() not in ("0", "false", "off", "no", "")
+def _provider_config_from_overlay(overlay_translation: dict, provider_id: str) -> dict:
+    stored = {}
+    providers = overlay_translation.get("providers")
+    if isinstance(providers, dict) and isinstance(providers.get(provider_id), dict):
+        stored = providers[provider_id]
+    return merge_config(
+        provider_id,
+        env_layer(provider_id),
+        legacy_layer(provider_id, overlay_translation),
+        stored,
+    )
 
 
 def get_runtime() -> dict:
     feeds = read_json("feeds")
     settings = feeds.get("settings", {}) if isinstance(feeds, dict) else {}
-    overrides = translate_overrides()
-    libre_key = str(overrides.get("libre_key") or os.environ.get("LIBRETRANSLATE_API_KEY") or "")
+    import translate
+
+    values = translate.settings()
+    providers = {
+        provider_id: public_config(provider_id, values["providers"][provider_id])
+        for provider_id in PROVIDER_IDS
+    }
     translation = {
-        "provider": str(overrides.get("provider") or os.environ.get("TRANSLATE_PROVIDER", "auto")),
-        "local_first": overrides.get("local_first", _env_bool("TRANSLATE_LOCAL_FIRST", False)),
-        "fallback": overrides.get("fallback", _env_bool("TRANSLATE_FALLBACK", True)),
-        "free_only": overrides.get("free_only", _env_bool("TRANSLATE_FREE_ONLY", True)),
-        "ollama_url": str(overrides.get("ollama_url") or os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")),
-        "ollama_model": str(overrides.get("ollama_model") or os.environ.get("OLLAMA_MODEL", "qwen3-vl:8b")),
-        "libre_url": str(overrides.get("libre_url") or os.environ.get("LIBRETRANSLATE_URL", "")),
-        "libre_key_set": bool(libre_key),
+        "provider": values["provider"],
+        "providers": providers,
+        "provider_specs": public_specs(),
+        # Legacy aliases kept for older clients.
+        "libre_url": providers["libre"]["url"],
+        "libre_key_set": providers["libre"]["key_set"],
+        "ollama_url": providers["ollama"]["url"],
+        "ollama_model": providers["ollama"]["model"],
     }
     return {"feeds": settings, "translation": translation, "ui": get_ui()}
+
+
+def _validate_provider_field(provider_id: str, field: dict, value) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    field_type = field.get("type")
+    if field_type == "select":
+        allowed = [str(option[0]) for option in field.get("options") or []]
+        if allowed and text not in allowed:
+            raise ConfigError(
+                f"translation.providers.{provider_id}.{field['key']} must be one of {allowed}"
+            )
+    if field_type == "url" and text and not text.startswith(("http://", "https://")):
+        raise ConfigError(
+            f"translation.providers.{provider_id}.{field['key']} must start with http:// or https://"
+        )
+    return text
 
 
 def save_runtime(payload: dict) -> dict:
@@ -394,32 +440,118 @@ def save_runtime(payload: dict) -> dict:
     translation = payload.get("translation", payload)
     if not isinstance(translation, dict):
         raise ConfigError("runtime.translation must be an object")
-    allowed = {
-        "provider", "local_first", "fallback", "free_only",
-        "ollama_url", "ollama_model", "libre_url", "libre_key",
-    }
+
     overlay = copy.deepcopy(_read_overlay())
     current = overlay.setdefault("runtime", {}).setdefault("translation", {})
-    for key in list(translation):
-        if key not in allowed:
+    if not isinstance(current, dict):
+        current = {}
+        overlay["runtime"]["translation"] = current
+
+    if "provider" in translation:
+        provider = str(translation["provider"] or "auto").lower()
+        if provider not in ("auto", *PROVIDER_IDS):
+            raise ConfigError(f"translation.provider must be auto/{'/'.join(PROVIDER_IDS)}")
+        current["provider"] = provider
+    for key in ("local_first", "fallback", "free_only", "auto_paid"):
+        current.pop(key, None)
+
+    current_providers = current.get("providers")
+    if not isinstance(current_providers, dict):
+        current_providers = {}
+        current["providers"] = current_providers
+
+    legacy = {
+        "libre_url": ("libre", "url"),
+        "libre_key": ("libre", "key"),
+        "ollama_url": ("ollama", "url"),
+        "ollama_model": ("ollama", "model"),
+    }
+    # Preserve values from the pre-provider schema before removing the old keys.
+    for old_key, (provider_id, field_key) in legacy.items():
+        if old_key not in current or old_key in translation:
             continue
-        value = translation[key]
-        if key == "libre_key":
-            if value == "":
-                current.pop("libre_key", None)
-            elif value is not None:
-                current["libre_key"] = str(value)
+        value = current[old_key]
+        saved = current_providers.setdefault(provider_id, {})
+        if not isinstance(saved, dict):
+            saved = {}
+            current_providers[provider_id] = saved
+        if field_key in SECRET_KEYS[provider_id]:
+            if value not in (None, ""):
+                saved[field_key] = str(value).strip()
+        elif value is not None:
+            saved[field_key] = str(value).strip()
+
+    clear_keys = translation.get("clear_keys") or []
+    if not isinstance(clear_keys, list):
+        raise ConfigError("translation.clear_keys must be a list")
+    for provider_id in clear_keys:
+        if provider_id not in PROVIDER_SPECS:
+            raise ConfigError(f"Unknown translation provider: {provider_id}")
+        saved = current_providers.get(provider_id)
+        if isinstance(saved, dict):
+            for secret_key in SECRET_KEYS[provider_id]:
+                saved.pop(secret_key, None)
+
+    incoming = translation.get("providers")
+    if incoming is not None and not isinstance(incoming, dict):
+        raise ConfigError("translation.providers must be an object")
+    for provider_id, raw in (incoming or {}).items():
+        if provider_id not in PROVIDER_SPECS:
+            raise ConfigError(f"Unknown translation provider: {provider_id}")
+        if not isinstance(raw, dict):
+            raise ConfigError(f"translation.providers.{provider_id} must be an object")
+        saved = current_providers.get(provider_id)
+        if not isinstance(saved, dict):
+            saved = {}
+            current_providers[provider_id] = saved
+        for field in PROVIDER_SPECS[provider_id]["fields"]:
+            key = field["key"]
+            if key not in raw:
+                continue
+            value = raw[key]
+            if field.get("secret"):
+                if value in (None, ""):
+                    continue
+                saved[key] = str(value).strip()
+                continue
+            clean = _validate_provider_field(provider_id, field, value)
+            if clean is None:
+                continue
+            saved[key] = clean
+
+    # Accept the old flat fields so existing overlays/bookmarks keep working.
+    for old_key, (provider_id, field_key) in legacy.items():
+        if old_key not in translation:
             continue
-        if key == "provider" and value not in ("auto", "ollama", "mymemory", "libre"):
-            raise ConfigError("translation.provider must be auto/ollama/mymemory/libre")
-        if key in ("local_first", "fallback", "free_only") and not isinstance(value, bool):
-            raise ConfigError(f"translation.{key} must be true/false")
-        if key in ("ollama_url", "libre_url") and value:
-            if not str(value).startswith(("http://", "https://")):
-                raise ConfigError(f"translation.{key} must start with http:// or https://")
-        if key in ("ollama_model",) and not str(value or "").strip():
-            raise ConfigError("translation.ollama_model is required")
-        current[key] = value
+        value = translation[old_key]
+        saved = current_providers.setdefault(provider_id, {})
+        if not isinstance(saved, dict):
+            saved = {}
+            current_providers[provider_id] = saved
+        if field_key in SECRET_KEYS[provider_id]:
+            if value in (None, ""):
+                saved.pop(field_key, None)
+            else:
+                saved[field_key] = str(value).strip()
+            continue
+        saved[field_key] = str(value or "").strip()
+    for old_key in legacy:
+        current.pop(old_key, None)
+
+    provider = str(current.get("provider") or "auto").lower()
+    current["provider"] = provider
+    if provider in PROVIDER_SPECS:
+        cfg = _provider_config_from_overlay(current, provider)
+        if not is_ready(provider, cfg):
+            missing = [
+                field["label"]
+                for field in PROVIDER_SPECS[provider]["fields"]
+                if field.get("required") and not str(cfg.get(field["key"]) or "").strip()
+            ]
+            raise ConfigError(
+                f"接口 {PROVIDER_SPECS[provider]['label']} 缺少必填项：{', '.join(missing)}"
+            )
+
     overlay["updated_at"] = _now()
     _write_overlay(overlay)
     return get_runtime()
@@ -430,7 +562,7 @@ def export_bundle(include_secrets: bool = False) -> dict:
     runtime = copy.deepcopy(overlay.get("runtime") or {})
     translation = runtime.get("translation") if isinstance(runtime, dict) else None
     if isinstance(translation, dict) and not include_secrets:
-        translation.pop("libre_key", None)
+        runtime["translation"] = strip_secrets(translation)
     return {
         "format": "global-news-timeline-customization",
         "version": 1,

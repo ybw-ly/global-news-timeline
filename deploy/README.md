@@ -43,7 +43,9 @@ docker compose up -d
 | `NEWS_DB` | `data/news.db` | SQLite 数据库路径 |
 | `CUSTOMIZATION_PATH` | `data/customization.json` | 图形化自定义的覆盖层路径 |
 | `ADMIN_TOKEN` | 空 | 设置后自定义中心写操作需要令牌；局域网暴露时建议设置 |
-| `TRANSLATE_LOCAL_FIRST` | `0` | 设为 `1` 时优先使用本地 Ollama 翻译 |
+| `TRANSLATE_PROVIDER` | `auto` | 主翻译接口；选中的接口同时用于手动和自动翻译 |
+
+付费翻译 Key 可以在“运行设置”里填写（推荐），也可以用 `DEEPL_API_KEY`、`OPENAI_API_KEY`、`AZURE_TRANSLATOR_KEY`、`BAIDU_TRANSLATE_KEY` 等环境变量注入；完整列表见主 README。公网部署时请限制 `/api/translate`，避免他人消耗付费额度。
 
 ## 常见问题
 

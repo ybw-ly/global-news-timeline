@@ -60,10 +60,11 @@ from taxonomy import (
 )
 from textutil import cluster_articles, diversify
 from translate import translate
+from translation_specs import detect_key_hints
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
-VERSION = "1.15.1"
+VERSION = "1.16.0"
 LOG = logging.getLogger("server")
 
 HOST = os.environ.get("HOST", "127.0.0.1")
@@ -123,7 +124,7 @@ def status_payload(conn) -> dict:
             "errors": health.get("errors") or 0,
         },
         "translation": {
-            "free_only": translate_module.settings()["free_only"],
+            "provider": translate_module.settings()["provider"],
             "providers": [name for name, _ in translate_module._chain()],
         },
     }
@@ -662,6 +663,10 @@ class Handler(BaseHTTPRequestHandler):
                 if path == "/api/customize/runtime":
                     runtime = customization.save_runtime(payload)
                     self._json({"ok": True, "runtime": runtime})
+                    return
+                if path == "/api/customize/detect-key":
+                    key = str(payload.get("key") or "")[:512]
+                    self._json({"ok": True, "hints": detect_key_hints(key)})
                     return
                 if path == "/api/customize/reload":
                     customization.reset_runtime_caches()

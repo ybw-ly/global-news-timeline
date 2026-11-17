@@ -4,6 +4,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -26,7 +27,9 @@ from elections import (  # noqa: E402
 from eventgraph import EventGraph  # noqa: E402
 import query_expand as query_expand_module  # noqa: E402
 from query_expand import terms_for_variant  # noqa: E402
+import customization  # noqa: E402
 import translate as translate_module  # noqa: E402
+from translation_specs import PROVIDER_SPECS, detect_key_hints  # noqa: E402
 from roles import choose_primary, classify_roles, statement_score  # noqa: E402
 from ingest import build_article, parse_feed, parse_polymarket_markets  # noqa: E402
 from quality import QualityFilter  # noqa: E402
@@ -332,38 +335,36 @@ class CorroborationTests(unittest.TestCase):
 
 
 class FreeTranslationTests(unittest.TestCase):
-    def test_external_libre_is_blocked_in_free_mode(self):
-        old = (
-            translate_module.TRANSLATE_FREE_ONLY,
-            translate_module.TRANSLATE_PROVIDER,
-            translate_module.LIBRE_URL,
-            translate_module.TRANSLATE_FALLBACK,
-        )
+    def setUp(self):
+        self._old_overrides = customization.translate_overrides
+        customization.translate_overrides = lambda: {}
+
+    def tearDown(self):
+        customization.translate_overrides = self._old_overrides
+
+    def test_external_libre_is_used_when_configured(self):
+        old_url = translate_module.LIBRE_URL
+        old_provider = translate_module.TRANSLATE_PROVIDER
         try:
-            translate_module.TRANSLATE_FREE_ONLY = True
             translate_module.TRANSLATE_PROVIDER = "auto"
-            translate_module.LIBRE_URL = "https://paid-translate.example.com"
-            translate_module.TRANSLATE_FALLBACK = True
-            names = [name for name, _ in translate_module._chain()]
-            self.assertNotIn("libre", names)
-            self.assertIn("ollama", names)
-            self.assertIn("mymemory", names)
+            translate_module.LIBRE_URL = "https://translate.example.com"
+            self.assertEqual(
+                [name for name, _ in translate_module._chain()],
+                ["libre", "mymemory", "ollama"],
+            )
             translate_module.TRANSLATE_PROVIDER = "libre"
-            self.assertEqual(translate_module._chain(), [])
+            self.assertEqual(
+                [name for name, _ in translate_module._chain()],
+                ["libre"],
+            )
         finally:
-            (
-                translate_module.TRANSLATE_FREE_ONLY,
-                translate_module.TRANSLATE_PROVIDER,
-                translate_module.LIBRE_URL,
-                translate_module.TRANSLATE_FALLBACK,
-            ) = old
+            translate_module.LIBRE_URL = old_url
+            translate_module.TRANSLATE_PROVIDER = old_provider
 
     def test_local_libre_is_allowed(self):
         old_url = translate_module.LIBRE_URL
         old_provider = translate_module.TRANSLATE_PROVIDER
-        old_free = translate_module.TRANSLATE_FREE_ONLY
         try:
-            translate_module.TRANSLATE_FREE_ONLY = True
             translate_module.TRANSLATE_PROVIDER = "auto"
             translate_module.LIBRE_URL = "http://127.0.0.1:5000"
             self.assertEqual([name for name, _ in translate_module._chain()], ["libre", "mymemory", "ollama"])
@@ -372,16 +373,13 @@ class FreeTranslationTests(unittest.TestCase):
         finally:
             translate_module.LIBRE_URL = old_url
             translate_module.TRANSLATE_PROVIDER = old_provider
-            translate_module.TRANSLATE_FREE_ONLY = old_free
 
     def test_fast_chain_skips_ollama(self):
         old_url = translate_module.LIBRE_URL
         old_provider = translate_module.TRANSLATE_PROVIDER
-        old_fallback = translate_module.TRANSLATE_FALLBACK
         try:
             translate_module.TRANSLATE_PROVIDER = "auto"
             translate_module.LIBRE_URL = ""
-            translate_module.TRANSLATE_FALLBACK = True
             self.assertEqual(
                 [name for name, _ in translate_module._chain(fast=True)],
                 ["mymemory"],
@@ -389,7 +387,139 @@ class FreeTranslationTests(unittest.TestCase):
         finally:
             translate_module.LIBRE_URL = old_url
             translate_module.TRANSLATE_PROVIDER = old_provider
-            translate_module.TRANSLATE_FALLBACK = old_fallback
+
+
+    def test_configured_paid_provider_is_used(self):
+        customization.translate_overrides = lambda: {
+            "provider": "deepl",
+            "free_only": False,
+            "fallback": True,
+            "auto_paid": False,
+            "providers": {
+                "deepl": {
+                    "key": "secret",
+                    "endpoint": "https://api-free.deepl.com/v2/translate",
+                }
+            },
+        }
+        self.assertEqual(
+            [name for name, _ in translate_module._chain()],
+            ["deepl"],
+        )
+
+    def test_selected_paid_provider_ignores_legacy_free_only(self):
+        customization.translate_overrides = lambda: {
+            "provider": "deepl",
+            "free_only": True,
+            "providers": {"deepl": {"key": "secret"}},
+        }
+        self.assertEqual(
+            [name for name, _ in translate_module._chain()],
+            ["deepl"],
+        )
+
+    def test_fast_uses_selected_paid_provider(self):
+        customization.translate_overrides = lambda: {
+            "provider": "deepl",
+            "free_only": False,
+            "providers": {"deepl": {"key": "secret"}},
+        }
+        self.assertEqual(
+            [name for name, _ in translate_module._chain(fast=True)],
+            ["deepl"],
+        )
+
+
+class ProviderAdapterTests(unittest.TestCase):
+    def setUp(self):
+        self._old_overrides = customization.translate_overrides
+        customization.translate_overrides = lambda: {
+            "provider": "deepl",
+            "free_only": False,
+            "providers": {
+                "deepl": {
+                    "key": "secret",
+                    "endpoint": "https://api-free.deepl.com/v2/translate",
+                }
+            },
+        }
+
+    def tearDown(self):
+        customization.translate_overrides = self._old_overrides
+
+    def test_deepl_request_and_response(self):
+        class FakeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return b'{"translations":[{"text":"\\u4f60\\u597d"}]}'
+
+        with mock.patch.object(
+            translate_module.urllib.request, "urlopen", return_value=FakeResponse()
+        ) as mocked:
+            text, model = translate_module._deepl("hello", "zh", "en")
+        self.assertEqual(text, "你好")
+        self.assertEqual(model, "deepl")
+        request = mocked.call_args[0][0]
+        self.assertEqual(request.full_url, "https://api-free.deepl.com/v2/translate")
+        self.assertEqual(request.headers["Authorization"], "DeepL-Auth-Key secret")
+
+    def test_custom_result_path(self):
+        self.assertEqual(
+            translate_module._dig(
+                {"data": {"translations": [{"text": "你好"}]}},
+                "data.translations.0.text",
+            ),
+            "你好",
+        )
+
+
+class TranslationKeyDetectionTests(unittest.TestCase):
+    def test_deepl_free_key_selects_free_endpoint(self):
+        hints = detect_key_hints("12345678-1234-1234-1234-123456789abc:fx")
+        self.assertEqual(hints[0]["provider"], "deepl")
+        self.assertEqual(hints[0]["confidence"], "high")
+        self.assertIn("api-free.deepl.com", hints[0]["fields"]["endpoint"])
+
+    def test_google_key(self):
+        hints = detect_key_hints("AIza" + "a" * 35)
+        self.assertEqual(hints[0]["provider"], "google")
+        self.assertEqual(hints[0]["confidence"], "high")
+
+    def test_sk_key_is_openai_compatible(self):
+        hints = detect_key_hints("sk-" + "a" * 32)
+        self.assertEqual(hints[0]["provider"], "openai")
+        self.assertEqual(hints[0]["confidence"], "medium")
+        self.assertEqual(hints[0]["fields"]["preset"], "OpenAI")
+
+    def test_openrouter_key_gets_preset(self):
+        hints = detect_key_hints("sk-or-v1-" + "a" * 32)
+        self.assertEqual(hints[0]["provider"], "openai")
+        self.assertEqual(hints[0]["confidence"], "high")
+        self.assertEqual(hints[0]["fields"]["preset"], "OpenRouter")
+
+    def test_baidu_appid_targets_appid_field(self):
+        hints = detect_key_hints("1234567890123456")
+        self.assertEqual(hints[0]["provider"], "baidu")
+        self.assertEqual(hints[0]["target_field"], "appid")
+
+    def test_youdao_app_key_targets_app_key_field(self):
+        hints = detect_key_hints("0123456789abcdef")
+        self.assertEqual(hints[0]["provider"], "youdao")
+        self.assertEqual(hints[0]["target_field"], "app_key")
+
+    def test_ambiguous_32_hex_lists_candidates(self):
+        hints = detect_key_hints("a" * 32)
+        providers = {hint["provider"] for hint in hints}
+        self.assertEqual(providers, {"azure", "baidu", "youdao"})
+        self.assertTrue(all(hint["confidence"] == "low" for hint in hints))
+
+    def test_unknown_key_returns_no_hints(self):
+        self.assertEqual(detect_key_hints("hello world"), [])
 
 
 class RoleTests(unittest.TestCase):
@@ -1044,6 +1174,97 @@ class CustomizationTests(unittest.TestCase):
     def test_invalid_accent_is_rejected(self):
         with self.assertRaises(self.customization.ConfigError):
             self.customization.save_ui({"accent": "red"})
+
+
+    def test_provider_specs_include_common_apis(self):
+        for provider_id in ("deepl", "google", "azure", "openai", "baidu", "youdao", "custom"):
+            self.assertIn(provider_id, PROVIDER_SPECS)
+            self.assertTrue(PROVIDER_SPECS[provider_id]["fields"])
+
+    def test_runtime_masks_provider_secrets_and_export_strips_them(self):
+        runtime = self.customization.save_runtime(
+            {
+                "translation": {
+                    "provider": "deepl",
+                    "free_only": False,
+                    "providers": {
+                        "deepl": {
+                            "key": "secret-key",
+                            "endpoint": "https://api-free.deepl.com/v2/translate",
+                        }
+                    },
+                }
+            }
+        )
+        deepl = runtime["translation"]["providers"]["deepl"]
+        self.assertTrue(deepl["key_set"])
+        self.assertNotIn("key", deepl)
+        self.assertTrue(deepl["ready"])
+        exported = self.customization.export_bundle(include_secrets=False)
+        self.assertNotIn(
+            "key", exported["runtime"]["translation"]["providers"]["deepl"]
+        )
+        exported_secret = self.customization.export_bundle(include_secrets=True)
+        self.assertEqual(
+            exported_secret["runtime"]["translation"]["providers"]["deepl"]["key"],
+            "secret-key",
+        )
+
+    def test_paid_provider_does_not_require_free_only_flag(self):
+        runtime = self.customization.save_runtime(
+            {
+                "translation": {
+                    "provider": "deepl",
+                    "providers": {"deepl": {"key": "secret"}},
+                }
+            }
+        )
+        self.assertEqual(runtime["translation"]["provider"], "deepl")
+        self.assertTrue(runtime["translation"]["providers"]["deepl"]["ready"])
+
+    def test_legacy_libre_fields_are_migrated(self):
+        runtime = self.customization.save_runtime(
+            {
+                "translation": {
+                    "provider": "libre",
+                    "free_only": True,
+                    "libre_url": "http://127.0.0.1:5000",
+                    "libre_key": "legacy-key",
+                }
+            }
+        )
+        libre = runtime["translation"]["providers"]["libre"]
+        self.assertEqual(libre["url"], "http://127.0.0.1:5000")
+        self.assertTrue(libre["key_set"])
+
+    def test_existing_legacy_key_survives_provider_switch(self):
+        self.customization._write_overlay(
+            {
+                "runtime": {
+                    "translation": {
+                        "provider": "openai",
+                        "free_only": False,
+                        "libre_key": "legacy-key",
+                    }
+                }
+            }
+        )
+        runtime = self.customization.save_runtime(
+            {
+                "translation": {
+                    "provider": "openai",
+                    "free_only": False,
+                    "providers": {
+                        "openai": {
+                            "key": "new-key",
+                            "base_url": "https://api.openai.com/v1",
+                            "model": "gpt-4o-mini",
+                        }
+                    },
+                }
+            }
+        )
+        self.assertTrue(runtime["translation"]["providers"]["libre"]["key_set"])
 
 
 class ArticleMetaTests(unittest.TestCase):

@@ -14,7 +14,7 @@
 |---|---|
 | ![搜索汇总](docs/screenshot-search.png) | ![P2P 接收端](docs/screenshot-p2p.png) |
 
-| 翻译（免费接口） | 移动端 |
+| 翻译（免费优先/可配 API） | 移动端 |
 |---|---|
 | ![翻译](docs/screenshot-translation.png) | ![移动端](docs/screenshot-mobile.png) |
 
@@ -33,7 +33,7 @@
 - **大选 OSINT 追踪页**：在同一个页面选择尼日利亚 2027、法国 2027、肯尼亚 2027、美国 2026 中期选举或巴西 2026 等选举；接入官方计票的选举每 15 秒刷新，未接入的展示时间线、制度、观察清单与公开来源，不伪造实时数字。
 - **新闻卡片工具**：时间线新闻条可直接生成 1080×1350 的 PNG 分享卡片；非中文报道自动附带中文译文并保留原文标题，支持深色/浅色/纸张主题、下载、复制图片与系统分享；独立工具页 `/card-tool.html` 可手动编辑标题、摘要、来源、译文与配图。
 - **浏览时自动翻译**：首页顶部「自动翻译」开关；滚动到非中文新闻条时自动翻译标题并显示在卡片下方。最多 2 个并发请求，连续失败会自动暂停，避免刷爆免费额度。
-- **免费翻译仅**：默认优先 MyMemory 匿名免费接口（公开标题/摘要，通常 1–2 秒），失败时回退本地 Ollama；设置 `TRANSLATE_LOCAL_FIRST=1` 可改回本地优先。默认阻止外部 LibreTranslate，不接入任何付费翻译计划。
+- **直接选翻译接口**：运行设置里选 LibreTranslate / Ollama / MyMemory / DeepL / Google / Azure / OpenAI 兼容 / 百度 / 有道 / 自定义 HTTP；选中的接口同时用于手动翻译和浏览自动翻译。付费接口按量计费；API Key 只保存在本机覆盖层，默认导出不含密钥。
 
 > 首次抓取通常 **1,800–2,500 条**、20 种语言；事件地点识别率随当天内容变化，2026-10-23 演示库 24 小时约 **34%**。未识别的报道不会被强行归到信源国家。
 
@@ -97,7 +97,7 @@
 - 译文检索不是简单整句匹配：源查询用保守词干（例如 `Землетрясение` → `Землетря`），机器译文用完整词以减少“agencies 被 agen 误中”这类问题；中日泰文会先用事件词库切分。每个译文允许“整句命中”或“全部关键词命中”。
 - 翻译结果写入 SQLite `translations` 表缓存。首次搜索某个新查询时最多等待约 4.5 秒，未完成的翻译会在后台继续并缓存；再次搜索同一查询通常几十毫秒内完成。
 - 搜索结果按“标题整句/关键词命中 > 摘要命中 > 事件字段命中”做轻量相关度排序，再以时间作为同分次序；比单纯按最新时间更接近搜索意图。
-- 如果翻译服务只返回部分语言，搜索仍会继续，并在汇总面板标注“部分语言超时/不可用”。默认优先 MyMemory 免费接口；设置 `TRANSLATE_LOCAL_FIRST=1` 可改回本地 Ollama 优先。发生 quorum 放宽时，汇总面板会显示“严格匹配 N 条，已自动放宽”。
+- 如果翻译服务只返回部分语言，搜索仍会继续，并在汇总面板标注“部分语言超时/不可用”。翻译接口由运行设置决定；选“自动”时按 LibreTranslate → MyMemory → Ollama，选具体接口则固定使用。发生 quorum 放宽时，汇总面板会显示“严格匹配 N 条，已自动放宽”。
 - 搜索后会展开“搜索汇总”面板：
   - 命中报道、独立信源、信源国家、原始语种、多源事件数；
   - 事件地点覆盖的国家/地区数与时间跨度；
@@ -279,7 +279,7 @@ GitHub Releases 提供打包好的 zip（`global-news-timeline-v*.zip`）。解�
 
 - **信源管理**：增删/启停信源，修改 URL、刷新频率、国家/语言/板块，支持单源抓取测试。
 - **选举管理**：新增/编辑任意选举；候选人、时间线、民调、观察清单用 JSON 编辑，保存后立即出现在大选 OSINT 下拉框。
-- **运行设置**：翻译提供链、Ollama 地址/模型、LibreTranslate、仅免费模式。
+- **运行设置**：通用翻译接口（LibreTranslate / Ollama / MyMemory / DeepL / Google / Azure / OpenAI 兼容 / 百度 / 有道 / 自定义 HTTP）、API Key/Endpoint/Region/Model、免费/本地保护、自动翻译是否允许付费接口。
 - **界面偏好**：默认时间窗口、内容类型、地区/语言、强调色、紧凑模式、默认选举、浏览时自动翻译。
 - **质量过滤 / 高级配置**：直接编辑 `quality`、`content_types`、`lexicon`、`countries`、`gazetteer`。
 - **备份与恢复**：导出自定义 JSON、导入到另一台机器、恢复全部默认。
@@ -300,12 +300,16 @@ GitHub Releases 提供打包好的 zip（`global-news-timeline-v*.zip`）。解�
 | `CUSTOMIZATION_PATH` | `data/customization.json` | 图形化自定义的覆盖层路径 |
 | `OLLAMA_URL` | `http://127.0.0.1:11434` | 本地翻译服务 |
 | `OLLAMA_MODEL` | `qwen3-vl:8b` | 翻译使用的 Ollama 模型 |
-| `TRANSLATE_PROVIDER` | `auto` | `auto` / `ollama` / `mymemory` / `libre` |
-| `TRANSLATE_LOCAL_FIRST` | `0` | 设为 `1` 恢复本地 Ollama 优先；默认 `0` 优先 MyMemory，减少等待 |
-| `TRANSLATE_FALLBACK` | `1` | 设为 `0` 关闭 MyMemory 免费接口回退，只使用本地 Ollama/本地 LibreTranslate |
-| `TRANSLATE_FREE_ONLY` | `1` | 免费-only 保护：只允许本地 Ollama、localhost/私网 LibreTranslate、MyMemory 免费接口；阻止外部 LibreTranslate |
+| `TRANSLATE_PROVIDER` | `auto` | `auto` / `libre` / `ollama` / `mymemory` / `deepl` / `google` / `azure` / `openai` / `baidu` / `youdao` / `custom` |
 | `LIBRETRANSLATE_URL` | 空 | 可选的自建 LibreTranslate 地址 |
 | `LIBRETRANSLATE_API_KEY` | 空 | LibreTranslate API key（如需要） |
+| `DEEPL_API_KEY` | 空 | DeepL API Key（Free Key 通常以 `:fx` 结尾） |
+| `GOOGLE_TRANSLATE_API_KEY` | 空 | Google Cloud Translation Basic v2 API Key |
+| `AZURE_TRANSLATOR_KEY` / `AZURE_TRANSLATOR_REGION` | 空 | Azure Translator Key 与区域（例如 `eastasia`） |
+| `OPENAI_BASE_URL` / `OPENAI_API_KEY` / `OPENAI_MODEL` | `https://api.openai.com/v1` / 空 / `gpt-4o-mini` | OpenAI 兼容接口；也可填 DeepSeek、Moonshot、Qwen、vLLM 等 |
+| `BAIDU_TRANSLATE_APPID` / `BAIDU_TRANSLATE_KEY` | 空 | 百度翻译开放平台 APP ID 与密钥 |
+| `YOUDAO_APP_KEY` / `YOUDAO_APP_SECRET` | 空 | 有道智云翻译 App Key 与 App Secret |
+| `CUSTOM_TRANSLATE_URL` / `CUSTOM_TRANSLATE_KEY` | 空 | 自定义 HTTP 翻译接口及可选 Key |
 | `SEARCH_TRANSLATE` | `1` | 设为 `0` 关闭搜索词的跨语言翻译扩展 |
 | `SEARCH_TRANSLATE_LANGS` | 空 | 逗号分隔的目标语言代码；空表示全部支持语言 |
 | `SEARCH_TRANSLATE_WORKERS` | `4` | 查询翻译并行度（1–12）；降低并发可减少免费接口限流 |
@@ -561,31 +565,48 @@ P2P 推送不需要额外配置：
 
 接收页也可通过 `/p2p-receiver.html` 打开。由于默认 `HOST=127.0.0.1`，远程朋友无法直接访问你的本机地址，实际使用中请发送下载的 HTML 文件，或让应用监听局域网地址。
 
-### 翻译提供链（仅免费）
+### 翻译提供链与 API Key
 
+翻译接口由运行设置里的下拉框决定：**选中哪个接口，手动翻译和浏览自动翻译就用哪个**。只有选 **“自动”** 时才走免费链：**LibreTranslate → MyMemory → Ollama**；选具体接口则固定使用它，失败直接提示，不再有“仅免费 / 回退 / 付费自动”这些开关。
 
-```sh
-# 默认快速模式：MyMemory 免费接口优先
-# 希望完全本地时，启动 Ollama 并设置本地优先：
-ollama serve
-ollama pull qwen3-vl:8b
-export TRANSLATE_LOCAL_FIRST=1
+自定义中心 → **运行设置** 选择主接口后，展开对应卡片填写字段：
 
-# 可选：自建 LibreTranslate（本地/私网地址优先）
-export LIBRETRANSLATE_URL=http://127.0.0.1:5000
-```
+| 接口 | 字段 | 说明 |
+|---|---|---|
+| LibreTranslate | 服务地址、API Key（可选） | 自建或托管；选中后手动/自动都用它 |
+| 本地 Ollama | 地址、模型 | 隐私最好，但 8B 模型较慢；“自动”快速链不包含它；显式选中时自动翻译会用它 |
+| MyMemory | 联系邮箱（可选） | 匿名免费接口，有每日额度 |
+| DeepL | API Key、接口地址 | Free Key 通常以 `:fx` 结尾 |
+| Google Cloud Translation | API Key、接口地址 | Basic v2 API |
+| Azure Translator | Key、区域、资源地址 | 区域必填，例如 `eastasia` |
+| OpenAI 兼容接口 | Base URL、Key、模型 | 兼容 `/v1/chat/completions`；可填 DeepSeek、Moonshot、Qwen、vLLM 等 |
+| 百度翻译 | APP ID、密钥、接口地址 | MD5 签名 |
+| 有道智云 | App Key、App Secret、接口地址 | v3 SHA256 签名 |
+| 自定义 HTTP | 地址、Key、方法、请求头、请求体模板、响应路径 | 没有内置适配器的 API 用这个；支持 `{{text}}`、`{{source}}`、`{{target}}`、`{{key}}` 占位符 |
 
-默认快速顺序：**本地/私网 LibreTranslate → MyMemory 匿名免费接口 → 本地 Ollama**。设置 `TRANSLATE_LOCAL_FIRST=1` 后为：**本地 Ollama → 本地/私网 LibreTranslate → MyMemory**。
+运行设置顶部还有 **“快速识别 API Key”**：粘贴 Key 后按格式离线匹配供应商，并自动填入默认地址/模型：
 
-免费-only 保证（`TRANSLATE_FREE_ONLY=1`，默认开启）：
+- `...:fx` → DeepL Free；UUID 格式 → DeepL Pro（中等置信）。
+- `AIza...` → Google Cloud Translation。
+- `sk-or-v1-...` → OpenRouter（OpenAI 兼容预设）。
+- `sk-...` → OpenAI 兼容接口（中等置信；OpenAI/DeepSeek/Moonshot/Qwen 等都用这个前缀，请在“常见服务预设”里确认）。
+- 纯数字 APP ID → 百度（还需要密钥）；16 位含字母的 Key → 有道 App Key（还需要 App Secret）。
+- 32 位十六进制 → 可能是 Azure/百度/有道，界面只列候选，不自动填入。
 
-- 只允许本地 Ollama、`localhost`/私网地址上的 LibreTranslate，以及 MyMemory 的匿名免费接口。
-- 外部 LibreTranslate 地址会被直接阻止，避免把请求发到可能收费的托管服务。
-- 没有接入 DeepL、OpenAI、Google Cloud Translation、Azure Translator 等付费翻译接口，也没有相关 API key 配置。
-- MyMemory 免费额度用尽时会返回错误或只保留原文搜索，**不会自动升级到付费计划，也不会产生扣费**。
-- 需要显式设置 `TRANSLATE_FREE_ONLY=0` 才会允许外部 LibreTranslate；这属于用户主动选择，需自行确认其计费条款。
+识别是启发式的：只在本机服务内做规则匹配，不会为了识别去请求任何翻译接口，也不会把 Key 发给第三方翻译商；无法保证 100% 正确。OpenAI 兼容接口内置 OpenAI、DeepSeek、Moonshot、阿里云百炼/Qwen、SiliconFlow、OpenRouter 预设，选中后自动填 Base URL 和模型。
 
-MyMemory 无需 key，但会把公开的标题/摘要或搜索词发到第三方服务，并有每日免费额度；不需要时设置 `TRANSLATE_FALLBACK=0` 或 `SEARCH_TRANSLATE=0`。
+快速识别输入框和密钥字段使用“普通文本输入 + CSS 掩码”，不是 `password` 类型，避免浏览器密码管理器弹出“保存密码”并清空字段；Key 不会进入浏览器密码库。
+
+密钥与部署：
+
+- API Key 只写入本机 `data/customization.json`；读取接口只返回 `key_set` 布尔值，不返回明文。
+- 默认导出（`/api/customize/export`）会移除所有 provider 密钥；不要把 `data/customization.json` 提交到仓库或发给别人。
+- 页面里每个有密钥的接口都有「清除该接口已保存的密钥」。
+- 选中付费接口即使用，没有额外的“仅免费/回退/付费自动”开关；请自行确认服务商计费。
+- 自动翻译和手动翻译使用同一个接口；只有选“自动”时才走 LibreTranslate → MyMemory → Ollama 免费链。
+- MyMemory 无需 Key，但会把公开标题/摘要或搜索词发到第三方服务，并有每日免费额度；不想用时选别的接口，或设置 `SEARCH_TRANSLATE=0` 关闭搜索词翻译。
+
+部署到公网时请注意：`/api/translate` 为了首页自动翻译不要求管理员令牌，任何能访问服务的人都可以调用它。若配置了付费 Key，请在反向代理层加认证/限流，或只监听 `127.0.0.1`，避免他人消耗你的额度。
 
 ---
 
@@ -714,23 +735,22 @@ python scripts/ingest_once.py
 
 ## 8. 翻译
 
-翻译按钮在卡片右下角和事件详情里。默认提供链（快速模式）：
+翻译按钮在卡片右下角和事件详情里。**手动翻译和浏览自动翻译都使用运行设置里选中的接口**：
 
-1. **本地/私网 LibreTranslate**——如果你设置了内网 `LIBRETRANSLATE_URL`；外部地址在免费-only 模式下会被阻止。
-2. **MyMemory 匿名免费接口**——无需 key，通常 1–2 秒返回；会把公开标题/摘要发到第三方。
-3. **本地 Ollama**（`qwen3-vl:8b`，可换模型）——本地回退；8B 模型冷启动可能较慢，所以不再默认挡在前面。
+- 选 **“自动”**：LibreTranslate → MyMemory → Ollama 免费链。
+- 选 **具体接口**：固定使用该接口；失败直接提示，不再自动切换或回退。
+- 选 **付费接口**（DeepL / Google / Azure / OpenAI 兼容 / 百度 / 有道）：按服务商计费，没有额外的“仅免费/付费自动”开关。
 
 ```sh
+# 本机免费链示例
 ollama serve
 ollama pull qwen3-vl:8b
-export TRANSLATE_LOCAL_FIRST=1   # 需要本地优先时
+export TRANSLATE_PROVIDER=auto
 ```
 
 - 结果按“源语言 + 目标语言 + 文本”哈希缓存在 SQLite 的 `translations` 表。
-- 前端会显示实际翻译来源，例如“由 MyMemory 免费接口 翻译”。
-- 设置 `TRANSLATE_FALLBACK=0` 可完全关闭 MyMemory 免费回退；设置 `TRANSLATE_PROVIDER=ollama` 可强制只用本地模型；设置 `TRANSLATE_LOCAL_FIRST=1` 可恢复“本地 Ollama 优先”的旧顺序。
-- 免费-only 模式默认开启：不接入 DeepL、OpenAI、Google/Azure 翻译等付费接口，外部 LibreTranslate 被阻止；免费额度耗尽时失败或保留原文，不会自动升级付费计划。
-- 批量翻译自己的私有内容时请使用 `TRANSLATE_PROVIDER=ollama`（或 `TRANSLATE_LOCAL_FIRST=1` + 本地 Ollama），不要依赖 MyMemory。
+- 前端会显示实际翻译来源，例如“由 DeepL 翻译”或“由 MyMemory 免费接口 翻译”。
+- 批量翻译私有内容时，直接在运行设置里选本地 Ollama，或设置 `TRANSLATE_PROVIDER=ollama`。
 
 ---
 
@@ -775,15 +795,15 @@ P2P 推送不依赖 Python 单元测试；已用两个真实浏览器标签页�
 - **跨语言聚类基于实体/主题签名**，不是 embedding；优点是离线、可解释，缺点是会漏掉一些改写较大的报道，也可能把同一事件的持续报道合并得偏宽。宽泛主题（选举、抗议）已收紧，不允许仅凭“同一国家 + 主题”合并。
 - **搜索最终仍是 LIKE 子串匹配，不是相关度排序**：跨语言翻译扩大了召回，但没有 FTS 索引、拼写纠错或 embedding 语义召回；搜索汇总最多抽样 6000 条做主题/地点聚合。
 - **跨语言检索依赖翻译质量与额度**：首次查询新词需要等待翻译；MyMemory 可能限流或只返回部分语言，界面会标注“部分语言超时/不可用”，后台完成后再次搜索会使用缓存。机器翻译可能把专有名词译错，导致漏召回或误召回。
-- **查询词可能离开本机**：默认优先 MyMemory，搜索词会发送到该免费接口；设置 `TRANSLATE_LOCAL_FIRST=1` 可改为本地 Ollama 优先，设置 `SEARCH_TRANSLATE=0` 可完全关闭查询翻译，设置 `TRANSLATE_FALLBACK=0` 可禁止云端翻译。
+- **查询词可能离开本机**：取决于运行设置选择的翻译接口；选“自动”时默认会走 MyMemory。不想让查询词离开本机，选本地 Ollama / 本地 LibreTranslate，或设置 `SEARCH_TRANSLATE=0` 关闭查询翻译。
 - **P2P 推送是手动信令**：需要复制邀请码/应答码；没有 TURN 中继，复杂 NAT 可能连不上。传输内容为快照，不是实时网页或完整文章；接收方应只信任发送者。
 - **聚类按当前查询页计算**：同一事件如果有成员落在分页之外，当前页的“信源数/语种数”可能只统计到本页成员。
 - **默认目录已移除 Google News 等聚合器**：所有链接直接指向媒体原文；若手动加入聚合源，其链接可能是跳转链接，需自行识别。
 - **RSS 可用性不稳定**：部分源会临时 403/SSL EOF（验证时 Hankyung 被 Cloudflare 403，已换为 Yonhap Economy；Globes English 与 Economic Times Hindi 改用可用的直连端点）。系统会退避重试，不阻塞其它源。
 - **无全文**：只存标题、摘要、来源、时间、图片 URL 和原文链接；不做正文抓取与再分发。
 - **无登录/权限**：默认只监听本机；公网部署必须自行加认证。
-- **翻译默认优先免费云端接口**：默认使用 MyMemory，通常 1–2 秒；如不希望内容离开本机，设置 `TRANSLATE_LOCAL_FIRST=1`（需本地 Ollama）或 `TRANSLATE_FALLBACK=0`。免费额度用尽时翻译会失败/保留原文，不会切换到付费服务。
-- **外部 LibreTranslate 默认被阻止**：`TRANSLATE_FREE_ONLY=1` 只允许本地/私网 LibreTranslate；若显式关闭该保护，外部服务的计费与合规需自行确认。
+- **翻译接口由运行设置决定**：选“自动”时走 LibreTranslate → MyMemory → Ollama；选具体接口就固定用它。如不希望内容离开本机，选本地 Ollama 或本地 LibreTranslate。
+- **付费接口需要显式选择**：DeepL / Google / Azure / OpenAI 兼容 / 百度 / 有道只有在你选中时才会被调用；计费与合规由你自行确认。
 
 ### 数据与版权
 
@@ -799,8 +819,8 @@ P2P 推送不依赖 Python 单元测试；已用两个真实浏览器标签页�
 - 前端对外部标题/摘要做 HTML 转义；图片设置 `referrerpolicy="no-referrer"`。
 - CSP：仅允许同源脚本、同源样式、HTTPS 图片；P2P 接收页单独使用仅允许内联脚本/样式的 CSP。
 - P2P 使用 WebRTC DTLS 加密，邀请码包含网络候选地址；不要把邀请码发给不信任的人。接收页不会执行推送内容中的 HTML/脚本，只按文本渲染。
-- 跨语言搜索会调用翻译提供链；如不希望搜索词离开本机，设置 `TRANSLATE_LOCAL_FIRST=1` 并启动本地 Ollama、配置本地 LibreTranslate，或设置 `SEARCH_TRANSLATE=0` / `TRANSLATE_FALLBACK=0`。
-- 翻译默认免费-only：外部 LibreTranslate、DeepL、OpenAI、Google/Azure 翻译等付费通道均未接入；MyMemory 免费额度耗尽只会失败，不会扣费。
+- 跨语言搜索会调用当前选中的翻译接口；如不希望搜索词离开本机，选本地 Ollama / 本地 LibreTranslate，或设置 `SEARCH_TRANSLATE=0`。
+- 付费翻译通道只有在你显式选中对应接口时才会调用；不选就不会产生费用。MyMemory 免费额度耗尽时只会失败。
 - 如果未来加入“用户自定义 RSS”，必须增加协议/域名白名单与私网地址拦截。
 
 ---
