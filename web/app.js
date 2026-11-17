@@ -1239,6 +1239,7 @@
         <div class="card-foot">
           ${cluster}
           ${translateButton}
+          <button type="button" class="card-share-btn" data-action="card">分享卡片</button>
           <a class="source-link" href="${esc(safeUrl(item.url))}" target="_blank" rel="noopener noreferrer">阅读原文 ↗</a>
           ${terms ? `<span class="terms">判定：${esc(terms)}</span>` : ""}
         </div>
@@ -1662,6 +1663,7 @@
         const item = article ? state.itemMap.get(article.dataset.id) : null;
         if (!item) return;
         if (action.dataset.action === "translate") translateCard(action, item);
+        if (action.dataset.action === "card") window.NewsCard?.open(item);
         if (action.dataset.action === "cluster") openDrawer(item);
         if (action.dataset.action === "drawer") openDrawer(item);
         if (action.dataset.action === "branches") {
@@ -1837,7 +1839,6 @@
       <div class="dossier-actions">
         <a class="primary-btn" href="${esc(safeUrl(item.url))}" target="_blank" rel="noopener noreferrer">阅读原文 ↗</a>
         ${canTranslate ? `<button class="ghost-btn" type="button" id="dossier-translate">译成中文</button>` : ""}
-        <button class="ghost-btn" type="button" id="dossier-card">分享卡片</button>
         <button class="ghost-btn" type="button" id="dossier-share">P2P 推送</button>
       </div>
       <div class="translation-box" id="dossier-translation" hidden></div>
@@ -1875,7 +1876,6 @@
       </div>`;
 
     $("#dossier-translate")?.addEventListener("click", () => translateDrawer(item));
-    $("#dossier-card")?.addEventListener("click", () => window.NewsCard?.open(item));
     $("#dossier-share")?.addEventListener("click", () => window.NewsP2P?.open("story"));
 
     const drawer = $("#drawer");

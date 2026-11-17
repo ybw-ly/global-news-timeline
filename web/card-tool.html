@@ -52,7 +52,18 @@
       </div>
       <div class="card-field">
         <label for="ct-language">原文语言</label>
-        <input id="ct-language" type="text" placeholder="例如 英语">
+        <input id="ct-language" type="text" placeholder="例如 en / 英语 / ru">
+      </div>
+      <div class="card-field">
+        <label for="ct-title-translated">译文标题（中文，可选）</label>
+        <textarea id="ct-title-translated" placeholder="可手动填写，或点下方按钮自动翻译"></textarea>
+      </div>
+      <div class="card-field">
+        <label for="ct-summary-translated">译文摘要（中文，可选）</label>
+        <textarea id="ct-summary-translated" placeholder="可手动填写，或点下方按钮自动翻译"></textarea>
+      </div>
+      <div class="card-tool-actions">
+        <button class="card-btn" type="button" id="ct-translate">翻译标题与摘要</button>
       </div>
       <div class="card-field">
         <label for="ct-url">原文链接</label>

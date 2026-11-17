@@ -34,7 +34,10 @@
     job: 0,
     modal: null,
     busy: false,
+    translating: false,
+    openJob: 0,
   };
+  const translationCache = new Map();
 
   function $(selector, root = document) { return root.querySelector(selector); }
 
@@ -136,12 +139,58 @@
     });
   }
 
+  async function translateText(text, source) {
+    if (!text) return null;
+    const key = `${source || ""}\u0000${text}`;
+    if (translationCache.has(key)) return translationCache.get(key);
+    const response = await fetch("/api/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, target: "zh", source: source || undefined }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || `HTTP ${response.status}`);
+    }
+    const result = {
+      text: data.translation || "",
+      provider: data.provider_label || data.provider || "",
+    };
+    translationCache.set(key, result);
+    return result;
+  }
+
+  async function translateItem(item) {
+    const source = item.language || "";
+    if (!source || source === "zh") return;
+    const titlePromise = translateText(item.title_original, source);
+    const summaryPromise = item.summary_original
+      ? translateText(item.summary_original, source)
+      : Promise.resolve(null);
+    const [title, summary] = await Promise.allSettled([titlePromise, summaryPromise]);
+    if (title.status !== "fulfilled" || !title.value?.text) {
+      throw new Error(title.status === "rejected" ? title.reason.message : "标题译文为空");
+    }
+    item.title_translated = title.value.text;
+    item.translation_provider = title.value.provider || "";
+    if (summary.status === "fulfilled" && summary.value?.text) {
+      item.summary_translated = summary.value.text;
+    }
+  }
+
   function normalize(item) {
+    const title = item.title || "未命名新闻";
+    const summary = item.summary || "";
     return {
-      title: item.title || "未命名新闻",
-      summary: item.summary || "",
+      title,
+      title_original: item.title_original || title,
+      title_translated: item.title_translated || item.translated_title || "",
+      summary,
+      summary_original: item.summary_original || summary,
+      summary_translated: item.summary_translated || item.translated_summary || "",
       publisher: item.publisher || item.source || "",
       published_at: item.published_at || item.time || "",
+      language: item.language || "",
       language_label: item.language_label || item.language || "",
       event_label: item.event_label || item.event_country_label || item.event_region_label || item.country_label || "",
       category: item.category || "other",
@@ -150,6 +199,8 @@
       url: item.url || "",
       image_url: item.image_url || item.image || "",
       accent: item.accent || "",
+      translation_enabled: item.translation_enabled !== false,
+      translation_provider: item.translation_provider || "",
     };
   }
 
@@ -214,30 +265,59 @@
     ctx.fillStyle = accent;
     ctx.fillRect(PAD, image ? imageHeight - 6 : 168, 92, 5);
 
+    const showTranslation = Boolean(item.translation_enabled && item.title_translated);
+    const primaryTitle = showTranslation ? item.title_translated : item.title_original;
+    const secondaryTitle = showTranslation && item.title_original && item.title_original !== primaryTitle
+      ? item.title_original
+      : "";
+    const primarySummary = showTranslation
+      ? (item.summary_translated || item.summary_original)
+      : item.summary_original;
+
     let y = image ? imageHeight + 22 : 220;
     const maxWidth = CARD_W - PAD * 2;
 
-    const title = item.title || "未命名新闻";
-    const titleSize = title.length > 92 ? 42 : title.length > 58 ? 50 : title.length > 34 ? 58 : 68;
+    if (showTranslation) {
+      ctx.font = `600 17px ${MONO}`;
+      ctx.fillStyle = accent;
+      ctx.fillText("译文 / TRANSLATED", PAD, y + 18);
+      y += 34;
+    }
+
+    const titleSize = primaryTitle.length > 92 ? 42 : primaryTitle.length > 58 ? 50 : primaryTitle.length > 34 ? 58 : 68;
     ctx.font = `700 ${titleSize}px ${SERIF}`;
     ctx.fillStyle = theme.text;
     const maxTitleLines = image ? 5 : 7;
-    const titleLines = truncateLines(ctx, title, maxWidth, maxTitleLines);
+    const titleLines = truncateLines(ctx, primaryTitle, maxWidth, maxTitleLines);
     const titleLineHeight = titleSize * 1.28;
     for (const line of titleLines) {
       ctx.fillText(line, PAD, y + titleSize);
       y += titleLineHeight;
     }
 
-    const footerTop = CARD_H - 154;
-    if (item.summary) {
+    if (secondaryTitle) {
+      y += 6;
+      ctx.font = `500 24px ${SANS}`;
+      const secondaryLines = truncateLines(ctx, secondaryTitle, maxWidth - 20, 3);
+      ctx.fillStyle = accent;
+      ctx.fillRect(PAD, y + 4, 3, secondaryLines.length * 31 - 6);
+      ctx.fillStyle = theme.faint;
+      for (const line of secondaryLines) {
+        ctx.fillText(line, PAD + 20, y + 24);
+        y += 31;
+      }
+      y += 6;
+    }
+
+    const footerTop = CARD_H - 172;
+    if (primarySummary) {
       y += 18;
       ctx.font = `400 27px ${SANS}`;
       ctx.fillStyle = theme.muted;
       const remaining = footerTop - y - 26;
       const maxSummaryLines = Math.max(0, Math.min(image ? 4 : 5, Math.floor(remaining / 40)));
       if (maxSummaryLines > 0) {
-        const summaryLines = truncateLines(ctx, item.summary, maxWidth, maxSummaryLines);
+        const summaryLines = truncateLines(ctx, primarySummary, maxWidth, maxSummaryLines);
         for (const line of summaryLines) {
           ctx.fillText(line, PAD, y + 27);
           y += 40;
@@ -250,6 +330,7 @@
       fmtDate(item.published_at),
       item.event_label ? `事件 ${item.event_label}` : "",
       item.language_label ? `原文 ${item.language_label}` : "",
+      showTranslation && item.translation_provider ? `译文 ${item.translation_provider}` : "",
     ].filter(Boolean);
     if (metaParts.length) {
       y = Math.min(y + 28, footerTop - 18);
@@ -310,6 +391,9 @@
                 <option value="paper">纸张</option>
               </select>
             </label>
+            <label class="card-check" id="news-card-translation-label">
+              <input type="checkbox" id="news-card-translation" checked> 包含中文译文
+            </label>
             <button class="card-btn primary" type="button" id="news-card-download">下载 PNG</button>
             <button class="card-btn" type="button" id="news-card-copy">复制图片</button>
             <button class="card-btn" type="button" id="news-card-share">系统分享</button>
@@ -328,6 +412,12 @@
     $("#news-card-theme", modal).addEventListener("change", (event) => {
       state.theme = event.target.value;
       render();
+    });
+    $("#news-card-translation", modal).addEventListener("change", (event) => {
+      if (state.item) {
+        state.item.translation_enabled = event.target.checked;
+        render();
+      }
     });
     $("#news-card-download", modal).addEventListener("click", download);
     $("#news-card-copy", modal).addEventListener("click", copy);
@@ -349,7 +439,7 @@
     const modal = ensureModal();
     if (!state.item) return;
     const job = ++state.job;
-    setStatus("正在生成卡片…");
+    setStatus(state.translating ? "正在翻译标题与摘要…" : "正在生成卡片…");
     const canvas = await buildCanvas(state.item, state.theme);
     if (job !== state.job) return;
     state.canvas = canvas;
@@ -357,7 +447,7 @@
     preview.width = canvas.width;
     preview.height = canvas.height;
     preview.getContext("2d").drawImage(canvas, 0, 0);
-    setStatus("卡片已生成");
+    setStatus(state.translating ? "正在翻译标题与摘要…" : "卡片已生成");
     const shareButton = $("#news-card-share", modal);
     const supported = Boolean(navigator.share);
     shareButton.hidden = !supported;
@@ -365,21 +455,57 @@
 
   function open(item) {
     const modal = ensureModal();
+    const job = ++state.openJob;
     state.item = normalize(item);
     state.theme = "dark";
+    state.translating = false;
     const select = $("#news-card-theme", modal);
     if (select) select.value = state.theme;
+
+    const needsTranslation = Boolean(state.item.language && state.item.language !== "zh");
+    state.item.translation_enabled = needsTranslation && state.item.translation_enabled !== false;
+    const checkbox = $("#news-card-translation", modal);
+    const checkboxLabel = $("#news-card-translation-label", modal);
+    checkbox.checked = state.item.translation_enabled;
+    checkbox.disabled = !needsTranslation;
+    checkboxLabel.classList.toggle("hidden", !needsTranslation);
+
     modal.hidden = false;
     document.body.classList.add("card-modal-open");
-    render();
+
+    if (needsTranslation && !state.item.title_translated) {
+      state.translating = true;
+      render();
+      translateItem(state.item)
+        .then(() => {
+          if (job !== state.openJob) return;
+          state.translating = false;
+          state.item.translation_enabled = true;
+          checkbox.checked = true;
+          checkbox.disabled = false;
+          render();
+        })
+        .catch((error) => {
+          if (job !== state.openJob) return;
+          state.translating = false;
+          state.item.translation_enabled = false;
+          checkbox.checked = false;
+          checkbox.disabled = true;
+          render().then(() => setStatus(`翻译失败：${error.message}`, true));
+        });
+    } else {
+      render();
+    }
   }
 
   function close() {
     if (!state.modal) return;
+    state.openJob += 1;
     state.modal.hidden = true;
     document.body.classList.remove("card-modal-open");
     state.item = null;
     state.canvas = null;
+    state.translating = false;
   }
 
   function toBlob(canvas) {
@@ -466,6 +592,7 @@
     downloadCanvas,
     copyCanvas,
     shareCanvas,
+    translateText,
     normalize,
     themes: Object.keys(THEMES),
   };

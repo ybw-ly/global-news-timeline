@@ -100,6 +100,22 @@
   color: #e9eef5;
   font: 13px/1.4 "Inter", "Microsoft YaHei", system-ui, sans-serif;
 }
+label.card-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  color: #8593a5;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+}
+label.card-check input {
+  width: 15px;
+  height: 15px;
+  accent-color: #76e0c2;
+}
 .card-btn {
   display: inline-flex;
   align-items: center;
