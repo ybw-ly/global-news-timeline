@@ -1,0 +1,119 @@
+{
+  "enabled": true,
+  "notes": "Rules are evaluated top-down; the first match wins. `feeds` / `languages` empty means every source. `unless` rescues legitimate news that happens to contain a soft keyword. Keep patterns narrow: this is a news timeline, not a spam classifier.",
+  "rules": [
+    {
+      "id": "ko-press-board",
+      "feeds": ["yonhap-economy"],
+      "languages": ["ko"],
+      "title": "^\\s*\\[(게시판|보도자료|공지)\\]"
+    },
+    {
+      "id": "ko-promo",
+      "feeds": ["yonhap-economy"],
+      "languages": ["ko"],
+      "title": "(이벤트|경품|사전예약|프로모션|할인\\s*행사|출시)",
+      "unless": "(실적|주가|증시|금리|환율|물가|수출|수입|무역|정책|정부|국회|은행|투자|M&A|인수|공모|채용|고용|물류|반도체|자동차|조선|건설|부동산|제재|관세|치료제|의약품|바이오|제약|임상|허가|승인|FDA|식약처)"
+    },
+    {
+      "id": "th-horoscope",
+      "feeds": ["prachachat"],
+      "languages": ["th"],
+      "title": "(ดูดวง|ดวงราย|ดวงวัน|ดวงเดือน|ดวงปี|ราศี|ทำนาย|เลขเด็ด|หวย|โชคลาภ)"
+    },
+    {
+      "id": "th-daily-price",
+      "feeds": ["prachachat"],
+      "languages": ["th"],
+      "title": "(ราคาน้ำมัน|ราคาบิทคอยน์|ราคาทอง|ค่าเงินบาท|ราคาหุ้น).{0,40}วันนี้|วันนี้.{0,20}(ราคาน้ำมัน|ราคาบิทคอยน์|ค่าเงินบาท)"
+    },
+    {
+      "id": "th-pr-event",
+      "feeds": ["prachachat"],
+      "languages": ["th"],
+      "title": "(โปรโมชั่น|เปิดสาขา|ลดราคา|แจก|ชิงโชค|คว้ารางวัล|รับรางวัล|แลนด์มาร์ก|เนรมิต|ต้อนรับ|บิ๊กดีล|ผนึกกำลัง|เปิดตัว|แถลงข่าว|จัดงาน|เปิดงาน)",
+      "unless": "(เศรษฐกิจ|ตลาด|ลงทุน|เงิน|ภาษี|ส่งออก|นำเข้า|ธนาคาร|เงินเฟ้อ|จีดีพี|นโยบาย|รัฐบาล|ต่างประเทศ|สงคราม|เลือกตั้ง|หุ้น|\\bSET\\b|ค่าแรง|จ้างงาน|เกษตร|กระทรวง|จังหวัด|ข่าวปลอม|โต้ข่าว|ค้าน|Sandbox)"
+    },
+    {
+      "id": "fa-horoscope",
+      "feeds": ["donya-eqtesad", "eghtesadonline"],
+      "languages": ["fa"],
+      "title": "(طالع\\s*بینی|طالع‌بینی|فال\\s*حافظ|برج\\s*(فلکی|ماه|هفته)|رصد\\s*ستارگان)"
+    },
+    {
+      "id": "fa-weather",
+      "feeds": ["donya-eqtesad", "eghtesadonline"],
+      "languages": ["fa"],
+      "title": "(هواشناسی|پیش‌بینی\\s*هوا|آب\\s*و\\s*هوا|وضعیت\\s*جوی|چرخش\\s*جوی|برف\\s*و\\s*باران|بارش‌ها.{0,20}امروز|آلودگی\\s*هوا|هوای\\s*تهران|تعطیلی\\s*مدارس|دما.{0,20}(سقوط|افزایش|کاهش))"
+    },
+    {
+      "id": "fa-daily-price",
+      "feeds": ["donya-eqtesad", "eghtesadonline"],
+      "languages": ["fa"],
+      "title": "(قیمت|نرخ).{0,30}(امروز|این\\s*هفته)|لیست\\s*قیمت|قیمت‌های\\s*جدید|قیمت\\s*جدید|جدول\\s*قیمت|شرایط\\s*جدید\\s*فروش\\s*اقساطی|(قیمت|نرخ).{0,60}جدول|ریزش\\s*دسته\\s*جمعی\\s*قیمت",
+      "unless": "(بورس|سهام|تورم|شاخص|نفت|گاز|ارز|طلا|مسکن|اجاره|دلار|یورو).{0,20}(سیاست|تحلیل|پیش‌بینی|روند|علت|چرا)|بازنگری|تعرفه|یارانه|سیاست|دولت|وزارت|مجلس|قانون|توافق|مذاکره"
+    },
+    {
+      "id": "fa-health-clickbait",
+      "feeds": ["donya-eqtesad", "eghtesadonline"],
+      "languages": ["fa"],
+      "title": "(میوه|چاقی|لاغری|کاهش\\s*وزن|خواص|فواید|مضرات|درمان|سلامت|بیماری|سرطان|دیابت|فشار\\s*خون|کلسترول|زوال\\s*عقل|روغن\\s*خوراکی|خوراکی|بخورید|نوشیدنی|رژیم\\s*غذایی|ویتامین|معجزه\\s*(می\\s*کند|درمان|سلامت|لاغری)|پوست|ریزش\\s*مو)",
+      "unless": "(اقتصاد|بازار|سرمایه|بانک|نفت|گاز|دلار|طلا|بورس|تجارت|صادرات|واردات|تورم|بودجه|مالیات|اشتغال|صنعت|شرکت|دولت|مجلس|تحریم|جنگ|سیاست|انتخابات|آنفلوانزا|واکسن|بیمارستان|وزارت\\s*بهداشت|پیشگیری|تشخیص|پژوهش|مطالعه|تحقیق|سازمان|شیوع|هوش\\s*مصنوعی|فناوری|مایکروسافت|پلیس|مواد\\s*مخدر|قضایی|دادستانی|گرانی|تعزیرات|قیمت)"
+    },
+    {
+      "id": "fa-pr-exhibition",
+      "feeds": ["eghtesadonline", "donya-eqtesad"],
+      "languages": ["fa"],
+      "title": "(حضور.{0,40}(نمایشگاه|همایش)|در\\s*نمایشگاه|اطلاعیه.{0,25}(تامین اجتماعی|سازمان|نسخه|دارو|مهلت|ثبت‌نام|قطع)|مهلت\\s*ثبت‌نام|ثبت‌نام\\s*آزمون|اعلام\\s*قیمت|اعلام\\s*شرایط)",
+      "unless": "(سیاست|دولت|مجلس|جنگ|تحریم|مذاکره|توافق|قانون|بودجه)"
+    },
+    {
+      "id": "id-buffett-wealth",
+      "feeds": ["cnbc-indonesia"],
+      "languages": ["id"],
+      "title": "(Buffett|orang\\s*kaya|jadi\\s*kaya|cepat\\s*kaya|rahasia\\s*sukses|kisah\\s*sukses|motivasi|inspirasi|Crazy\\s*Rich|gaya\\s*hidup)",
+      "unless": "(saham|investasi|pasar|ekonomi|bank|inflasi|suku\\s*bunga|pemerintah|kebijakan|IPO|emiten|rupiah|IHSG|ekspor|impor|perdagangan|APBN|pajak|PHK|utang|kredit|modal|perusahaan|industri|energi|minyak|gas|batu\\s*bara|nikel|tambang|politik|hukum|pemilu|demo|protes|serangan|perang)"
+    },
+    {
+      "id": "id-soft-feature",
+      "feeds": ["cnbc-indonesia"],
+      "languages": ["id"],
+      "title": "(^Cerita\\b|^Kisah\\b|Curhat|Drama|Misteri|Babi\\s*Ngepet|mitos|klenik|hantu|alam\\s*gaib|ramalan|zodiak|shio)",
+      "unless": "(saham|investasi|pasar|ekonomi|bank|inflasi|suku\\s*bunga|pemerintah|kebijakan|IPO|emiten|rupiah|IHSG|ekspor|impor|perdagangan|APBN|pajak|PHK|utang|kredit|modal|perusahaan|industri|energi|minyak|gas|batu\\s*bara|nikel|tambang|politik|hukum|pemilu|demo|protes|serangan|perang)"
+    },
+    {
+      "id": "id-health-listicle",
+      "feeds": ["cnbc-indonesia"],
+      "languages": ["id"],
+      "title": "(^\\d+\\s*(Makanan|Buah|Minuman|Cara|Tips|Tanda|Penyebab|Manfaat|Khasiat)|perut\\s*buncit|turunkan\\s*berat|kolesterol|asam\\s*urat|diabetes|detoks|imun|vitamin|diet)",
+      "unless": "(industri|ekspor|impor|harga|pasar|ekonomi|saham|bank|perusahaan|kebijakan|riset|penelitian|vaksin|wabah|\\bWHO\\b|rumah\\s*sakit|BPJS|kementerian)"
+    },
+    {
+      "id": "id-daily-price",
+      "feeds": ["cnbc-indonesia"],
+      "languages": ["id"],
+      "title": "(Harga\\s*(Emas|Bitcoin|Dolar|Rupiah).{0,40}Hari\\s*Ini|Daftar\\s*(Harga|Bunga|Tarif|Biaya)|Bunga\\s*Deposito.{0,40}(Terbaru|Hari\\s*Ini|per\\s+\\d+)|Harga\\s*Emas\\s*Galeri|Harga\\s*Emas\\s*Antam)"
+    },
+    {
+      "id": "id-promo",
+      "feeds": ["cnbc-indonesia"],
+      "languages": ["id"],
+      "title": "(Pesta\\s*Diskon|\\bPromo\\b|\\bDiskon\\b|\\bBazar\\b|\\bGandeng\\b)",
+      "unless": "(inflasi|harga\\s*pangan|ekonomi|kebijakan|pemerintah|pasar|ritel|penjualan|konsumsi)"
+    },
+    {
+      "id": "ja-lifestyle",
+      "feeds": ["toyo-keizai"],
+      "languages": ["ja"],
+      "title": "(人生|幸せ|幸福|人間関係|コミュニケーション|モテ|老後|健康|ダイエット|食事|睡眠|子育て|介護|恋愛|結婚|生き方|孤食|グルメ).{0,80}\\|\\s*ライフ\\s*\\||\\|\\s*ライフ\\s*\\|.{0,80}(人生|幸せ|幸福|人間関係|コミュニケーション|モテ|老後|健康|ダイエット|食事|睡眠|子育て|介護|恋愛|結婚|生き方|孤食|グルメ)",
+      "unless": "(景気|GDP|物価|インフレ|金融|企業|市場|投資|株|金利|政策|政府|業界|決算|雇用|賃金|働き方|DX|AI|半導体|エネルギー|円|輸出|輸入|貿易)"
+    },
+    {
+      "id": "zh-pr-event",
+      "feeds": ["eeo"],
+      "languages": ["zh"],
+      "title": "(分享会|发布会|揭牌|签约仪式|启动仪式|圆满举行|成功举办|荣获|斩获|亮相|官宣|盛大开幕|圆满落幕|品牌营销)",
+      "unless": "(经济|政策|监管|产业|市场|投资|贸易|关税|金融|科技|能源|汽车|地产|就业|消费)"
+    }
+  ]
+}

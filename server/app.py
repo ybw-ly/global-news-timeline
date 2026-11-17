@@ -20,6 +20,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+from brazil import fetch_results as fetch_brazil_results
 from db import (
     connect,
     count_articles,
@@ -36,7 +37,7 @@ from db import (
     unlocated_count,
 )
 from ingest import load_config, refresh_async, scheduler_loop
-from query_expand import expand_search
+from query_expand import SEARCH_RELAX_MIN, expand_search
 from taxonomy import (
     CATEGORIES,
     COUNTRIES,
@@ -54,7 +55,7 @@ from translate import translate
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
-VERSION = "1.5.1"
+VERSION = "1.8.0"
 LOG = logging.getLogger("server")
 
 HOST = os.environ.get("HOST", "127.0.0.1")
@@ -82,13 +83,18 @@ def status_payload(conn) -> dict:
     health = feed_health(conn)
     total = count_articles(conn)
     day_count = conn.execute(
-        "SELECT COUNT(*) FROM articles WHERE published_at >= ?", (_iso_day_ago(24),)
+        "SELECT COUNT(*) FROM articles WHERE published_at >= ? AND COALESCE(filtered, 0) = 0",
+        (_iso_day_ago(24),),
+    ).fetchone()[0]
+    filtered_total = conn.execute(
+        "SELECT COUNT(*) FROM articles WHERE COALESCE(filtered, 0) = 1"
     ).fetchone()[0]
     import ingest
     import translate as translate_module
 
     last_at = meta_get(conn, "last_ingest_at")
     last_new = meta_get(conn, "last_new_count", "0")
+    last_filtered = meta_get(conn, "last_filtered_count", "0")
     last_duration = meta_get(conn, "last_duration_seconds", "0")
     return {
         "version": VERSION,
@@ -96,9 +102,11 @@ def status_payload(conn) -> dict:
         "refreshing": bool(ingest._refreshing),
         "last_ingest_at": last_at,
         "last_new_count": int(last_new or 0),
+        "last_filtered_count": int(last_filtered or 0),
         "last_duration_seconds": float(last_duration or 0),
         "articles_total": total,
         "articles_24h": day_count,
+        "articles_filtered": filtered_total,
         "feeds": {
             "total": health.get("total") or 0,
             "enabled": health.get("enabled") or 0,
@@ -164,7 +172,10 @@ def decorate(item: dict) -> dict:
     item["region_label"] = region_label(item.get("region", "other"))
     item["country_label"] = country_label(item.get("country"))
     item["ownership_label"] = ownership_label(item.get("ownership"))
-    item["content_type_label"] = content_type_label(item.get("content_type"))
+    item["content_type_label"] = (
+        "预测市场" if item.get("ownership") == "market"
+        else content_type_label(item.get("content_type"))
+    )
     item["coverage"] = item.get("coverage", 1)
     item["related"] = item.get("related", [])
     item["event_country_label"] = (
@@ -188,10 +199,68 @@ def decorate(item: dict) -> dict:
     return item
 
 
+def _search_score(item: dict, q: str, variants: list[dict]) -> int:
+    """Cheap relevance score: title hits beat summary/event hits.
+
+    Recency remains the tie-breaker because the SQL rows arrive newest-first
+    and Python's sort is stable.
+    """
+    title = str(item.get("title") or "").casefold()
+    summary = str(item.get("summary") or "").casefold()
+    event_text = " ".join(
+        str(item.get(field) or "")
+        for field in ("event_places", "event_entities", "event_topics")
+    ).casefold()
+    score = 0
+    needle = q.casefold()
+    if needle and needle in title:
+        score += 120
+    elif needle and needle in summary:
+        score += 35
+    tokens = [token for token in needle.split() if len(token) > 1]
+    for token in tokens:
+        if token in title:
+            score += 24
+        elif token in summary:
+            score += 7
+        elif token in event_text:
+            score += 4
+    for variant in variants:
+        text = str(variant.get("text") or "").casefold()
+        if len(text) > 2 and text in title:
+            score += 10
+        for term in (variant.get("terms") or [])[:4]:
+            value = str(term or "").casefold()
+            if len(value) > 1 and value in title:
+                score += 3
+    return score
+
+
 def query_payload(conn, filters: dict, limit: int, offset: int) -> dict:
     expansion = expand_search(filters) if filters.get("q") else None
+    strict_total = None
     items, total = query_articles(conn, filters, limit=limit, offset=offset)
+    if filters.get("q") and not filters.get("_relaxed") and total < SEARCH_RELAX_MIN:
+        strict_total = total
+        relaxed_filters = dict(filters)
+        relaxed_filters["_relaxed"] = True
+        relaxed_items, relaxed_total = query_articles(
+            conn, relaxed_filters, limit=limit, offset=offset
+        )
+        if relaxed_total > total:
+            filters = relaxed_filters
+            items, total = relaxed_items, relaxed_total
+            if expansion is not None:
+                expansion["relaxed"] = True
+                expansion["strict_total"] = strict_total
+                expansion["relaxed_total"] = relaxed_total
+    if expansion is not None and expansion.get("strict_total") is None:
+        expansion["strict_total"] = total
     items = [decorate(dict(row)) for row in items]
+    if filters.get("q"):
+        q_value = filters.get("q") or ""
+        variants = filters.get("_variants") or []
+        items.sort(key=lambda item: _search_score(item, q_value, variants), reverse=True)
     cluster_articles(items)
     items = diversify(items)
 
@@ -384,6 +453,10 @@ class Handler(BaseHTTPRequestHandler):
                 self._json({"ok": True, "version": VERSION, "articles": count_articles(conn)})
             finally:
                 conn.close()
+            return
+        if path == "/api/brazil/results":
+            scope = (query.get("scope") or ["br"])[0]
+            self._json(fetch_brazil_results(scope))
             return
         if path == "/api/status":
             conn = connect()

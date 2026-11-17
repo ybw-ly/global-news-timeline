@@ -7,6 +7,7 @@ import hashlib
 import html
 import json
 import logging
+import os
 import re
 import threading
 import time
@@ -18,10 +19,12 @@ from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from classifier import Classifier
 from contenttype import classifier as content_classifier
 from eventgraph import graph as event_graph
+from quality import quality_filter
 from db import (
     connect,
     feed_states,
@@ -53,6 +56,69 @@ _refreshing = False
 _last_result: dict[str, Any] = {}
 
 _IMAGE_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)', re.IGNORECASE)
+
+
+def _detect_proxy() -> str | None:
+    """Env vars first, then the Windows system proxy (registry)."""
+    for name in (
+        "HTTPS_PROXY",
+        "https_proxy",
+        "HTTP_PROXY",
+        "http_proxy",
+        "ALL_PROXY",
+        "all_proxy",
+    ):
+        value = os.environ.get(name)
+        if value:
+            return value
+    if os.name != "nt":
+        return None
+    try:
+        import winreg
+
+        path = r"Software\Microsoft\Windows\CurrentVersion\Internet Settings"
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, path) as key:
+            enabled = winreg.QueryValueEx(key, "ProxyEnable")[0]
+            server = winreg.QueryValueEx(key, "ProxyServer")[0]
+        if not enabled or not server:
+            return None
+        if "=" in server:
+            parts = dict(part.split("=", 1) for part in server.split(";") if "=" in part)
+            server = parts.get("https") or parts.get("http") or ""
+        if not server:
+            return None
+        return server if "://" in server else "http://" + server
+    except Exception:
+        return None
+
+
+_PROXY = _detect_proxy()
+_PROXY_OPENER = (
+    urllib.request.build_opener(
+        urllib.request.ProxyHandler({"http": _PROXY, "https": _PROXY})
+    )
+    if _PROXY
+    else urllib.request.build_opener()
+)
+_DIRECT_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+# 这些域名经当前代理出口时会被 TLS 重置，直连反而正常
+_DIRECT_SUFFIXES = (".gov", ".mil")
+
+
+def _open(request: urllib.request.Request, timeout: int):
+    host = (urlsplit(request.full_url).hostname or "").lower()
+    if host.endswith(_DIRECT_SUFFIXES):
+        return _DIRECT_OPENER.open(request, timeout=timeout)
+    try:
+        return _PROXY_OPENER.open(request, timeout=timeout)
+    except urllib.error.HTTPError as exc:
+        if exc.code not in (403, 407, 451):
+            raise
+        # 部分站点会拒绝代理出口 IP，但直连正常
+        return _DIRECT_OPENER.open(request, timeout=timeout)
+    except (urllib.error.URLError, OSError):
+        # 代理节点偶发 TLS/连接失败，回退直连一次
+        return _DIRECT_OPENER.open(request, timeout=timeout)
 
 
 def load_config() -> dict:
@@ -207,9 +273,313 @@ def parse_feed(data: bytes, feed: dict) -> list[dict]:
     return raw_items[: int(feed.get("max_items", 40))]
 
 
+def _polymarket_time(value: str | None) -> str:
+    if not value:
+        return utcnow()
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    except Exception:
+        return utcnow()
+
+
+def _polymarket_list(value) -> list:
+    if isinstance(value, list):
+        return value
+    try:
+        parsed = json.loads(value or "[]")
+        return parsed if isinstance(parsed, list) else []
+    except Exception:
+        return []
+
+
+_POLYMARKET_EXCLUDED_TAGS = {
+    "sports", "games", "soccer", "football", "nba", "nfl", "mlb", "nhl",
+    "ufc", "boxing", "tennis", "golf", "formula-1", "basketball",
+    "baseball", "hockey", "esports", "awards", "entertainment", "music",
+    "movies", "tv", "celebrities", "pop-culture",
+}
+
+
+def _polymarket_event_item(event: dict, feed: dict) -> dict | None:
+    if not isinstance(event, dict):
+        return None
+    tags = {
+        str(tag.get("slug") or "").casefold()
+        for tag in (event.get("tags") or [])
+        if isinstance(tag, dict)
+    }
+    if tags & _POLYMARKET_EXCLUDED_TAGS:
+        return None
+    title = str(event.get("title") or "").strip()
+    slug = str(event.get("slug") or "").strip()
+    if not title or not slug:
+        return None
+    outcomes: list[tuple[str, float]] = []
+    for market in event.get("markets") or []:
+        if not isinstance(market, dict):
+            continue
+        if market.get("closed") or market.get("archived") or market.get("active") is False:
+            continue
+        label = str(market.get("groupItemTitle") or market.get("question") or "").strip()
+        prices = _polymarket_list(market.get("outcomePrices"))
+        try:
+            price = float(prices[0]) if prices else 0.0
+        except Exception:
+            continue
+        if not label or price <= 0.001 or price >= 0.999:
+            continue
+        outcomes.append((label, price))
+    if not outcomes:
+        return None
+    outcomes.sort(key=lambda pair: pair[1], reverse=True)
+    shown = outcomes[:4]
+    odds = " / ".join(f"{name} {value * 100:.1f}%" for name, value in shown)
+    if len(outcomes) > len(shown):
+        odds += f" 等 {len(outcomes)} 个选项"
+    parts = [f"预测市场：{odds}"]
+    volume_value = 0.0
+    try:
+        volume_value = float(event.get("volume24hr") or event.get("volume") or 0)
+        if volume_value > 0:
+            parts.append(f"24h 成交额 ${volume_value:,.0f}")
+    except Exception:
+        pass
+    try:
+        liquidity = float(event.get("liquidity") or event.get("liquidityClob") or 0)
+        if liquidity > 0:
+            parts.append(f"流动性 ${liquidity:,.0f}")
+    except Exception:
+        pass
+    end_date = str(event.get("endDate") or event.get("endDateIso") or "")[:10]
+    if end_date:
+        parts.append(f"截止 {end_date}")
+    description = re.sub(r"\s+", " ", str(event.get("description") or "")).strip()
+    if description:
+        parts.append(description[:180])
+    return {
+        "title": title[:300],
+        "url": f"https://polymarket.com/event/{slug}",
+        "summary": " · ".join(parts),
+        "published_at": _polymarket_time(event.get("updatedAt") or event.get("createdAt")),
+        "publisher": feed.get("publisher") or "Polymarket",
+        "publisher_url": feed.get("homepage") or "https://polymarket.com/",
+        "image_url": event.get("image") or event.get("icon"),
+        "categories": ["prediction-market"],
+        "snapshot_update": True,
+    }
+
+
+def parse_polymarket_markets(data, feed: dict) -> list[dict]:
+    """Convert Gamma API markets into the app's raw article shape."""
+    markets = data if isinstance(data, list) else (data.get("markets") if isinstance(data, dict) else [])
+    if not isinstance(markets, list):
+        return []
+    rows: list[tuple[float, dict]] = []
+    for market in markets:
+        if not isinstance(market, dict):
+            continue
+        if market.get("markets") and market.get("title"):
+            event_item = _polymarket_event_item(market, feed)
+            if event_item:
+                try:
+                    volume_value = float(market.get("volume24hr") or market.get("volume") or 0)
+                except Exception:
+                    volume_value = 0.0
+                rows.append((volume_value, event_item))
+            continue
+        if market.get("closed") or market.get("archived") or market.get("active") is False:
+            continue
+        question = str(market.get("question") or "").strip()
+        slug = str(market.get("slug") or "").strip()
+        if not question or not slug:
+            continue
+        outcomes = [str(value) for value in _polymarket_list(market.get("outcomes"))]
+        prices = _polymarket_list(market.get("outcomePrices"))
+        pairs: list[tuple[str, float]] = []
+        for outcome, price in zip(outcomes, prices):
+            try:
+                pairs.append((outcome, float(price)))
+            except Exception:
+                continue
+        pairs.sort(key=lambda pair: pair[1], reverse=True)
+        shown = pairs[:4]
+        odds = " / ".join(f"{name} {value * 100:.1f}%" for name, value in shown)
+        if len(pairs) > len(shown):
+            odds += f" 等 {len(pairs)} 个选项"
+        parts = [f"预测市场：{odds}" if odds else "预测市场"]
+        volume = market.get("volume24hr") or market.get("volumeNum") or market.get("volume")
+        liquidity = market.get("liquidityNum") or market.get("liquidity")
+        end_date = str(market.get("endDate") or market.get("endDateIso") or "")[:10]
+        volume_value = 0.0
+        try:
+            volume_value = float(volume or 0)
+            if volume_value > 0:
+                parts.append(f"24h 成交额 ${volume_value:,.0f}")
+        except Exception:
+            pass
+        try:
+            if float(liquidity or 0) > 0:
+                parts.append(f"流动性 ${float(liquidity):,.0f}")
+        except Exception:
+            pass
+        if end_date:
+            parts.append(f"截止 {end_date}")
+        description = re.sub(r"\s+", " ", str(market.get("description") or "")).strip()
+        if description:
+            parts.append(description[:220])
+        rows.append((volume_value, {
+            "title": question[:300],
+            "url": f"https://polymarket.com/event/{slug}",
+            "summary": " · ".join(parts),
+            "published_at": _polymarket_time(market.get("updatedAt") or market.get("createdAt")),
+            "publisher": feed.get("publisher") or "Polymarket",
+            "publisher_url": feed.get("homepage") or "https://polymarket.com/",
+            "image_url": market.get("image") or market.get("icon"),
+            "categories": ["prediction-market"],
+            "snapshot_update": True,
+        }))
+    rows.sort(key=lambda pair: pair[0], reverse=True)
+    return [item for _, item in rows[: int(feed.get("max_items", 12))]]
+
+
+def _fetch_polymarket(feed: dict, timeout: int, user_agent: str) -> dict:
+    started = time.time()
+    try:
+        request = urllib.request.Request(
+            feed["url"],
+            headers={
+                "User-Agent": user_agent,
+                "Accept": "application/json",
+                "Accept-Language": "en,*;q=0.5",
+            },
+        )
+        with _open(request, timeout) as response:
+            # Gamma API 的 events 响应含嵌套 markets/tokens，随热度增长会超过 16 MiB；
+            # 截断读取会在字符串中间断开，json 直接报 Unterminated string。
+            data = json.loads(response.read(64 * 1024 * 1024).decode("utf-8"))
+        items = parse_polymarket_markets(data, feed)
+        return {
+            "feed": feed,
+            "status": "ok" if items else "empty",
+            "items": items,
+            "etag": None,
+            "last_modified": None,
+            "error": None,
+            "seconds": round(time.time() - started, 1),
+        }
+    except Exception as exc:
+        return {
+            "feed": feed,
+            "status": "error",
+            "items": [],
+            "etag": None,
+            "last_modified": None,
+            "error": f"Polymarket: {str(exc)[:160]}",
+            "seconds": round(time.time() - started, 1),
+        }
+
+
+def _jin10_time(value: str | None) -> str:
+    if not value:
+        return utcnow()
+    try:
+        parsed = datetime.strptime(str(value).strip(), "%Y-%m-%d %H:%M:%S")
+        return parsed.replace(tzinfo=timezone(timedelta(hours=8))).astimezone(
+            timezone.utc
+        ).strftime("%Y-%m-%dT%H:%M:%SZ")
+    except Exception:
+        return utcnow()
+
+
+def parse_jin10_flash(data, feed: dict) -> list[dict]:
+    """Convert the jin10 flash-list JSON into the app's raw article shape."""
+    entries = data.get("data") if isinstance(data, dict) else data
+    if not isinstance(entries, list):
+        return []
+    items: list[dict] = []
+    seen: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        flash_id = str(entry.get("id") or "").strip()
+        if not flash_id or flash_id in seen:
+            continue
+        payload = entry.get("data") if isinstance(entry.get("data"), dict) else {}
+        title = str(payload.get("title") or "").strip()
+        content = str(payload.get("content") or "").strip()
+        content = html.unescape(re.sub(r"<[^>]+>", " ", content))
+        content = re.sub(r"\s+", " ", content).strip()
+        headline = title or content
+        if not headline:
+            continue
+        seen.add(flash_id)
+        items.append(
+            {
+                "title": headline[:300],
+                "url": f"https://flash.jin10.com/detail/{flash_id}",
+                "summary": content[:400] if title else "",
+                "published_at": _jin10_time(entry.get("time")),
+                "publisher": feed.get("publisher") or "金十数据",
+                "publisher_url": feed.get("homepage") or "https://www.jin10.com/",
+                "image_url": payload.get("pic") or None,
+                "categories": ["flash"],
+            }
+        )
+    items.sort(key=lambda item: item["published_at"], reverse=True)
+    return items[: int(feed.get("max_items", 15))]
+
+
+def _fetch_jin10(feed: dict, timeout: int, user_agent: str) -> dict:
+    started = time.time()
+    try:
+        request = urllib.request.Request(
+            feed["url"],
+            headers={
+                "User-Agent": user_agent,
+                "Accept": "application/json",
+                "x-app-id": "bVBF4FyRTn5NJF5n",
+                "x-version": "1.0.0",
+                "Referer": "https://www.jin10.com/",
+            },
+        )
+        with _open(request, timeout) as response:
+            data = json.loads(response.read(8 * 1024 * 1024).decode("utf-8"))
+        if isinstance(data, dict) and data.get("status") not in (None, 200):
+            raise RuntimeError(
+                f"status={data.get('status')} {data.get('message') or ''}".strip()
+            )
+        items = parse_jin10_flash(data, feed)
+        return {
+            "feed": feed,
+            "status": "ok" if items else "empty",
+            "items": items,
+            "etag": None,
+            "last_modified": None,
+            "error": None,
+            "seconds": round(time.time() - started, 1),
+        }
+    except Exception as exc:
+        return {
+            "feed": feed,
+            "status": "error",
+            "items": [],
+            "etag": None,
+            "last_modified": None,
+            "error": f"jin10: {str(exc)[:160]}",
+            "seconds": round(time.time() - started, 1),
+        }
+
+
 def _fetch(
     feed: dict, state: dict | None, timeout: int, user_agent: str, force: bool
 ) -> dict:
+    if feed.get("connector") == "polymarket":
+        return _fetch_polymarket(feed, timeout, user_agent)
+    if feed.get("connector") == "jin10":
+        return _fetch_jin10(feed, timeout, user_agent)
     url = feed["url"]
     headers = {
         "User-Agent": user_agent,
@@ -231,7 +601,7 @@ def _fetch(
     for attempt in range(2):
         try:
             request = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(request, timeout=timeout) as response:
+            with _open(request, timeout) as response:
                 data = response.read(4 * 1024 * 1024)
                 etag = response.headers.get("ETag")
                 last_modified = response.headers.get("Last-Modified")
@@ -352,6 +722,7 @@ def build_article(
         "content_type": content["content_type"],
         "content_type_terms": content["content_type_terms"],
         "rss_categories": raw.get("categories", []),
+        "snapshot_update": bool(raw.get("snapshot_update")),
     }
 
 
@@ -393,15 +764,30 @@ def refresh(force: bool = False, only_ids: list[str] | None = None) -> dict:
         classifier = Classifier()
         eg = event_graph()
         ctype = content_classifier()
+        qf = quality_filter()
         total_new = 0
         total_items = 0
+        total_filtered = 0
         ok = errors = 0
         for result in results:
             feed = result["feed"]
             items = result["items"]
+            kept = []
+            for item in items:
+                reason = qf.match(
+                    item["title"],
+                    item.get("summary", ""),
+                    item["url"],
+                    feed.get("language", ""),
+                    feed["id"],
+                )
+                if reason:
+                    total_filtered += 1
+                    continue
+                kept.append(item)
             parsed = [
                 article
-                for article in (build_article(item, feed, classifier, eg, ctype) for item in items)
+                for article in (build_article(item, feed, classifier, eg, ctype) for item in kept)
                 if article is not None
             ]
             new = insert_articles(conn, parsed)
@@ -421,8 +807,9 @@ def refresh(force: bool = False, only_ids: list[str] | None = None) -> dict:
             else:
                 errors += 1
             LOG.info(
-                "%-22s %-12s items=%-3s new=%-3s %.1fs %s",
-                feed["id"], result["status"], len(parsed), new, result["seconds"],
+                "%-22s %-12s items=%-3s kept=%-3s filtered=%-3s new=%-3s %.1fs %s",
+                feed["id"], result["status"], len(items), len(parsed),
+                len(items) - len(kept), new, result["seconds"],
                 result["error"] or "",
             )
 
@@ -431,6 +818,7 @@ def refresh(force: bool = False, only_ids: list[str] | None = None) -> dict:
             meta_set(conn, "last_ingest_at", utcnow())
             meta_set(conn, "last_new_count", str(total_new))
             meta_set(conn, "last_item_count", str(total_items))
+            meta_set(conn, "last_filtered_count", str(total_filtered))
             meta_set(conn, "last_duration_seconds", str(duration))
         else:
             meta_set(conn, "last_check_at", utcnow())
@@ -445,6 +833,7 @@ def refresh(force: bool = False, only_ids: list[str] | None = None) -> dict:
             "ok": ok,
             "errors": errors,
             "items": total_items,
+            "filtered": total_filtered,
             "new": total_new,
             "seconds": duration,
         }

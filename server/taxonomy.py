@@ -69,6 +69,7 @@ OWNERSHIP: dict[str, str] = {
     "public": "公共",
     "private": "私营",
     "aggregator": "聚合",
+    "market": "预测市场",
 }
 
 # Language used for lexicon lookup (script variants share a base language).

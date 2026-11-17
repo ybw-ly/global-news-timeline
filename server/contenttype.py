@@ -126,7 +126,11 @@ class ContentTypeClassifier:
         if "?" in title and scores["analysis"] > 0:
             scores["analysis"] += 0.3
 
-        if opinion_tag or scores["opinion"] >= 2.0:
+        if hint in ("hard", "analysis", "opinion"):
+            # Feed-level override: prediction-market data is intentionally
+            # shown as a hard data card, not misread as commentary.
+            content_type = hint
+        elif opinion_tag or scores["opinion"] >= 2.0:
             content_type = "opinion"
         elif analysis_tag or scores["analysis"] >= 1.8:
             content_type = "analysis"

@@ -17,9 +17,53 @@ def utcnow() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _word_hit(value: str | None, token: str | None) -> int:
+    """Case-insensitive whole-word check for short Latin tokens (AI/US/EU)."""
+    text = str(value or "").casefold()
+    needle = str(token or "").casefold().strip()
+    if not needle:
+        return 0
+    if not re.fullmatch(r"[a-z0-9]+", needle):
+        return 1 if needle in text else 0
+    pattern = r"(?<![a-z0-9])" + re.escape(needle) + r"(?![a-z0-9])"
+    return 1 if re.search(pattern, text) else 0
+
+
+def _word_prefix(value: str | None, token: str | None) -> int:
+    """Word-prefix check used for inflected Latin query tokens."""
+    text = str(value or "").casefold()
+    needle = str(token or "").casefold().strip()
+    if not needle:
+        return 0
+    if not re.fullmatch(r"[a-z0-9]+", needle):
+        return 1 if needle in text else 0
+    pattern = r"(?<![a-z0-9])" + re.escape(needle) + r"[a-z0-9]*"
+    return 1 if re.search(pattern, text) else 0
+
+
+def _query_stem(token: str) -> str:
+    """Strip common English inflections without collapsing to a 4-letter stem."""
+    value = token.casefold()
+    if len(value) >= 5 and value.endswith("ies"):
+        return value[:-3] + "y"
+    if len(value) >= 4 and value.endswith("ing"):
+        return value[:-3]
+    if len(value) >= 5 and value.endswith("ed"):
+        return value[:-2]
+    if (
+        len(value) >= 4
+        and value.endswith("s")
+        and not value.endswith(("ss", "us", "is"))
+    ):
+        return value[:-1]
+    return value
+
+
 def connect(path: Path | None = None) -> sqlite3.Connection:
     db = sqlite3.connect(str(path or DB_PATH), timeout=30, check_same_thread=False)
     db.row_factory = sqlite3.Row
+    db.create_function("word_hit", 2, _word_hit, deterministic=True)
+    db.create_function("word_prefix", 2, _word_prefix, deterministic=True)
     db.execute("PRAGMA journal_mode=WAL")
     db.execute("PRAGMA synchronous=NORMAL")
     db.execute("PRAGMA busy_timeout=30000")
@@ -58,7 +102,9 @@ def init_db(conn: sqlite3.Connection) -> None:
             event_confidence TEXT,
             content_type TEXT DEFAULT 'hard',
             content_type_terms TEXT,
-            rss_categories TEXT
+            rss_categories TEXT,
+            filtered INTEGER DEFAULT 0,
+            filter_reason TEXT
         );
         CREATE UNIQUE INDEX IF NOT EXISTS ux_articles_publisher_fp
             ON articles(publisher, fingerprint);
@@ -115,9 +161,16 @@ def init_db(conn: sqlite3.Connection) -> None:
                    "content_type", "content_type_terms", "rss_categories"):
         if column not in existing:
             conn.execute(f"ALTER TABLE articles ADD COLUMN {column} TEXT")
+    # Quality gate: hidden rows stay in the database (reversible) but are
+    # excluded from every timeline/search/facet query.
+    if "filtered" not in existing:
+        conn.execute("ALTER TABLE articles ADD COLUMN filtered INTEGER DEFAULT 0")
+    if "filter_reason" not in existing:
+        conn.execute("ALTER TABLE articles ADD COLUMN filter_reason TEXT")
     conn.execute("CREATE INDEX IF NOT EXISTS ix_articles_event_country ON articles(event_country)")
     conn.execute("CREATE INDEX IF NOT EXISTS ix_articles_event_region ON articles(event_region)")
     conn.execute("CREATE INDEX IF NOT EXISTS ix_articles_content_type ON articles(content_type)")
+    conn.execute("CREATE INDEX IF NOT EXISTS ix_articles_filtered ON articles(filtered)")
     conn.commit()
 
 
@@ -206,8 +259,18 @@ def insert_articles(conn: sqlite3.Connection, articles: list[dict]) -> int:
                 json.dumps(article.get("rss_categories", []), ensure_ascii=False),
             ),
         )
-        if conn.total_changes > before:
+        inserted = conn.total_changes > before
+        if inserted:
             new += 1
+        if article.get("snapshot_update"):
+            conn.execute(
+                "UPDATE articles SET summary=?, fetched_at=?, image_url=COALESCE(?, image_url) "
+                "WHERE id=?",
+                (
+                    article.get("summary", ""), article["fetched_at"],
+                    article.get("image_url"), article["id"],
+                ),
+            )
     conn.commit()
     return new
 
@@ -245,11 +308,14 @@ def _build_where(
 ) -> tuple[str, list[Any]]:
     clauses = ["published_at >= ?"]
     params: list[Any] = [_since(filters.get("hours", 24))]
+    if not filters.get("include_filtered"):
+        clauses.append("COALESCE(filtered, 0) = 0")
     if filters.get("until"):
         clauses.append("published_at <= ?")
         params.append(filters["until"])
     q = (filters.get("q") or "").strip()
     variants = filters.get("_variants") or []
+    relaxed = bool(filters.get("_relaxed"))
     search_groups: list[str] = []
     search_params: list[Any] = []
 
@@ -268,15 +334,44 @@ def _build_where(
                 "event_places", "event_entities", "event_topics",
             ]
             like = f"%{token}%"
-            token_params = [like] * len(fields)
+            latin = token.isascii() and token.isalnum()
+            boundary = latin and len(token) <= 3
+            stem = _query_stem(token) if latin and len(token) >= 4 else ""
+            field_clauses: list[str] = []
+            token_params: list[Any] = []
+            for field in fields:
+                if boundary:
+                    # Avoid %AI% matching "said"/"aid" and %US% matching
+                    # "Russia". Short Latin tokens are matched as whole words.
+                    field_clauses.append(f"word_hit({field}, ?)")
+                    token_params.append(token)
+                elif stem:
+                    # "banking" -> "bank*" catches bank/banks/banking without
+                    # matching unrelated substrings inside longer words.
+                    field_clauses.append(f"word_prefix({field}, ?)")
+                    token_params.append(stem)
+                else:
+                    field_clauses.append(f"{field} LIKE ?")
+                    token_params.append(like)
             for entity_id in _entity_alias_ids(token):
-                fields.append("event_entities")
-                token_params.append(f"%{entity_id}%")
-            group_parts.append("(" + " OR ".join(f"{field} LIKE ?" for field in fields) + ")")
+                field_clauses.append("word_hit(event_entities, ?)")
+                token_params.append(entity_id)
+            group_parts.append("(" + " OR ".join(field_clauses) + ")")
             group_params.extend(token_params)
         if group_parts:
-            search_groups.append("(" + " AND ".join(group_parts) + ")")
-            search_params.extend(group_params)
+            if relaxed and len(group_parts) > 1:
+                # Relax by at most one token. Two-word queries keep both:
+                # "Tibet earthquake" must not degrade into every earthquake.
+                need = len(group_parts) if len(group_parts) <= 2 else len(group_parts) - 1
+                score = " + ".join(
+                    f"(CASE WHEN {part} THEN 1 ELSE 0 END)" for part in group_parts
+                )
+                search_groups.append(f"(({score}) >= ?)")
+                search_params.extend(group_params)
+                search_params.append(need)
+            else:
+                search_groups.append("(" + " AND ".join(group_parts) + ")")
+                search_params.extend(group_params)
 
     # Cross-language variants broaden the search: each translation may match
     # by its whole phrase, or by all of its significant terms. Variants are
@@ -286,6 +381,13 @@ def _build_where(
         text = str(variant.get("text") or "").strip()
         if not text:
             continue
+        if variant.get("origin") == "source":
+            # The original-query clause above already covers this variant.
+            # Only use its segmented terms for a no-space CJK query in the
+            # relaxed pass; otherwise "AI agents banking" would match
+            # "agencies" + "West Bank" via the source variant.
+            if not relaxed or len(q.split()) > 1:
+                continue
         terms: list[str] = []
         for term in variant.get("terms") or []:
             term = str(term).strip()
@@ -296,7 +398,8 @@ def _build_where(
         whole_clause = "(title LIKE ? OR summary LIKE ? OR event_places LIKE ? OR event_topics LIKE ?)"
         parts = [whole_clause]
         variant_params: list[Any] = [whole_like] * 4
-        if len(terms) >= 2:
+        allow_relaxed_terms = (not relaxed) or variant.get("origin") in ("source", "alias", "")
+        if len(terms) >= 2 and allow_relaxed_terms:
             term_clauses: list[str] = []
             for term in terms:
                 like = f"%{term}%"
@@ -304,7 +407,15 @@ def _build_where(
                     "(title LIKE ? OR summary LIKE ? OR event_places LIKE ? OR event_topics LIKE ?)"
                 )
                 variant_params.extend([like] * 4)
-            parts.append("(" + " AND ".join(term_clauses) + ")")
+            if relaxed:
+                need = min(len(terms), max(2, len(terms) - 1))
+                score = " + ".join(
+                    f"(CASE WHEN {clause} THEN 1 ELSE 0 END)" for clause in term_clauses
+                )
+                parts.append(f"(({score}) >= ?)")
+                variant_params.append(need)
+            else:
+                parts.append("(" + " AND ".join(term_clauses) + ")")
         search_groups.append("(" + " OR ".join(parts) + ")")
         search_params.extend(variant_params)
 
@@ -488,7 +599,9 @@ def meta_set(conn: sqlite3.Connection, key: str, value: str) -> None:
 
 
 def count_articles(conn: sqlite3.Connection) -> int:
-    return conn.execute("SELECT COUNT(*) FROM articles").fetchone()[0]
+    return conn.execute(
+        "SELECT COUNT(*) FROM articles WHERE COALESCE(filtered, 0) = 0"
+    ).fetchone()[0]
 
 
 def purge_old(conn: sqlite3.Connection, days: int = 60) -> int:

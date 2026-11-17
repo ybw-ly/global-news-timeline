@@ -18,6 +18,7 @@ import concurrent.futures
 import json
 import os
 import re
+import threading
 import time
 from pathlib import Path
 
@@ -28,7 +29,7 @@ from translate import PROVIDER_LABELS, cached_translation, translate
 ROOT = Path(__file__).resolve().parent.parent
 NO_SPACE_LANGUAGES = {"zh", "zh-Hant", "ja", "th"}
 CJK_LANGUAGES = {"zh", "zh-Hant", "ja"}
-MAX_VARIANTS = 20
+MAX_VARIANTS = 32
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -40,9 +41,9 @@ def _env_bool(name: str, default: bool) -> bool:
 
 SEARCH_TRANSLATE = _env_bool("SEARCH_TRANSLATE", True)
 try:
-    SEARCH_TRANSLATE_WORKERS = max(1, min(12, int(os.environ.get("SEARCH_TRANSLATE_WORKERS", "6"))))
+    SEARCH_TRANSLATE_WORKERS = max(1, min(12, int(os.environ.get("SEARCH_TRANSLATE_WORKERS", "4"))))
 except ValueError:
-    SEARCH_TRANSLATE_WORKERS = 6
+    SEARCH_TRANSLATE_WORKERS = 4
 try:
     SEARCH_TRANSLATE_DEADLINE = max(1.0, min(20.0, float(os.environ.get("SEARCH_TRANSLATE_DEADLINE", "4.5"))))
 except ValueError:
@@ -51,6 +52,25 @@ try:
     SEARCH_TRANSLATE_CACHED_DEADLINE = max(0.5, min(10.0, float(os.environ.get("SEARCH_TRANSLATE_CACHED_DEADLINE", "1.5"))))
 except ValueError:
     SEARCH_TRANSLATE_CACHED_DEADLINE = 1.5
+try:
+    SEARCH_TRANSLATE_SYNC_LIMIT = max(1, min(20, int(os.environ.get("SEARCH_TRANSLATE_SYNC_LIMIT", "8"))))
+except ValueError:
+    SEARCH_TRANSLATE_SYNC_LIMIT = 8
+try:
+    SEARCH_TRANSLATE_BACKGROUND_WORKERS = max(1, min(6, int(os.environ.get("SEARCH_TRANSLATE_BACKGROUND_WORKERS", "3"))))
+except ValueError:
+    SEARCH_TRANSLATE_BACKGROUND_WORKERS = 3
+try:
+    SEARCH_RELAX_MIN = max(1, min(20, int(os.environ.get("SEARCH_RELAX_MIN", "1"))))
+except ValueError:
+    SEARCH_RELAX_MIN = 3
+
+# Translate the languages with the highest news volume first. The rest warm
+# in the background and are picked up by the frontend's automatic retry.
+_LANGUAGE_PRIORITY = (
+    "en", "zh", "ru", "es", "pt", "fr", "de", "ar", "it", "tr",
+    "uk", "ja", "ko", "fa", "hi", "id", "vi", "th", "he", "zh-Hant",
+)
 
 _ENV_LANGUAGES = {
     code.strip()
@@ -187,10 +207,158 @@ def _cjk_chunks(text: str) -> list[str]:
     return chunks
 
 
-def terms_for_variant(text: str, language: str) -> list[str]:
+_ALIAS_INDEX: dict[str, dict] | None = None
+
+
+def _load_alias_index() -> dict[str, dict]:
+    """Build a compact alias -> entity index from the event gazetteer.
+
+    This is deliberately local and offline: known people, places, countries
+    and event topics can expand across languages even when the translation
+    provider is slow or rate-limited.
+    """
+    index: dict[str, dict] = {}
+
+    def add(alias: str | None, entry: dict) -> None:
+        value = _normalize(alias)
+        if not value:
+            return
+        key = value.casefold()
+        if len(key) < 2:
+            return
+        # Avoid treating common two-letter Latin words ("us", "uk") as names.
+        if not _has_cjk_or_thai(key) and len(key) < 3:
+            return
+        index.setdefault(key, entry)
+
+    try:
+        gazetteer = json.loads((ROOT / "config" / "gazetteer.json").read_text(encoding="utf-8"))
+        for code, item in (gazetteer.get("countries") or {}).items():
+            aliases = [item.get("label_zh")] + list(item.get("aliases") or [])
+            entry = {
+                "kind": "country",
+                "id": code,
+                "label": item.get("label_zh") or code,
+                "aliases": aliases,
+            }
+            for alias in aliases:
+                add(alias, entry)
+        for section, kind in (("places", "place"), ("actors", "actor"), ("topics", "topic")):
+            for item in gazetteer.get(section) or []:
+                aliases = [item.get("label_zh")] + list(item.get("aliases") or [])
+                entry = {
+                    "kind": kind,
+                    "id": item.get("id") or item.get("label_zh") or "",
+                    "label": item.get("label_zh") or item.get("id") or "",
+                    "aliases": aliases,
+                }
+                for alias in aliases:
+                    add(alias, entry)
+    except Exception:
+        pass
+    return index
+
+
+def _alias_index() -> dict[str, dict]:
+    global _ALIAS_INDEX
+    if _ALIAS_INDEX is None:
+        _ALIAS_INDEX = _load_alias_index()
+    return _ALIAS_INDEX
+
+
+def _alias_entries(query: str) -> list[dict]:
+    lowered = query.casefold()
+    found: list[tuple[int, dict]] = []
+    for alias, entry in _alias_index().items():
+        if _has_cjk_or_thai(alias):
+            if alias not in lowered:
+                continue
+        else:
+            pattern = r"(?<![a-z0-9])" + re.escape(alias) + r"(?![a-z0-9])"
+            if not re.search(pattern, lowered):
+                continue
+        found.append((len(alias), entry))
+    found.sort(key=lambda pair: -pair[0])
+    entries: list[dict] = []
+    seen: set[tuple[str, str]] = set()
+    for _, entry in found:
+        key = (str(entry.get("kind") or ""), str(entry.get("id") or ""))
+        if key in seen:
+            continue
+        seen.add(key)
+        entries.append(entry)
+        if len(entries) >= 6:
+            break
+    return entries
+
+
+def _contains_anchor(text: str, anchors: list[str]) -> bool:
+    lowered = text.casefold()
+    for anchor in anchors:
+        value = anchor.casefold()
+        if not value:
+            continue
+        if _has_cjk_or_thai(value):
+            if value in lowered:
+                return True
+            continue
+        if value in lowered:
+            return True
+        # Machine translation often truncates inflection: "Тибе" for "Тибет".
+        if len(value) >= 4 and value[:4] in lowered:
+            return True
+    return False
+
+
+def _alias_variants(query: str, source: str) -> tuple[list[dict], list[str], list[str]]:
+    """Return local multilingual variants and anchor terms for known entities.
+
+    When a query contains a specific place/person/country, generic topic
+    aliases (e.g. "earthquake") are suppressed; otherwise a query such as
+    "Tibet earthquake" would match every earthquake in the corpus.
+    """
+    variants: list[dict] = []
+    labels: list[str] = []
+    anchors: list[str] = []
+    seen = {query.casefold()}
+    entries = _alias_entries(query)
+    specific = [entry for entry in entries if entry.get("kind") != "topic"]
+    if specific:
+        entries = specific
+    for entry in entries:
+        for alias in entry.get("aliases") or []:
+            value = _normalize(alias)
+            if value:
+                anchors.append(value)
+        label = str(entry.get("label") or entry.get("id") or "").strip()
+        if label:
+            labels.append(label)
+        for alias in entry.get("aliases") or []:
+            text = _normalize(alias)
+            key = text.casefold()
+            if not text or len(text) < 2 or key in seen:
+                continue
+            language = detect_language(text) or source
+            variant = make_variant(text, language)
+            variant["origin"] = "alias"
+            variant["alias_id"] = entry.get("id") or ""
+            variant["alias_label"] = label
+            variants.append(variant)
+            seen.add(key)
+            if len(variants) >= 12:
+                break
+        if len(variants) >= 12:
+            break
+    return variants, labels, anchors
+
+
+def terms_for_variant(text: str, language: str, stem: bool = True) -> list[str]:
     """Return search terms for one translated query variant.
 
-    Spaced languages get significant tokens with a conservative prefix stem.
+    Spaced languages get significant tokens. Source/alias queries use a
+    conservative prefix stem so inflections still match; machine translations
+    use full tokens to avoid false positives such as "Agen" matching
+    "agencies" or "Bank" matching "West Bank".
     Chinese/Japanese/Thai use known event vocabulary, then 2-character chunks
     as a fallback when vocabulary matching yields fewer than two terms.
     """
@@ -212,19 +380,19 @@ def terms_for_variant(text: str, language: str) -> list[str]:
         key = token.casefold()
         if len(token) <= 2 or key in _STOPWORDS:
             continue
-        stem = _prefix(token)
-        if stem not in terms:
-            terms.append(stem)
+        value = _prefix(token) if stem else key
+        if value not in terms:
+            terms.append(value)
         if len(terms) >= 4:
             break
     return terms
 
 
-def make_variant(text: str, language: str) -> dict:
+def make_variant(text: str, language: str, stem: bool = True) -> dict:
     return {
         "language": language,
         "text": _normalize(text),
-        "terms": terms_for_variant(text, language),
+        "terms": terms_for_variant(text, language, stem=stem),
     }
 
 
@@ -238,8 +406,44 @@ def _translate_one(target: str, text: str, source: str) -> tuple[str, dict]:
         conn.close()
 
 
+def _warm_translations(targets: list[str], text: str, source: str) -> None:
+    """Populate the translation cache after the interactive search returns."""
+    if not targets:
+        return
+    # Give the synchronous batch a small head start so MyMemory is not
+    # overwhelmed by 19 simultaneous requests.
+    time.sleep(0.8)
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=SEARCH_TRANSLATE_BACKGROUND_WORKERS
+    ) as pool:
+        futures = [pool.submit(_translate_one, target, text, source) for target in targets]
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception:
+                pass
+
+
+def _ordered_targets(source: str) -> list[str]:
+    ordered = [
+        code for code in _LANGUAGE_PRIORITY
+        if code in TARGET_LANGUAGES and code != source
+    ]
+    ordered.extend(
+        code for code in TARGET_LANGUAGES
+        if code not in _LANGUAGE_PRIORITY and code != source
+    )
+    return ordered
+
+
 def expand_search(filters: dict) -> dict | None:
     """Translate the query and attach search variants to ``filters``.
+
+    Three layers of resilience:
+    1. Known gazetteer entities expand locally into multilingual aliases.
+    2. The highest-volume languages are translated synchronously under a
+       deadline; the rest warm in the background for the next retry.
+    3. The API can relax strict AND matching when a query is too narrow.
 
     Returns a small metadata object for the API. The private ``_variants`` and
     ``_search_meta`` keys are consumed by db._build_where and stripped before
@@ -253,6 +457,9 @@ def expand_search(filters: dict) -> dict | None:
 
     source = detect_language(q)
     variants = [make_variant(q, source)]
+    variants[0]["origin"] = "source"
+    alias_variants, alias_labels, anchor_terms = _alias_variants(q, source)
+    variants.extend(alias_variants)
     meta = {
         "enabled": SEARCH_TRANSLATE,
         "source_language": source,
@@ -265,6 +472,15 @@ def expand_search(filters: dict) -> dict | None:
         "partial": False,
         "timed_out": False,
         "elapsed_ms": 0,
+        "alias_count": len(alias_variants),
+        "alias_expanded": list(dict.fromkeys(label for label in alias_labels if label)),
+        "anchor_rejected": 0,
+        "weak_rejected": 0,
+        "relaxed": False,
+        "strict_total": None,
+        "relaxed_total": None,
+        "sync_limit": SEARCH_TRANSLATE_SYNC_LIMIT,
+        "deferred": 0,
     }
 
     if not SEARCH_TRANSLATE or len(q) < 2:
@@ -272,7 +488,7 @@ def expand_search(filters: dict) -> dict | None:
         filters["_search_meta"] = meta
         return meta
 
-    targets = [code for code in TARGET_LANGUAGES if code != source]
+    targets = _ordered_targets(source)
     meta["attempted"] = len(targets)
     started = time.monotonic()
     results: dict[str, dict] = {}
@@ -288,12 +504,20 @@ def expand_search(filters: dict) -> dict | None:
     finally:
         cache_conn.close()
 
-    missing = [target for target in targets if target not in results]
+    sync_targets = [
+        target for target in targets[:SEARCH_TRANSLATE_SYNC_LIMIT]
+        if target not in results
+    ]
+    deferred_targets = [
+        target for target in targets[SEARCH_TRANSLATE_SYNC_LIMIT:]
+        if target not in results
+    ]
+    meta["deferred"] = len(deferred_targets)
     timed_out = False
-    if missing:
+    if sync_targets:
         deadline = SEARCH_TRANSLATE_CACHED_DEADLINE if results else SEARCH_TRANSLATE_DEADLINE
         pool = concurrent.futures.ThreadPoolExecutor(max_workers=SEARCH_TRANSLATE_WORKERS)
-        futures = {pool.submit(_translate_one, target, q, source): target for target in missing}
+        futures = {pool.submit(_translate_one, target, q, source): target for target in sync_targets}
         try:
             for future in concurrent.futures.as_completed(futures, timeout=deadline):
                 target = futures[future]
@@ -309,7 +533,17 @@ def expand_search(filters: dict) -> dict | None:
             # populate the translation cache for the next search.
             pool.shutdown(wait=False, cancel_futures=False)
 
-    seen = {q.casefold()}
+    if deferred_targets:
+        threading.Thread(
+            target=_warm_translations,
+            args=(deferred_targets, q, source),
+            daemon=True,
+            name="search-translate-warmup",
+        ).start()
+
+    source_terms = variants[0].get("terms") or []
+    min_terms = 2 if len(source_terms) >= 2 else 1
+    seen = {str(variant.get("text") or "").casefold() for variant in variants}
     providers: set[str] = set()
     for target in targets:
         result = results.get(target)
@@ -325,11 +559,23 @@ def expand_search(filters: dict) -> dict | None:
         provider_label = result.get("provider_label") or PROVIDER_LABELS.get(result.get("provider") or "", "")
         if provider_label:
             providers.add(provider_label)
+        if anchor_terms and not _contains_anchor(translated, anchor_terms):
+            meta["anchor_rejected"] += 1
+            continue
+        variant = make_variant(translated, target, stem=False)
+        pieces = [
+            piece for piece in re.findall(r"[^\W_]+", translated, re.UNICODE)
+            if len(piece) > 1
+        ]
+        if max(len(variant.get("terms") or []), len(pieces)) < min_terms:
+            meta["weak_rejected"] += 1
+            continue
         key = translated.casefold()
         if key in seen:
             continue
         seen.add(key)
-        variants.append(make_variant(translated, target))
+        variant["origin"] = "translation"
+        variants.append(variant)
         meta["languages"].append({"code": target, "label": LANGUAGES.get(target, target)})
         if len(variants) >= MAX_VARIANTS:
             break

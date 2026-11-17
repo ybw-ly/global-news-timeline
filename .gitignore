@@ -21,3 +21,13 @@ data/*.csv
 # generated database snapshots
 data/*.db
 data/*.db-*
+
+# local secrets / environment overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets.json
+*.log

@@ -352,6 +352,8 @@ button { cursor: pointer; }
 .rail-note { display: flex; gap: 8px; align-items: flex-start; }
 .rail-note p { margin: 0; font-size: 9.5px; line-height: 1.55; color: var(--faint); }
 .rail-note .dot { margin-top: 5px; flex: none; }
+.rail-link { display: block; margin-top: 12px; color: var(--accent); font-size: 10px; line-height: 1.5; }
+.rail-link:hover { color: var(--text); }
 .rail-foot .mono { margin: 13px 0 0; font-size: 8px; letter-spacing: 0.1em; color: rgba(255, 255, 255, 0.18); }
 
 /* ── main ──────────────────────────────────────────────────────────────── */
@@ -414,6 +416,8 @@ h1 {
 .update-note { font-family: var(--mono); font-size: 8.5px; color: var(--faint); }
 .text-btn { border: 0; border-bottom: 1px solid var(--line-strong); background: none; color: var(--muted); padding: 1px 0; font-size: 9.5px; }
 .text-btn:hover { color: var(--accent); border-color: var(--accent-line); }
+.osint-entry { color: var(--accent); border-bottom-color: var(--accent-line); white-space: nowrap; letter-spacing: 0.02em; }
+.osint-entry:hover { color: var(--text); }
 
 .timeline { position: relative; padding-top: 4px; transition: opacity 0.2s; }
 .timeline.loading { opacity: 0.5; }
@@ -1034,6 +1038,7 @@ h1 {
   .rail-toggle { display: grid; }
   .main { padding: 20px 16px 80px; }
   .live-status { display: none; }
+  .osint-entry { display: none; }
   .sidebar, .side-panel { min-width: 0; }
   .search-wrap kbd { display: none; }
   .day-head { top: var(--topbar); }

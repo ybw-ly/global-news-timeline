@@ -254,7 +254,7 @@
     return params;
   }
 
-  async function load({ append = false, silent = false } = {}) {
+  async function load({ append = false, silent = false, preserveView = false } = {}) {
     if (state.loading && append) return;
     if (state.searchRetryTimer) {
       clearTimeout(state.searchRetryTimer);
@@ -292,7 +292,7 @@
       state.search = data.search || null;
       state.lastStatusAt = state.status.last_ingest_at || null;
       state.firstLoad = false;
-      renderAll();
+      renderAll({ preserveView });
       if (state.deepLinkStory) {
         const story = state.itemMap.get(state.deepLinkStory);
         state.deepLinkStory = null;
@@ -308,7 +308,7 @@
         state.searchRetryTimer = setTimeout(() => {
           state.searchRetryTimer = null;
           if (currentSearch() === qKey && $("#search").value.trim() === qKey && !state.loading) {
-            load({ silent: true });
+            load({ silent: true, preserveView: true });
           }
         }, 7000);
       }
@@ -335,9 +335,12 @@
       state.status = status;
       renderStatus();
       if (status.last_ingest_at && status.last_ingest_at !== previous && !state.firstLoad) {
-        await load({ silent: true });
+        await load({ silent: true, preserveView: true });
         const added = Number(status.last_new_count || 0);
-        if (added > 0) toast(`已同步 ${fmt(added)} 条新报道`);
+        const filtered = Number(status.last_filtered_count || 0);
+        if (added > 0 || filtered > 0) {
+          toast(`已同步 ${fmt(added)} 条新报道${filtered > 0 ? `（过滤 ${fmt(filtered)} 条）` : ""}`);
+        }
       }
     } catch (_) { /* transient */ }
   }
@@ -368,8 +371,12 @@
             button.disabled = false;
             button.classList.remove("spinning");
             if (!status.refreshing) {
-              await load({ silent: true });
-              toast(`同步完成，新增 ${fmt(status.last_new_count || 0)} 条`);
+              await load({ silent: true, preserveView: true });
+              const filtered = Number(status.last_filtered_count || 0);
+              toast(
+                `同步完成，新增 ${fmt(status.last_new_count || 0)} 条`
+                + (filtered > 0 ? `，过滤 ${fmt(filtered)} 条` : "")
+              );
             }
           }
         } catch (_) {
@@ -388,7 +395,101 @@
   }
 
   // ── rendering: shell ────────────────────────────────────────────────────
-  function renderAll() {
+  // Background refreshes rebuild the timeline. Capture what the reader is
+  // looking at, plus the panels and translations they opened, then put it all
+  // back after the rebuild so a sync never yanks the viewport away.
+  function cssEscape(value) {
+    if (window.CSS && typeof CSS.escape === "function") return CSS.escape(String(value));
+    return String(value).replace(/["\\]/g, "\\$&");
+  }
+
+  function captureTimelineView() {
+    const wrap = $("#timeline");
+    if (!wrap) return null;
+    const view = {
+      scrollTop: document.scrollingElement?.scrollTop ?? window.scrollY,
+      anchorId: null,
+      anchorOffset: 0,
+      collapsed: [],
+      translated: [],
+    };
+    wrap.querySelectorAll(".branch-panel.collapsed").forEach((panel) => {
+      const article = panel.closest(".article");
+      if (article) view.collapsed.push(article.dataset.id);
+    });
+    wrap.querySelectorAll(".translation").forEach((box) => {
+      if (box.hidden) return;
+      const article = box.closest(".article");
+      if (article) view.translated.push(article.dataset.id);
+    });
+    for (const el of wrap.querySelectorAll(".article")) {
+      const rect = el.getBoundingClientRect();
+      if (rect.bottom > 0) {
+        view.anchorId = el.dataset.id;
+        view.anchorOffset = rect.top;
+        break;
+      }
+    }
+    return view;
+  }
+
+  // The page has `scroll-behavior: smooth`; temporary auto keeps restoration
+  // from animating (which itself reads as the layout being dragged around).
+  function scrollInstantly(top, { absolute = false } = {}) {
+    const root = document.documentElement;
+    const previous = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    if (absolute) window.scrollTo(0, top);
+    else window.scrollBy(0, top);
+    root.style.scrollBehavior = previous;
+  }
+
+  function restoreTimelineView(view) {
+    if (!view) return;
+    const wrap = $("#timeline");
+    if (!wrap) return;
+    const articleById = (id) => wrap.querySelector(`.article[data-id="${cssEscape(id)}"]`);
+
+    for (const id of view.collapsed) {
+      const panel = articleById(id)?.querySelector(".branch-panel");
+      if (!panel) continue;
+      panel.classList.add("collapsed");
+      const button = panel.querySelector(".branch-collapse");
+      if (button) button.textContent = "展开";
+    }
+
+    for (const id of view.translated) {
+      const article = articleById(id);
+      const cached = state.translationCache.get(id);
+      const card = article?.querySelector(".card");
+      if (!card || !cached) continue;
+      let box = card.querySelector(".translation");
+      if (!box) {
+        box = document.createElement("p");
+        box.className = "translation";
+        card.querySelector(".card-content")?.after(box);
+      }
+      setTranslationContent(box, cached.text, cached.provider);
+      box.hidden = false;
+      const button = card.querySelector('[data-action="translate"]');
+      if (button) {
+        button.textContent = "收起";
+        button.disabled = false;
+      }
+    }
+
+    const anchor = view.anchorId ? articleById(view.anchorId) : null;
+    if (anchor) {
+      const delta = anchor.getBoundingClientRect().top - view.anchorOffset;
+      if (Math.abs(delta) >= 1) scrollInstantly(delta);
+    } else if (typeof view.scrollTop === "number") {
+      const current = document.scrollingElement?.scrollTop ?? window.scrollY;
+      if (Math.abs(current - view.scrollTop) >= 1) scrollInstantly(view.scrollTop, { absolute: true });
+    }
+  }
+
+  function renderAll(opts = {}) {
+    const view = opts.preserveView ? captureTimelineView() : null;
     renderFilters();
     renderHead();
     renderKpis();
@@ -401,6 +502,7 @@
     renderSparkline();
     renderStatus();
     updateExportLink();
+    restoreTimelineView(view);
   }
 
   function corroborationPublishers(item) {
@@ -514,9 +616,12 @@
       : "";
     $("#search-title").textContent = `“${q}” 的搜索汇总`;
     const sourceCountries = Number(search.source_countries || 0);
-    $("#search-meta").textContent = `命中 ${fmt(state.total)} 条 · ${fmt(k.publishers)} 家信源 · ${fmt(k.languages)} 种语言 · 事件地点 ${fmt(k.countries)} 个国家/地区${sampleNote}`;
-
     const xl = search.cross_language;
+    const relaxedNote = xl && xl.relaxed
+      ? ` · 严格匹配 ${fmt(xl.strict_total || 0)} 条，已自动放宽`
+      : "";
+    $("#search-meta").textContent = `命中 ${fmt(state.total)} 条 · ${fmt(k.publishers)} 家信源 · ${fmt(k.languages)} 种语言 · 事件地点 ${fmt(k.countries)} 个国家/地区${sampleNote}${relaxedNote}`;
+
     const xlWrap = $("#search-xl");
     if (xl && xl.enabled === false) {
       xlWrap.textContent = "跨语言检索已关闭（SEARCH_TRANSLATE=0），当前仅检索原文。";
@@ -527,8 +632,11 @@
       const shown = languageLabels.slice(0, 10).join(" / ");
       const more = languageLabels.length > 10 ? ` 等 ${languageLabels.length} 种` : "";
       const providers = (xl.provider_labels || []).filter(Boolean).join(" / ");
-      xlWrap.textContent = `跨语言检索：已翻译为 ${xl.translated_count} 种语言（${shown}${more}）${providers ? ` · 翻译：${providers}` : ""}${xl.partial ? " · 部分语言超时/不可用" : ""}`;
-      xlWrap.title = "搜索词会发送到所标注的翻译服务；本地 Ollama 优先，翻译结果按查询缓存。";
+      const aliasCount = Number(xl.alias_count || 0);
+      const aliasNote = aliasCount ? ` · 实体别名 +${aliasCount}` : "";
+      const deferredNote = Number(xl.deferred || 0) ? ` · 其余 ${fmt(xl.deferred)} 种后台补齐` : "";
+      xlWrap.textContent = `跨语言检索：已翻译为 ${xl.translated_count} 种语言（${shown}${more}）${aliasNote}${providers ? ` · 翻译：${providers}` : ""}${xl.partial ? " · 部分语言超时/不可用" : ""}${deferredNote}`;
+      xlWrap.title = "搜索词会发送到所标注的翻译服务；默认 MyMemory 免费接口，实体别名可离线扩展，翻译结果按查询缓存。";
       xlWrap.classList.toggle("partial", Boolean(xl.partial));
       xlWrap.hidden = false;
     } else if (xl && Number(xl.attempted || 0) > 0) {
@@ -640,7 +748,11 @@
     const xl = state.search?.cross_language;
     if (xl && Number(xl.translated_count || 0) > 0) {
       const providers = (xl.provider_labels || []).filter(Boolean).join(" / ");
-      lines.push(`跨语言检索：${xl.translated_count} 种语言${providers ? ` · ${providers}` : ""}${xl.partial ? " · 部分语言未返回" : ""}`);
+      const aliasNote = Number(xl.alias_count || 0) ? ` · 实体别名 +${xl.alias_count}` : "";
+      lines.push(`跨语言检索：${xl.translated_count} 种语言${aliasNote}${providers ? ` · ${providers}` : ""}${xl.partial ? " · 部分语言未返回" : ""}`);
+    }
+    if (xl && xl.relaxed) {
+      lines.push(`匹配方式：严格匹配 ${xl.strict_total || 0} 条，已自动放宽为任一词匹配`);
     }
     if (clusters.length) {
       lines.push("主要事件：");
@@ -1082,7 +1194,7 @@
     const eventLabel = item.event_country_label || item.event_region_label;
     const image = safeImage(item.image_url);
     const terms = (item.category_terms || []).slice(0, 3).join(" · ");
-    const ownership = item.ownership_label && !["私营", "聚合"].includes(item.ownership_label)
+    const ownership = item.ownership_label && !["私营", "聚合", "预测市场"].includes(item.ownership_label)
       ? `<span class="ownership-tag">${esc(item.ownership_label)}</span>` : "";
     const cluster = coverage > 1
       ? `<button type="button" class="cluster-btn" data-action="cluster">
@@ -1105,7 +1217,7 @@
       <div class="card${coverage > 1 ? " has-cluster" : ""}" tabindex="0" role="button" aria-label="查看报道详情">
         <div class="card-top">
           <span class="cat-tag ${category}">${esc(CATEGORY_LABELS[category])}</span>
-          <span class="ctype-tag ${contentType}" title="按版块、RSS 分类与语言线索判定">${esc(CONTENT_TYPE_LABELS[contentType])}</span>
+          <span class="ctype-tag ${contentType}" title="按版块、RSS 分类与语言线索判定">${esc(item.content_type_label || CONTENT_TYPE_LABELS[contentType])}</span>
           ${showRole ? `<span class="role-tag ${role}" title="报道在事件中的角色">${esc(roleLabel)}</span>` : ""}
           <span class="lang-tag">原文 · ${esc(item.language_label || item.language)}</span>
           ${item.country ? `<span class="country-tag" title="${esc(item.country_label)}">${esc(item.country)}</span>` : ""}
@@ -1583,7 +1695,7 @@
       const button = $("#load-more");
       button.disabled = true;
       button.textContent = "载入中…";
-      await load({ append: true, silent: true });
+      await load({ append: true, silent: true, preserveView: true });
       button.disabled = false;
       button.textContent = "加载更早的报道";
     });
@@ -1705,12 +1817,12 @@
     body.innerHTML = `
       <div class="dossier-tags">
         <span class="cat-tag ${category}">${esc(CATEGORY_LABELS[category])}</span>
-        <span class="ctype-tag ${contentType}">${esc(CONTENT_TYPE_LABELS[contentType])}</span>
+        <span class="ctype-tag ${contentType}">${esc(item.content_type_label || CONTENT_TYPE_LABELS[contentType])}</span>
         <span class="role-tag ${role}">${esc(roleLabel)}</span>
         <span class="lang-tag">原文 · ${esc(item.language_label || item.language)}</span>
         ${item.country ? `<span class="country-tag">信源 ${esc(item.country)} · ${esc(item.country_label)}</span>` : ""}
         <span class="event-tag">事件 · ${esc(eventLabel)}</span>
-        ${item.ownership_label && !["私营", "聚合"].includes(item.ownership_label) ? `<span class="ownership-tag">${esc(item.ownership_label)}</span>` : ""}
+        ${item.ownership_label && !["私营", "聚合", "预测市场"].includes(item.ownership_label) ? `<span class="ownership-tag">${esc(item.ownership_label)}</span>` : ""}
       </div>
       <h2 class="dossier-title" dir="auto">${esc(item.title)}</h2>
       <div class="dossier-meta">

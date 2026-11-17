@@ -20,7 +20,7 @@
 
 - **一个 Python 进程**：只用标准库，无 npm、无构建步骤、无数据库服务。
 - **本地 SQLite**：标题、摘要、来源、时间、原文链接；不抓全文、不做全文再分发。
-- **104 个专业 RSS/Atom 频道（全部启用）**：全部直连媒体，0 聚合器，覆盖 20 种语言、31 个国家/地区、59 个细分区块（金融、市场、防务、科技、AI、能源、气候、健康、科学、法律、区域商业等）。
+- **111 个专业信息源（全部启用）**：109 个直连 RSS/Atom 专业媒体/版块 + 1 个 Polymarket 预测市场 API + 1 个金十数据快讯 API，0 聚合器，覆盖 17 种语言、30 个国家/地区、60 个细分区块（金融、市场、防务、科技、AI、能源、气候、健康、科学、法律、区域商业、预测市场等）。
 - **可解释的分类**：3,000+ 多语言关键词 + 信源提示 + 歧义词降权；同一标题永远得到同一标签。
 - **五维联动筛选**：区域、信源、原始语言、主题类型、内容形态；地图、语言光谱、信源排行同步更新。
 - **事件地点识别**：多语言地名库（19 个语种的国家名、83 个城市/地区、33 个人物/组织、15 类事件主题），可在“事件地点 / 信源总部”两种区域口径间切换。
@@ -30,6 +30,7 @@
 - **首页事件脉络**：默认只看硬新闻；每起事件优先选一条第一手报道，下面按“转载 / 其他角度 / 政府官方声明”展开同事件报道。
 - **事件 / 关键词搜索汇总**：查询词自动翻译为 19 种语言，原文与全部译文一起检索；结果汇总相关词、信源国家、时间跨度与多源事件簇。
 - **P2P 推送**：通过 WebRTC 数据通道把当前页面或事件快照直接推给朋友，邀请码/应答码手动交换，不经过应用服务器。
+- **巴西 2026 大选 OSINT 追踪页**：把 TSE 官方计票 JSON、民调、投票日事件、海外选区与关键州观察点放进一个可自动刷新的时间线；计票数据每 15 秒更新，开票前明确显示“0 / 投票中”。
 - **免费翻译仅**：默认优先 MyMemory 匿名免费接口（公开标题/摘要，通常 1–2 秒），失败时回退本地 Ollama；设置 `TRANSLATE_LOCAL_FIRST=1` 可改回本地优先。默认阻止外部 LibreTranslate，不接入任何付费翻译计划。
 
 > 首次抓取通常 **1,800–2,500 条**、20 种语言；事件地点识别率随当天内容变化，2026-10-23 演示库 24 小时约 **34%**。未识别的报道不会被强行归到信源国家。
@@ -84,13 +85,17 @@
 ### 搜索与事件汇总
 
 - 搜索框同时匹配：标题、摘要、媒体名、事件地点、事件人物/组织、事件主题。
-- 多词查询按 **AND** 处理：例如 `Tibet earthquake` 要求两个词都命中；中文查询 `西藏 地震` 同样生效。
+- 多词查询默认按 **AND** 处理：例如 `Tibet earthquake` 要求两个词都命中；中文查询 `西藏 地震` 同样生效。
+- 如果严格匹配为空，系统会自动进入 **quorum 放宽**：最多只放宽一个词（4 个词查 3 个、5 个词查 4 个）；两词查询仍要求两个词都命中，避免“Tibet earthquake”退化成所有地震新闻。
 - 因为事件地点/主题是多语言规范化后的字段，搜 `地震` 可以找到标题里只有 Russian、Portuguese 或 Indonesian 措辞的报道。
 - 人物/组织别名会展开到规范 ID：搜 `普京` 也会命中标题只有 Putin 的稿件，`北约`、`联合国` 等同样适用。
-- **跨语言检索默认开启**：搜索词会通过翻译提供链翻译为当前支持的全部新闻语言（中、英、俄、阿、西、法、德、葡、日、韩、土、印地、印尼、越、泰、意、波斯、希伯来、乌克兰等），然后用“原文 + 各语言译文”一起检索。
-- 译文检索不是简单整句匹配：带空格语言会抽取关键词并做保守词干前缀（例如 `Землетрясение` → `Землетря`），中日泰文会先用事件词库切分；每个译文允许“整句命中”或“全部关键词命中”。
+- **实体别名离线扩展**：命中山川、城市、人物、国家、事件主题时，会把 gazetteer 中的多语言别名一起加入检索，不依赖翻译服务。例如 `Tibet` 会带上 `西藏 / チベット / 티베트`；`Putin` 会带上 `Путин / 普京`。当查询包含具体地名/人物时，泛化主题别名（如“地震”）会被抑制，避免把不相干的地震新闻全部召回。
+- **翻译质量守门**：如果译文丢失了查询中的关键实体（如 `Tibet earthquake` 的译文只剩“地震”），该变体会被丢弃；只有一个泛化词、明显丢词的译文也不会进入检索。
+- **跨语言检索默认开启**：搜索词会通过翻译提供链翻译为当前支持的全部新闻语言（中、英、俄、阿、西、法、德、葡、日、韩、土、印地、印尼、越、泰、意、波斯、希伯来、乌克兰等），然后用“原文 + 各语言译文”一起检索。按语料量优先翻译前 8 种语言，其余语言在后台补齐，前端 7 秒后自动重试缓存结果。
+- 译文检索不是简单整句匹配：源查询用保守词干（例如 `Землетрясение` → `Землетря`），机器译文用完整词以减少“agencies 被 agen 误中”这类问题；中日泰文会先用事件词库切分。每个译文允许“整句命中”或“全部关键词命中”。
 - 翻译结果写入 SQLite `translations` 表缓存。首次搜索某个新查询时最多等待约 4.5 秒，未完成的翻译会在后台继续并缓存；再次搜索同一查询通常几十毫秒内完成。
-- 如果翻译服务只返回部分语言，搜索仍会继续，并在汇总面板标注“部分语言超时/不可用”。默认优先 MyMemory 免费接口；设置 `TRANSLATE_LOCAL_FIRST=1` 可改回本地 Ollama 优先。
+- 搜索结果按“标题整句/关键词命中 > 摘要命中 > 事件字段命中”做轻量相关度排序，再以时间作为同分次序；比单纯按最新时间更接近搜索意图。
+- 如果翻译服务只返回部分语言，搜索仍会继续，并在汇总面板标注“部分语言超时/不可用”。默认优先 MyMemory 免费接口；设置 `TRANSLATE_LOCAL_FIRST=1` 可改回本地 Ollama 优先。发生 quorum 放宽时，汇总面板会显示“严格匹配 N 条，已自动放宽”。
 - 搜索后会展开“搜索汇总”面板：
   - 命中报道、独立信源、信源国家、原始语种、多源事件数；
   - 事件地点覆盖的国家/地区数与时间跨度；
@@ -122,6 +127,17 @@
 - 同一语种、标题高度相似的报道会合并为一个“多信源事件”，点开可看各家的标题、国家、语种与时间。
 - 跨语种使用**规范化事件签名**合并：共享城市 + 事件主题、两个以上共享地点 + 严格主题、或共享人物/组织 + 严格主题。选举、抗议等宽泛主题不会仅凭“同一国家 + 同一主题”合并，以避免把不同事件揉在一起。
 - 当前专业目录实测可把同一中国 AI/出口管制议题合并成 **3 家信源 / 3 种语言** 的事件；跨语言簇上限 24 条，防止形成过大的主题团。
+
+### 巴西 2026 大选：实时 OSINT 追踪页
+
+![巴西大选 OSINT 追踪](docs/screenshot-brazil-tracker.png)
+
+- 入口：`/brazil-2026-runoff.html`，首页顶栏与筛选栏底部都有链接。
+- 计票数据直连 TSE 公开 JSON（2026 年第二轮联邦选举代码 `6258`，总统职位 `0001`），经 `/api/brazil/results?scope=br|mg|sp|rj` 本地代理缓存，避免浏览器跨域和重复请求。
+- 页面每 15 秒刷新一次；投票日 17:00（BRT）前 TSE 文件为 0，页面会明确标注“投票进行中 / 等待首批数据”，不会把 0 当成结果。
+- 除全国数字外，固定跟踪米纳斯吉拉斯（风向标）、圣保罗（最大选举团）和里约热内卢（弗拉维奥主场）三个州。
+- 时间线覆盖首轮结果、两场辩论、最后一批民调、投票日事件、海外选区快照与 2027 年 1 月 5 日就职；民调表明确标注“技术性平局”和误差范围。
+- 数据边界：TSE 数字是官方的，但页面只做格式化与缓存；海外选区、事件和民调来自公开报道，可能滞后，不能替代 TSE 最终结果。
 
 ### 首页事件脉络：第一手、转载、角度与声明
 
@@ -175,6 +191,7 @@
 - **事件地理编码**：Babel 19 语种国家名 + 手工城市/人物/组织/主题库；歧义国家名（Turkey、US 等）要求首字母大写，避免把代词或普通名词当成地点。
 - **事件地点回填**：历史文章可用 `scripts/enrich_events.py` 重算，不需要重新抓取。
 - **内容类型回填**：修改 `config/content_types.json` 或新增评论源后，可用 `scripts/enrich_content.py` 重算历史文章。
+- **垃圾内容过滤**：`config/quality.json` 在入库前丢弃每日价格表、天气预报、星座运势、养生偏方、成功学、企业通稿与活动软文。规则按信源/语种限定，并带 `unless` 白名单保护同主题的正常新闻；历史数据用 `scripts/apply_quality_filter.py --apply` 回填，`filtered=1` 的条目保留在库中但不出现在任何查询里，可随时恢复。
 - **交叉检验按页计算**：指标基于当前查询页内的聚类成员；分页之外的成员不会计入，因此是下限而非全库精确值。
 - **搜索汇总**：`search_summary` 最多抽样 6000 条匹配文章做主题/地点聚合；来源国与时间范围由 SQL 全量统计。
 - **保留期**：默认 60 天，每天清理一次。
@@ -242,9 +259,12 @@ python3 server/app.py
 | `LIBRETRANSLATE_API_KEY` | 空 | LibreTranslate API key（如需要） |
 | `SEARCH_TRANSLATE` | `1` | 设为 `0` 关闭搜索词的跨语言翻译扩展 |
 | `SEARCH_TRANSLATE_LANGS` | 空 | 逗号分隔的目标语言代码；空表示全部支持语言 |
-| `SEARCH_TRANSLATE_WORKERS` | `6` | 查询翻译并行度（1–12） |
-| `SEARCH_TRANSLATE_DEADLINE` | `4.5` | 首次查询等待翻译的总秒数（1–20） |
-| `SEARCH_TRANSLATE_CACHED_DEADLINE` | `1.5` | 已有部分缓存时，等待剩余语言的秒数 |
+| `SEARCH_TRANSLATE_WORKERS` | `4` | 查询翻译并行度（1–12）；降低并发可减少免费接口限流 |
+| `SEARCH_TRANSLATE_SYNC_LIMIT` | `8` | 首屏同步翻译的语言数；其余后台补齐 |
+| `SEARCH_TRANSLATE_BACKGROUND_WORKERS` | `3` | 后台补齐翻译的并行度（1–6） |
+| `SEARCH_TRANSLATE_DEADLINE` | `4.5` | 首次搜索等待翻译的秒数（1–20） |
+| `SEARCH_TRANSLATE_CACHED_DEADLINE` | `1.5` | 已有部分缓存时等待新译文的秒数（0.5–10） |
+| `SEARCH_RELAX_MIN` | `1` | 严格结果少于该值时触发 quorum 放宽（默认只在 0 条时放宽） |
 
 ---
 
@@ -254,7 +274,7 @@ python3 server/app.py
 config/feeds.json
       │
       ▼
-104 个专业直连频道 ──► 条件 GET / gzip / 超时退避
+111 个专业直连源 ──► RSS 条件 GET / Polymarket Gamma API / 金十快讯 API / 超时退避
       │
       ▼
 解析 RSS 2.0 + Atom ──► 标题/摘要/时间/图片/原始信源
@@ -304,7 +324,7 @@ global-news-timeline/
 │   ├── world-map.js      # 构建产物：内联 SVG 国界
 │   └── favicon.svg
 ├── config/
-│   ├── feeds.json        # 104 个专业频道目录（全部启用，0 聚合器）
+│   ├── feeds.json        # 111 个专业信息源目录（含 Polymarket、金十，全部启用，0 聚合器）
 │   ├── lexicon.json      # 3,000+ 多语言关键词
 │   ├── content_types.json# 内容类型与评论/分析版块规则
 │   ├── gazetteer.json    # 19 语种国家/城市/人物/组织/主题库
@@ -316,7 +336,7 @@ global-news-timeline/
 │   ├── enrich_content.py # 回填硬新闻/分析/评论标签
 │   ├── ingest_once.py    # 单次抓取后退出，适合外部 cron
 │   └── reclassify.py     # 修改词库后重跑历史文章
-├── tests/test_core.py    # 53 个离线单元测试
+├── tests/test_core.py    # 64 个离线单元测试
 ├── data/
 │   ├── geo/countries.geojson
 │   └── news.db           # 运行时生成
@@ -331,26 +351,31 @@ global-news-timeline/
 
 ### 默认信源构成（专业媒体目录）
 
-当前目录共 **104 个频道，全部启用、全部 `direct` 直连、0 个聚合器**，覆盖 **20 种语言、31 个国家/地区、59 个细分板块**。不再使用 Google News、综合门户或“什么都有”的首页 feed；每个源都尽量指向媒体的专业版块或专业媒体本身。
+当前目录共 **111 个信息源，全部启用、全部 `direct` 直连、0 个聚合器**（109 个 RSS/Atom + 1 个 Polymarket 预测市场 API + 1 个金十数据快讯 API），覆盖 **17 种语言、30 个国家/地区、60 个细分板块**。不再使用 Google News、综合门户或“什么都有”的首页 feed；每个源都尽量指向媒体的专业版块或专业媒体本身。
 
 | 板块 | 信源（节选） | 语言 / 地区 |
 |---|---|---|
-| 金融 / 市场 / 商业（14） | Financial Times、The Economist Finance、CNBC Business、MarketWatch、Nikkei Asia、SCMP Business、Mint、The Economic Times、Moneyweb、Nairametrics、African Business、ABC Business、The Astana Times、Times of Central Asia | 英语；英/美/日/港/印/南非/尼日利亚/澳/中亚 |
-| 政策 / 法律 / 区域（12） | Politico Europe、The Hill、Foreign Policy、Foreign Affairs、Euractiv、The Diplomat、Fulcrum、Al-Monitor、Amwaj.media、The Africa Report、Just Security、SCOTUSblog | 英语；欧美/中东/东南亚/非洲 |
-| 防务 / 安全（10） | Defense One、Defense News、War on the Rocks、Breaking Defense、The War Zone、Military Times、Naval News、Air & Space Forces、Long War Journal、Dialogo Americas | 英语；美/法/拉美 |
+| 金融 / 市场 / 商业（16） | Financial Times、The Economist Finance / Business、WSJ World / Markets、Bloomberg Markets、CNBC Business、Nikkei Asia、SCMP Business、Mint、The Economic Times、Moneyweb、Nairametrics、ABC Business、The Astana Times、Times of Central Asia | 英语；英/美/日/港/印/南非/尼日利亚/澳/中亚 |
+| 政策 / 法律 / 区域（14） | Politico Europe、The Hill、Foreign Policy、Foreign Affairs、Euractiv、The Diplomat、Fulcrum、Al-Monitor、Amwaj.media、The Africa Report、Just Security、SCOTUSblog、SCMP China、Buenos Aires Times | 英语；欧美/中东/东南亚/非洲 |
+| 防务 / 安全（11） | Defense One、Defense News、War on the Rocks、Breaking Defense、The War Zone、Military Times、Naval News、Air & Space Forces、Long War Journal、DefenseScoop、Zona Militar | 英语；美/法/拉美 |
 | 科技 / AI（8） | TechCrunch、Ars Technica、The Verge、Wired、MIT Technology Review、IEEE Spectrum、TechNode、The Decoder | 英语；美/中/德 |
 | 能源 / 气候 / 健康 / 科学（9） | Carbon Brief、Inside Climate News、OilPrice、STAT News、Endpoints News、KFF Health News、WHO News、Nature、Science | 英语；国际 |
-| 官方 / 多边（5） | UN News、European Commission、U.S. State Department、U.S. SEC、Federal Reserve | 英语；联合国/欧盟/美国 |
-| 中文（9） | FT中文网、日经中文网、经济观察网、钛媒体、爱范儿、量子位；INSIDE、报导者、经理人月刊 | 简体中文、繁体中文；中/日/台 |
-| 日韩（3） | 东洋经济；연합뉴스 경제（Yonhap Economy）、每日经济新闻 | 日语、韩语；日/韩 |
+| 官方 / 多边（7） | UN News、ReliefWeb、European Commission、U.S. State Department、U.S. SEC、Federal Reserve、Bank of Japan | 英语；联合国/欧盟/美国 |
+| 中文（6） | FT中文网、日经中文网、金十数据（快讯 API）；INSIDE、报导者、经理人月刊 | 简体中文、繁体中文；中/日/台 |
+| 日韩（3） | 东洋经济、每日经济新闻、The Japan Times | 日语、韩语；日/韩 |
 | 俄乌（8） | Vedomosti、The Bell、Kommersant Politics / Business、3DNews；LIGA Business / Finance / Tech | 俄语、乌克兰语；俄/乌 |
-| 德法意（7） | Handelsblatt、FAZ Wirtschaft；Le Monde Économie、Le Figaro Économie、L'Usine Nouvelle；Il Sole 24 Ore、Formiche | 德/法/意 |
+| 德法意（7） | Handelsblatt、Süddeutsche Wirtschaft；Le Monde Économie、Le Figaro Économie、L'Usine Nouvelle；Il Sole 24 Ore、Formiche | 德/法/意 |
 | 西葡（7） | El País Economía、El Mundo Economía、Expansión、Economía Digital；Exame、Jornal de Negócios、InfoMoney | 西班牙语、葡萄牙语；西/巴西/葡 |
-| 土耳其 / 中东 / 伊朗 / 以色列 / 印度（9） | Dünya、Ekonomim；Asharq Al-Awsat、Attaqa；Donya-e-Eqtesad、Eghtesad Online；Globes（希伯来语 + 英语）；Economic Times Hindi | 土/阿/波斯/希伯来/印地语 |
-| 东南亚（3） | CNBC Indonesia、VnExpress Business、Prachachat | 印尼语、越南语、泰语 |
+| 土耳其 / 中东 / 以色列 / 印度（7） | Hürriyet Ekonomi、Bloomberg HT；Asharq Al-Awsat、Attaqa；Globes（希伯来语 + 英语）；Economic Times Hindi | 土/阿/希伯来/印地语 |
+| 细分行业（8） | SpaceNews、EE Times、FreightWaves、Utility Dive、Mining.com、MedTech Dive、CyberScoop、DefenseScoop | 英语；美/加 |
+| 预测市场（1） | Polymarket Gamma API（按 24h 成交量取活跃事件；展示主要选项概率、成交额、流动性、截止日） | 英语；美国/全球 |
+| 东南亚（2） | VnExpress Business、The Straits Times Business | 印尼语、越南语、泰语 |
 
-- **所有权标注**：国营、国有资金、公共、私营；默认目录无聚合器。仅作来源属性提示，不是偏见评分。
-- **频道健康**：2026-10-23 强制刷新结果 **104/104 正常、0 错误**。仍会有单源临时 403/SSL EOF；系统按 10 分钟退避重试，不影响其它源。
+- **Polymarket 预测市场**：通过 Gamma API 每 60 分钟取 24h 成交量最高的活跃事件，过滤体育/娱乐标签，最多入库 12 个。卡片标题为市场问题，摘要显示主要选项概率、24h 成交额、流动性、截止日；赔率变化会原地更新同一张卡片，不重复插入。它代表市场共识概率，**不是新闻事实或事实核查结论**；界面单独标为“预测市场”。
+- **金十数据快讯**：直连 `flash-api.jin10.com` 的重要快讯频道，每 10 分钟拉取最新 15 条；卡片标题为快讯正文，发布时间按北京时间换算为 UTC；只入库快讯流，不抓全文。
+- **预测市场的字段口径**：为了让它进入默认硬新闻首页，数据库 `content_type` 保持 `hard`；API 同时返回 `ownership=market`、`ownership_label=预测市场` 和 `content_type_label=预测市场`，需要严格区分新闻与市场数据时请用这三个字段。
+- **所有权标注**：国营、国有资金、公共、私营、预测市场；默认目录无聚合器。仅作来源属性提示，不是偏见评分。
+- **频道健康**：接入 Polymarket 后目标为 **111/111 正常、0 错误**；当前仍可能有单源临时 403/SSL EOF；系统按 10 分钟退避重试，不影响其它源。
 - **切换目录后的历史数据**：旧综合目录备份在 `config/feeds-general-backup-20261023.json`；切换前的数据库备份在 `data/news-before-specialized-20261023.db`。清理旧源历史文章：
 
 ```sh
@@ -442,6 +467,22 @@ python scripts/enrich_content.py
 
 新增评论源时，可在 `feeds.json` 的源配置里加 `"content_hint": "opinion"`（或 `analysis`），该源稿件会直接归入对应类型。`content_hint` 只应标注真正的评论/分析专版，不要给综合新闻源使用。
 
+### 垃圾内容过滤（config/quality.json）
+
+`hard` 只是“没检测到评论/分析标记”的兜底标签，不负责判断内容价值。专业媒体（尤其是印尼、伊朗、泰国、韩国的经济源）的 RSS 里仍会混入每日金价/汇率表、天气预报、星座运势、养生偏方、成功学、企业通稿和商场促销。`config/quality.json` 是独立的质量闸门：
+
+- 规则自上而下匹配，**第一条命中即过滤**；`feeds` / `languages` 为空表示对所有源生效。把养生关键词只用在经济类源上，`STAT News` / `WHO` 的正常健康报道不受影响。
+- `title` / `summary` / `url` 任一命中即触发；`unless` 是白名单，只在**触发字段和标题**里检查，避免摘要里的“债务”、URL 里的 `ai` 之类的巧合把垃圾救回来。
+- 入库时直接跳过，不写数据库；服务日志会打印每个源的 `filtered=` 数量。
+- 历史数据回填（默认干跑，`--apply` 才写）：
+
+```sh
+python scripts/apply_quality_filter.py            # 预览
+python scripts/apply_quality_filter.py --apply    # 写入 filtered 标记
+```
+
+`filtered=1` 的条目仍保留在 `articles` 表里，只是所有时间线/搜索/分面查询都会排除它们；改完规则重跑脚本即可重新判定（不匹配的会自动恢复为可见）。
+
 ### 事件地名库与历史回填
 
 `config/gazetteer.json` 由 `scripts/build_gazetteer.py` 生成：
@@ -507,6 +548,7 @@ MyMemory 无需 key，但会把公开的标题/摘要或搜索词发到第三方
 | GET | `/api/status` | 最近同步时间、新增数、信源健康度、抓取中状态 |
 | GET | `/api/feeds` | 频道目录 + 最近抓取状态 + 错误 |
 | GET | `/api/export.csv` | 按当前筛选导出 CSV（UTF-8 BOM） |
+| GET | `/api/brazil/results?scope=br` | 巴西 2026 第二轮总统计票；`scope` 为 `br` 或州代码（`mg`/`sp`/`rj` 等），返回 TSE JSON 的紧凑快照 |
 | POST | `/api/refresh` | 异步强制同步；`{"force": true}` |
 | POST | `/api/translate` | 翻译；`{"text": "...", "target": "zh", "source": "en"}`；返回实际 provider |
 | GET | `/api/health` | 健康检查 |
@@ -523,7 +565,7 @@ MyMemory 无需 key，但会把公开的标题/摘要或搜索词发到第三方
 | `country` | `US` / `IL` / `all` | 国家 ISO2；按 `geo` 解释 |
 | `language` | `en` / `zh` / `zh-Hant` / ... / `all` | 原始语言 |
 | `publisher` | `Financial Times` / `all` | 精确媒体名 |
-| `q` | `Tibet earthquake` / `西藏 地震` | 多词 AND；匹配标题、摘要、媒体名、事件地点/人物/主题；默认翻译为多语言后联合检索 |
+| `q` | `Tibet earthquake` / `西藏 地震` | 默认多词 AND；结果过少时自动 quorum 放宽；匹配标题、摘要、媒体名、事件地点/人物/主题，并联合多语言译文与实体别名 |
 | `limit` | `240` | 1–600 |
 | `offset` | `0` | 分页 |
 
@@ -535,7 +577,7 @@ MyMemory 无需 key，但会把公开的标题/摘要或搜索词发到第三方
 - 聚类 lead 的 `coverage`、`member_ids`、`coverage_languages`、`cross_language`、`cluster_topics`、`related`。
 - 聚类 lead 的 `corroboration`：`level`、`label`、`publishers`（独立信源数）、`countries`（信源国家数）、`languages`（原始语种数）、`hard`/`analysis`/`opinion`、`coverage`、`state_media`、`public_service`、`first_seen`、`last_seen`、`notes`。
 - 有 `q` 时返回 `search`：`q`、`tokens`、`source_countries`、`topics`、`places`、`content_types`、`sampled`、`cross_language`。
-- `search.cross_language`：`enabled`、`source_language`、`languages`、`failed`、`provider_labels`、`attempted`、`translated_count`、`partial`、`timed_out`、`elapsed_ms`。
+- `search.cross_language`：`enabled`、`source_language`、`languages`、`failed`、`provider_labels`、`attempted`、`translated_count`、`partial`、`timed_out`、`elapsed_ms`、`alias_count`、`alias_expanded`、`anchor_rejected`、`weak_rejected`、`relaxed`、`strict_total`、`relaxed_total`、`deferred`。
 
 前端深链示例：
 
@@ -650,10 +692,10 @@ python -m unittest discover -s tests -v
 - 搜索：多词 AND、事件地点/主题 JSON 匹配、人物别名展开、搜索汇总统计
 - 跨语言查询扩展：中日泰分词/词库切分、俄语等屈折语词干前缀、译文 SQL 变体匹配
 - RSS/Atom 解析、14 天截断、聚合器标题后缀兼容、语种守卫
-- 专业信源目录：104 源全部启用/直连/无聚合器、20 种语言齐全、国家与板块覆盖
+- 专业信源目录：111 源全部启用/直连/无聚合器、17 种语言齐全、国家与板块覆盖、Polymarket 解析与快照更新
 - SQLite 写入、去重、分面统计、内容类型筛选
 
-当前：**53 tests, OK**。
+当前：**64 tests, OK**。
 
 P2P 推送不依赖 Python 单元测试；已用两个真实浏览器标签页做过端到端验证：生成邀请码 → 生成应答码 → 建立数据通道 → 接收快照 → 回传确认；下载后的 `file://` 接收页也已验证可用。
 
@@ -710,7 +752,7 @@ P2P 推送不依赖 Python 单元测试；已用两个真实浏览器标签页�
 - [x] 事件/关键词搜索汇总（多词 AND、事件字段检索、相关词与多源事件簇）
 - [x] 搜索词多语种翻译与全语言联合检索（缓存 + 部分语言回退）
 - [x] 首页硬新闻优先 + 事件脉络（第一手 / 转载 / 其他角度 / 政府声明）
-- [x] 默认信源切换为 20 语种 / 31 国 / 59 板块的 104 个专业直连媒体，0 聚合器
+- [x] 默认信源切换为 17 语种 / 30 国 / 60 板块的 111 个专业直连信息源（含 Polymarket、金十），0 聚合器
 - [x] P2P 推送（WebRTC 手动信令 + 独立接收页 + 确认回执）
 - [ ] 搜索升级为 FTS/embedding 相关度排序与拼写纠错
 - [ ] 查询翻译改为单次批量 LLM 调用/本地翻译模型，减少首查等待
